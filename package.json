@@ -93,12 +93,7 @@
       "json",
       "node",
       "mjs"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "/Users/gustafguner/Documents/_WEB/spotify-rooms/tsconfig.test.json"
-      }
-    }
+    ]
   },
   "babel": {
     "presets": [
