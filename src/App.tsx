@@ -1,20 +1,16 @@
 import * as queryString from 'query-string';
 import * as React from 'react';
+import { Provider } from 'constate';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-js';
+import Home from './pages/Home';
 
 import './App.css';
 
 const spotifyApi = new SpotifyWebApi();
 
 const getNowPlaying = () => {
-  spotifyApi
-    .getMyCurrentPlaybackState()
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error: any) => {
-      console.log(error);
-    });
+  return spotifyApi.getMyCurrentPlaybackState();
 };
 
 const App = () => {
@@ -24,10 +20,17 @@ const App = () => {
     spotifyApi.setAccessToken(accessToken);
   }
   getNowPlaying();
+
   return (
-    <>
-      <h1>Welcome</h1>
-    </>
+    <Provider>
+      <p>header</p>
+      <BrowserRouter>
+        <Switch>
+          <Route key={'/'} path={'/'} exact={true} component={Home} />
+        </Switch>
+      </BrowserRouter>
+      <a href="http://localhost:8888/login">Login with Spotify</a>
+    </Provider>
   );
 };
 

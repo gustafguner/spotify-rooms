@@ -6,7 +6,8 @@
     "interface-name": false,
     "no-submodule-imports": false,
     "no-implicit-dependencies": false,
-    "no-console": false
+    "no-console": false,
+    "ordered-imports": false
   },
   "linterOptions": {
     "exclude": [
