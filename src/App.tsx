@@ -3,9 +3,8 @@ import * as React from 'react';
 import { Provider } from 'constate';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-js';
-import Home from './pages/Home';
-
-import './App.css';
+import Header from './components/Header';
+import { routes } from './routes';
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -23,13 +22,14 @@ const App = () => {
 
   return (
     <Provider>
-      <p>header</p>
+      <Header />
       <BrowserRouter>
         <Switch>
-          <Route key={'/'} path={'/'} exact={true} component={Home} />
+          {routes.map(({ path, exact, Component }) => (
+            <Route key={path} path={path} exact={exact} component={Component} />
+          ))}
         </Switch>
       </BrowserRouter>
-      <a href="http://localhost:8888/login">Login with Spotify</a>
     </Provider>
   );
 };
