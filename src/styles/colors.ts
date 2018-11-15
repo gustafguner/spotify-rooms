@@ -4,5 +4,5 @@ export const colors = {
   WHITE: '#FFFFFF',
   SPOTIFY_GREEN: '#84BD00',
   SPOTIFY_GREEN_HOVERED: '#7FB700',
-  DARK_GRAY: '#1C2A39',
+  DARK_GRAY: '#555555',
 };

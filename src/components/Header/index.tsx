@@ -1,8 +1,10 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import { colors } from 'src/styles';
-
-import spotifyLogo from 'src/assets/images/spotify-logo.svg';
+import { colors } from '../../styles';
+import { Button } from '../buttons';
+import { Container, EffectMap, EffectProps } from 'constate';
+import { removeToken } from '../../utils/auth';
+import spotifyLogo from '../../assets/images/spotify-logo.svg';
 
 const HeaderWrapper = styled('header')`
   width: 100%;
@@ -46,18 +48,43 @@ const SpotifyLogoImage = styled('img')`
   margin-left: 7px;
 `;
 
-const Header = () => (
-  <>
-    <HeaderWrapperPadding />
-    <HeaderWrapper>
-      <Logo>spots</Logo>
+interface State {
+  loggedIn: boolean;
+}
 
-      <SpotifyLoginButton href="https://accounts.spotify.com/sv/authorize?response_type=code&client_id=67c2087e5f8e44a48ba26e41b459c848&scope=user-read-private%20user-read-email%20user-read-playback-state&redirect_uri=http:%2F%2Flocalhost:8888%2Fcallback">
-        Log in with Spotify
-        <SpotifyLogoImage src={spotifyLogo} alt="Spotify logo" />
-      </SpotifyLoginButton>
-    </HeaderWrapper>
-  </>
+interface Effects {
+  logOut: () => void;
+}
+
+const effects: EffectMap<State, Effects> = {
+  logOut: () => ({ setState }: EffectProps<State>) => {
+    removeToken();
+    setState(() => ({
+      loggedIn: false,
+    }));
+  },
+};
+
+const Header = () => (
+  <Container context="auth" effects={effects}>
+    {({ loggedIn, logOut }) => (
+      <>
+        <HeaderWrapperPadding />
+        <HeaderWrapper>
+          <Logo>spots</Logo>
+
+          {loggedIn ? (
+            <Button onClick={logOut}>Log out</Button>
+          ) : (
+            <SpotifyLoginButton href="https://accounts.spotify.com/sv/authorize?response_type=code&client_id=67c2087e5f8e44a48ba26e41b459c848&scope=user-read-private%20user-read-email%20user-read-playback-state&redirect_uri=http:%2F%2Flocalhost:8888%2Fcallback">
+              Log in with Spotify
+              <SpotifyLogoImage src={spotifyLogo} alt="Spotify logo" />
+            </SpotifyLoginButton>
+          )}
+        </HeaderWrapper>
+      </>
+    )}
+  </Container>
 );
 
 export default Header;
