@@ -8,34 +8,39 @@ import { routes } from './routes';
 
 const spotifyApi = new SpotifyWebApi();
 
-const getNowPlaying = () => {
-  return spotifyApi.getMyCurrentPlaybackState();
+const initialState = {
+  loggedIn: false,
 };
 
-const App = () => {
-  if (localStorage.getItem('spotify-access-token')) {
-    spotifyApi.setAccessToken(localStorage.getItem('spotify-access-token')!);
+const onMount = ({ setContextState }: any) => {
+  const tokenFromStorage = localStorage.getItem('spotify-access-token');
+  if (tokenFromStorage) {
+    spotifyApi.setAccessToken(tokenFromStorage);
   }
-  const parsed = queryString.parse(window.location.search);
-  const accessToken = parsed.access_token as string | undefined;
-  if (accessToken) {
-    spotifyApi.setAccessToken(accessToken);
-    localStorage.setItem('spotify-access-token', accessToken);
-  }
-  getNowPlaying();
+  const parsedUrl = queryString.parse(window.location.search);
+  const tokenFromUrl = parsedUrl.access_token as string | undefined;
 
-  return (
-    <Provider>
-      <Header />
-      <BrowserRouter>
-        <Switch>
-          {routes.map(({ path, exact, Component }) => (
-            <Route key={path} path={path} exact={exact} component={Component} />
-          ))}
-        </Switch>
-      </BrowserRouter>
-    </Provider>
-  );
+  if (tokenFromUrl) {
+    spotifyApi.setAccessToken(tokenFromUrl);
+    localStorage.setItem('spotify-access-token', tokenFromUrl);
+  }
+
+  setContextState('auth', {
+    loggedIn: tokenFromUrl || tokenFromStorage ? true : false,
+  });
 };
+
+const App = () => (
+  <Provider initialState={initialState} onMount={onMount}>
+    <Header />
+    <BrowserRouter>
+      <Switch>
+        {routes.map(({ path, exact, Component }) => (
+          <Route key={path} path={path} exact={exact} component={Component} />
+        ))}
+      </Switch>
+    </BrowserRouter>
+  </Provider>
+);
 
 export default App;

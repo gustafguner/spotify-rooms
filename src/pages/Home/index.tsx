@@ -1,3 +1,6 @@
 import * as React from 'react';
+import { Container } from 'constate';
 
-export const Home: React.SFC<{}> = () => <h2>Home</h2>;
+export const Home = () => (
+  <Container context="auth">{({ loggedIn }) => <></>}</Container>
+);

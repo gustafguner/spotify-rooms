@@ -43,7 +43,7 @@ const SpotifyLoginButton = styled('a')`
 const SpotifyLogoImage = styled('img')`
   width: 18px;
   height: 18px;
-  margin-left: 10px;
+  margin-left: 7px;
 `;
 
 const Header = () => (
@@ -51,8 +51,9 @@ const Header = () => (
     <HeaderWrapperPadding />
     <HeaderWrapper>
       <Logo>spots</Logo>
-      <SpotifyLoginButton href="http://localhost:8888/login">
-        Log in
+
+      <SpotifyLoginButton href="https://accounts.spotify.com/sv/authorize?response_type=code&client_id=67c2087e5f8e44a48ba26e41b459c848&scope=user-read-private%20user-read-email%20user-read-playback-state&redirect_uri=http:%2F%2Flocalhost:8888%2Fcallback">
+        Log in with Spotify
         <SpotifyLogoImage src={spotifyLogo} alt="Spotify logo" />
       </SpotifyLoginButton>
     </HeaderWrapper>
