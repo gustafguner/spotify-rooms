@@ -13,10 +13,14 @@ const getNowPlaying = () => {
 };
 
 const App = () => {
+  if (localStorage.getItem('spotify-access-token')) {
+    spotifyApi.setAccessToken(localStorage.getItem('spotify-access-token')!);
+  }
   const parsed = queryString.parse(window.location.search);
   const accessToken = parsed.access_token as string | undefined;
   if (accessToken) {
     spotifyApi.setAccessToken(accessToken);
+    localStorage.setItem('spotify-access-token', accessToken);
   }
   getNowPlaying();
 
