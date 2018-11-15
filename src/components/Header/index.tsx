@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'react-emotion';
+import { colors } from 'src/styles';
 
 const HeaderWrapper = styled('header')`
   width: 100%;
@@ -7,7 +8,7 @@ const HeaderWrapper = styled('header')`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: white;
+  background-color: ${colors.WHITE};
   display: flex;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.08);
   padding: 0 25px;
@@ -21,14 +22,13 @@ const HeaderWrapperPadding = styled('div')`
 const Logo = styled('div')`
   width: 100px;
   height: 30px;
-  background-color: red;
 `;
 
 const Header: React.SFC<{}> = () => (
   <>
     <HeaderWrapperPadding />
     <HeaderWrapper>
-      <Logo />
+      <Logo>spots</Logo>
       <a href="http://localhost:8888/login">Login with Spotify</a>
     </HeaderWrapper>
   </>
