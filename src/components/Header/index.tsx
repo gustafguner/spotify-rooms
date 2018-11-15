@@ -65,7 +65,7 @@ const effects: EffectMap<State, Effects> = {
   },
 };
 
-const Header = () => (
+const Header: React.SFC = () => (
   <Container context="auth" effects={effects}>
     {({ loggedIn, logOut }) => (
       <>
