@@ -1,14 +1,10 @@
-import * as queryString from 'query-string';
 import * as React from 'react';
 import { Provider } from 'constate';
 import styled from 'react-emotion';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-// import SpotifyWebApi from 'spotify-web-api-js';
-import { setToken } from './utils/spotify';
+import { initializeSpotify } from './utils/spotify';
 import Header from './components/Header';
 import { routes } from './routes';
-
-// const spotifyApi = new SpotifyWebApi();
 
 const SiteContainer = styled('div')`
   width: 100%;
@@ -26,17 +22,7 @@ const onMount = ({ setContextState }: any) => {
 };
 
 const App: React.SFC = () => {
-  const parsedUrl = queryString.parse(window.location.search);
-  const tokenFromUrl = parsedUrl.access_token as string | undefined;
-  const tokenFromStorage = localStorage.getItem('spotify-access-token');
-
-  if (tokenFromUrl) {
-    setToken(tokenFromUrl);
-    localStorage.setItem('spotify-access-token', tokenFromUrl);
-  } else if (tokenFromStorage) {
-    setToken(tokenFromStorage);
-  }
-
+  initializeSpotify();
   return (
     <Provider initialState={initialState} onMount={onMount}>
       <Header />

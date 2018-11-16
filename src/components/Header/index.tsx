@@ -4,6 +4,7 @@ import { colors } from '../../styles';
 import { Button } from '../buttons';
 import { Container, EffectMap, EffectProps } from 'constate';
 import { removeToken } from '../../utils/auth';
+import { getSpotifyAuthorizeUrl } from '../../utils/spotify';
 import spotifyLogo from '../../assets/images/spotify-logo.svg';
 
 const HeaderWrapper = styled('header')`
@@ -12,7 +13,7 @@ const HeaderWrapper = styled('header')`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: ${colors.WHITE};
+  background-color: ${colors.PRIMARY_DARK};
   display: flex;
   justify-content: space-between;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.08);
@@ -28,7 +29,7 @@ const Logo = styled('div')`
   width: 100px;
 `;
 
-const SpotifyLoginButton = styled('a')`
+const SpotifyLoginButton = styled('button')`
   background-color: ${colors.SPOTIFY_GREEN};
   color: white;
   text-decoration: none;
@@ -37,6 +38,10 @@ const SpotifyLoginButton = styled('a')`
   display: flex;
   align-items: center;
   position: relative;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  cursor: pointer;
   &:hover {
     background-color: ${colors.SPOTIFY_GREEN_HOVERED};
   }
@@ -76,7 +81,7 @@ const Header: React.SFC = () => (
           {loggedIn ? (
             <Button onClick={logOut}>Log out</Button>
           ) : (
-            <SpotifyLoginButton href="https://accounts.spotify.com/sv/authorize?response_type=code&client_id=67c2087e5f8e44a48ba26e41b459c848&scope=user-read-private%20user-read-email%20user-read-playback-state&redirect_uri=http:%2F%2Flocalhost:8888%2Fcallback">
+            <SpotifyLoginButton onClick={getSpotifyAuthorizeUrl}>
               Log in with Spotify
               <SpotifyLogoImage src={spotifyLogo} alt="Spotify logo" />
             </SpotifyLoginButton>

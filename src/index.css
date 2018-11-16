@@ -39,5 +39,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: circular, sans-serif;
+  color: white;
   font-size: 16px;
+  background-color: #1c1d1c;
 }
