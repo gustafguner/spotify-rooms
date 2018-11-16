@@ -13,6 +13,7 @@ export const initializeSpotify = () => {
       spotifyApi.setAccessToken(accessToken);
     }
   }
+  checkAndRefreshAccessToken();
 };
 
 const storeTokensFromUrl = () => {
@@ -22,17 +23,17 @@ const storeTokensFromUrl = () => {
   if (accessTokenFromUrl) {
     storeAccessToken(accessTokenFromUrl);
   }
-
   const refreshTokenFromUrl = parsedUrl.refresh_token as string | undefined;
   if (refreshTokenFromUrl) {
     storeRefreshToken(refreshTokenFromUrl);
   }
+
   const expiresInFromUrl = parsedUrl.expires_in as number | undefined;
   if (expiresInFromUrl) {
     storeExpire(expiresInFromUrl);
   }
 
-  return accessTokenFromUrl != null;
+  return getAccessToken() != null;
 };
 
 const storeAccessToken = (token: string) => {
@@ -45,6 +46,10 @@ const getAccessToken = () => {
 
 const storeRefreshToken = (token: string) => {
   localStorage.setItem('spotify-refresh-token', token);
+};
+
+const getRefreshToken = () => {
+  return localStorage.getItem('spotify-refresh-token');
 };
 
 const storeExpire = (expiresIn: number) => {
@@ -65,9 +70,16 @@ const getTokenExpire = () => {
 
 export const checkAndRefreshAccessToken = () => {
   if (getTokenExpire() < Date.now()) {
-    return false;
-  } else {
-    return true;
+    fetch(
+      'http://localhost:8888/refreshAccessToken?refresh_token=' +
+        getRefreshToken(),
+    )
+      .then((e) => e.json())
+      .then((data) => {
+        storeAccessToken(data.access_token);
+        spotifyApi.setAccessToken(data.access_token);
+        storeExpire(data.expires_in);
+      });
   }
 };
 
