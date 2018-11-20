@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/query-string": "^6.1.1",
     "@types/react-router-dom": "^4.3.1",
+    "apollo-boost": "^0.1.21",
     "autoprefixer": "7.1.6",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.2",
@@ -20,6 +21,7 @@
     "file-loader": "1.1.5",
     "fork-ts-checker-webpack-plugin": "^0.2.8",
     "fs-extra": "3.0.1",
+    "graphql": "^14.0.2",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "object-assign": "4.1.1",
@@ -29,6 +31,7 @@
     "query-string": "^6.2.0",
     "raf": "3.4.0",
     "react": "^16.6.1",
+    "react-apollo": "^2.3.1",
     "react-dev-utils": "^5.0.2",
     "react-dom": "^16.6.1",
     "react-emotion": "^9.2.12",
@@ -58,6 +61,7 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
+    "@types/graphql": "^14.0.3",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.5",
     "@types/react": "^16.7.3",

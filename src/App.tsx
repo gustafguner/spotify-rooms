@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Provider } from 'constate';
+import apolloClient from './graphql/client';
+import { ApolloProvider } from 'react-apollo';
 import styled from 'react-emotion';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { initializeSpotify } from './utils/spotify';
@@ -24,23 +26,25 @@ const onMount = ({ setContextState }: any) => {
 const App: React.SFC = () => {
   initializeSpotify();
   return (
-    <Provider initialState={initialState} onMount={onMount}>
-      <Header />
-      <SiteContainer>
-        <BrowserRouter>
-          <Switch>
-            {routes.map(({ path, exact, Component }) => (
-              <Route
-                key={path}
-                path={path}
-                exact={exact}
-                component={Component}
-              />
-            ))}
-          </Switch>
-        </BrowserRouter>
-      </SiteContainer>
-    </Provider>
+    <ApolloProvider client={apolloClient}>
+      <Provider initialState={initialState} onMount={onMount}>
+        <Header />
+        <SiteContainer>
+          <BrowserRouter>
+            <Switch>
+              {routes.map(({ path, exact, Component }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  exact={exact}
+                  component={Component}
+                />
+              ))}
+            </Switch>
+          </BrowserRouter>
+        </SiteContainer>
+      </Provider>
+    </ApolloProvider>
   );
 };
 

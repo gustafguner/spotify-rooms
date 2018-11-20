@@ -3,7 +3,9 @@ import * as queryString from 'query-string';
 
 const spotifyApi = new SpotifyWebApi();
 
-export const initializeSpotify = () => {
+export const initializeSpotify = async () => {
+  await checkAndRefreshAccessToken();
+
   const redirected = storeTokensFromUrl();
   if (redirected) {
     spotifyApi.setAccessToken(getAccessToken()!);
@@ -13,7 +15,6 @@ export const initializeSpotify = () => {
       spotifyApi.setAccessToken(accessToken);
     }
   }
-  checkAndRefreshAccessToken();
 };
 
 const storeTokensFromUrl = () => {
@@ -60,6 +61,7 @@ const storeExpire = (expiresIn: number) => {
 };
 
 export const getMyCurrentPlayingTrack = async () => {
+  await checkAndRefreshAccessToken();
   return spotifyApi.getMyCurrentPlayingTrack();
 };
 
@@ -68,18 +70,20 @@ const getTokenExpire = () => {
   return stored != null ? Number(stored) : 0;
 };
 
-export const checkAndRefreshAccessToken = () => {
-  if (getTokenExpire() < Date.now()) {
-    fetch(
-      'http://localhost:8888/refreshAccessToken?refresh_token=' +
-        getRefreshToken(),
-    )
-      .then((e) => e.json())
-      .then((data) => {
-        storeAccessToken(data.access_token);
-        spotifyApi.setAccessToken(data.access_token);
-        storeExpire(data.expires_in);
-      });
+export const checkAndRefreshAccessToken = async () => {
+  if (getTokenExpire()) {
+    if (getTokenExpire() < Date.now()) {
+      await fetch(
+        'http://localhost:8888/refreshAccessToken?refresh_token=' +
+          getRefreshToken(),
+      )
+        .then((e) => e.json())
+        .then((data) => {
+          storeAccessToken(data.access_token);
+          spotifyApi.setAccessToken(data.access_token);
+          storeExpire(data.expires_in);
+        });
+    }
   }
 };
 
