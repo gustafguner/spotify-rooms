@@ -6,7 +6,9 @@ import styled from 'react-emotion';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { initializeSpotify } from './utils/spotify';
 import Header from './components/Header';
+import PlaybackFooter from './components/PlaybackFooter';
 import { routes } from './routes';
+import { getMyCurrentPlayingTrack } from './utils/spotify';
 
 const SiteContainer = styled('div')`
   width: 100%;
@@ -17,9 +19,12 @@ const initialState = {
   loggedIn: false,
 };
 
-const onMount = ({ setContextState }: any) => {
+const onMount = async ({ setContextState }: any) => {
+  const data = await getMyCurrentPlayingTrack();
+  console.log(data);
   setContextState('auth', {
     loggedIn: localStorage.getItem('spotify-access-token') ? true : false,
+    currentTrack: data,
   });
 };
 
@@ -43,6 +48,7 @@ const App: React.SFC = () => {
             </Switch>
           </BrowserRouter>
         </SiteContainer>
+        <PlaybackFooter />
       </Provider>
     </ApolloProvider>
   );
