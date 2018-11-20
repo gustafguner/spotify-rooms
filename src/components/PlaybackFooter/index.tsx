@@ -2,10 +2,14 @@ import * as React from 'react';
 import { Container, EffectMap, EffectProps } from 'constate';
 import styled from 'react-emotion';
 import { colors } from '../../styles';
+import { getMyCurrentPlayingTrack } from '../../utils/spotify';
+
+import ProgressBar from './components/ProgressBar';
 
 interface State {
   loggedIn: boolean;
-  currentTrack: any | null;
+  playerStatus?: any;
+  spotifyPoll?: any;
 }
 
 interface Effects {
@@ -18,6 +22,18 @@ const effects: EffectMap<State, Effects> = {
       loggedIn: false,
     }));
   },
+};
+
+const onMount = async ({ setState }: any) => {
+  const initialData = await getMyCurrentPlayingTrack();
+  console.log(initialData);
+  setState(() => ({ playerStatus: initialData }));
+
+  const fn = async () => {
+    const data = await getMyCurrentPlayingTrack();
+    setState(() => ({ playerStatus: data }));
+  };
+  setInterval(fn, 10000);
 };
 
 const PlaybackContainer = styled('div')`
@@ -87,7 +103,6 @@ const TrackArtist = styled('div')`
 
 const Center = styled('div')`
   flex-basis: 60%;
-  flex-shrink: 0;
   flex-grow: 0;
   padding: 0 20px;
 `;
@@ -101,20 +116,20 @@ const Right = styled('div')`
 `;
 
 const PlaybackFooter: React.SFC = () => (
-  <Container context="auth" effects={effects}>
-    {({ currentTrack, play }) =>
-      currentTrack != null ? (
+  <Container effects={effects} onMount={onMount}>
+    {({ loggedIn, playerStatus, play }) =>
+      playerStatus != null ? (
         <PlaybackContainer>
           <Left>
             <AlbumImageContainer>
-              <AlbumImage src={currentTrack.item.album.images[0].url} />
+              <AlbumImage src={playerStatus.item.album.images[0].url} />
             </AlbumImageContainer>
             <TrackHeadings>
               <TrackTitle>
-                <a href="">{currentTrack.item.name}</a>
+                <a href="">{playerStatus.item.name}</a>
               </TrackTitle>
               <TrackArtist>
-                {currentTrack.item.artists
+                {playerStatus.item.artists
                   .map((e: any) => {
                     return e.name;
                   })
@@ -123,7 +138,13 @@ const PlaybackFooter: React.SFC = () => (
             </TrackHeadings>
           </Left>
 
-          <Center>1</Center>
+          <Center>
+            <button>Play</button>
+            <ProgressBar
+              progress={playerStatus.progress_ms}
+              duration={playerStatus.item.duration_ms}
+            />
+          </Center>
 
           <Right>2</Right>
         </PlaybackContainer>

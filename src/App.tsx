@@ -8,7 +8,6 @@ import { initializeSpotify } from './utils/spotify';
 import Header from './components/Header';
 import PlaybackFooter from './components/PlaybackFooter';
 import { routes } from './routes';
-import { getMyCurrentPlayingTrack } from './utils/spotify';
 
 const SiteContainer = styled('div')`
   width: 100%;
@@ -19,12 +18,9 @@ const initialState = {
   loggedIn: false,
 };
 
-const onMount = async ({ setContextState }: any) => {
-  const data = await getMyCurrentPlayingTrack();
-  console.log(data);
+const onMount = ({ setContextState }: any) => {
   setContextState('auth', {
     loggedIn: localStorage.getItem('spotify-access-token') ? true : false,
-    currentTrack: data,
   });
 };
 
