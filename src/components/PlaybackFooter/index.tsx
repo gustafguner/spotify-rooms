@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Container, EffectMap, EffectProps } from 'constate';
 import styled from 'react-emotion';
 import { colors } from '../../styles';
-import { getMyCurrentPlayingTrack } from '../../utils/spotify';
+import { getMyCurrentPlayingTrack, play, pause } from '../../utils/spotify';
 
 import ProgressBar from './components/ProgressBar';
+import TrackInfo from './components/TrackInfo';
 
 interface State {
   loggedIn: boolean;
@@ -13,14 +14,16 @@ interface State {
 }
 
 interface Effects {
-  play: () => void;
+  playSpotify: () => void;
+  pauseSpotify: () => void;
 }
 
 const effects: EffectMap<State, Effects> = {
-  play: () => ({ setState }: EffectProps<State>) => {
-    setState(() => ({
-      loggedIn: false,
-    }));
+  playSpotify: () => ({ setState }: EffectProps<State>) => {
+    play();
+  },
+  pauseSpotify: () => ({ setState }: EffectProps<State>) => {
+    pause();
   },
 };
 
@@ -48,59 +51,6 @@ const PlaybackContainer = styled('div')`
   align-items: center;
 `;
 
-const AlbumImageContainer = styled('div')`
-  flex-basis: 50px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  width: 50px;
-  height: 50px;
-  border-radius: 3px;
-  overflow: hidden;
-  margin-right: 16px;
-`;
-
-const AlbumImage = styled('img')`
-  width: 100%;
-  height: 100%;
-`;
-
-const Left = styled('div')`
-  display: flex;
-  flex-basis: 30%;
-  min-width: 180px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  align-items: center;
-`;
-
-const TrackHeadings = styled('div')`
-  display: flex;
-  flex-flow: row wrap;
-  width: calc(100% - 50px - 16px);
-  flex-direction: column;
-`;
-
-const TrackTitle = styled('div')`
-  width: 100%;
-  font-weight: 700;
-  font-size: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 2px;
-  a {
-    color: white;
-    text-decoration: none;
-  }
-`;
-
-const TrackArtist = styled('div')`
-  width: 100%;
-  color: ${colors.GRAY};
-  font-weight: 300;
-  font-size: 14px;
-`;
-
 const Center = styled('div')`
   flex-basis: 60%;
   flex-grow: 0;
@@ -117,29 +67,14 @@ const Right = styled('div')`
 
 const PlaybackFooter: React.SFC = () => (
   <Container effects={effects} onMount={onMount}>
-    {({ loggedIn, playerStatus, play }) =>
+    {({ loggedIn, playerStatus, playSpotify, pauseSpotify }) =>
       playerStatus != null ? (
         <PlaybackContainer>
-          <Left>
-            <AlbumImageContainer>
-              <AlbumImage src={playerStatus.item.album.images[0].url} />
-            </AlbumImageContainer>
-            <TrackHeadings>
-              <TrackTitle>
-                <a href="">{playerStatus.item.name}</a>
-              </TrackTitle>
-              <TrackArtist>
-                {playerStatus.item.artists
-                  .map((e: any) => {
-                    return e.name;
-                  })
-                  .join(', ')}
-              </TrackArtist>
-            </TrackHeadings>
-          </Left>
+          <TrackInfo track={playerStatus.item} />
 
           <Center>
-            <button>Play</button>
+            <button onClick={playSpotify}>Play</button>
+            <button onClick={pauseSpotify}>Pause</button>
             <ProgressBar
               progress={playerStatus.progress_ms}
               duration={playerStatus.item.duration_ms}
