@@ -65,6 +65,11 @@ export const getMyCurrentPlayingTrack = async () => {
   return spotifyApi.getMyCurrentPlayingTrack();
 };
 
+export const getMyRecentlyPlayedTracks = async (limit: number) => {
+  await checkAndRefreshAccessToken();
+  return spotifyApi.getMyRecentlyPlayedTracks({ limit });
+};
+
 export const play = async () => {
   await checkAndRefreshAccessToken();
   return spotifyApi.play();

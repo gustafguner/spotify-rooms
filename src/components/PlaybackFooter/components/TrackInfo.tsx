@@ -3,7 +3,9 @@ import styled from 'react-emotion';
 import { colors } from '../../../styles/colors';
 
 interface TrackInfoProps {
-  track?: any;
+  name: string;
+  artists: any;
+  image: string;
 }
 
 const Wrapper = styled('div')`
@@ -59,21 +61,23 @@ const Artist = styled('div')`
   font-size: 14px;
 `;
 
-const TrackInfo: React.SFC<TrackInfoProps> = ({ track }) => (
+const TrackInfo: React.SFC<TrackInfoProps> = ({ name, artists, image }) => (
   <Wrapper>
     <AlbumImageContainer>
-      <AlbumImage src={track.album.images[0].url} />
+      <AlbumImage src={image} />
     </AlbumImageContainer>
     <Headings>
       <Title>
-        <a href="">{track.name}</a>
+        <a href="">{name}</a>
       </Title>
       <Artist>
-        {track.artists
-          .map((e: any) => {
-            return e.name;
-          })
-          .join(', ')}
+        {artists === null
+          ? ''
+          : artists
+              .map((e: any) => {
+                return e.name;
+              })
+              .join(', ')}
       </Artist>
     </Headings>
   </Wrapper>

@@ -2,14 +2,20 @@ import * as React from 'react';
 import { Container, EffectMap, EffectProps } from 'constate';
 import styled from 'react-emotion';
 import { colors } from '../../styles';
-import { getMyCurrentPlayingTrack, play, pause } from '../../utils/spotify';
+import {
+  getMyCurrentPlayingTrack,
+  play,
+  pause,
+  getMyRecentlyPlayedTracks,
+} from '../../utils/spotify';
 
 import ProgressBar from './components/ProgressBar';
 import TrackInfo from './components/TrackInfo';
+import PlayerControls from './components/PlayerControls';
 
 interface State {
-  loggedIn: boolean;
-  playerStatus?: any;
+  track?: any;
+  playStatus?: any;
   spotifyPoll?: any;
 }
 
@@ -28,15 +34,31 @@ const effects: EffectMap<State, Effects> = {
 };
 
 const onMount = async ({ setState }: any) => {
-  const initialData = await getMyCurrentPlayingTrack();
-  console.log(initialData);
-  setState(() => ({ playerStatus: initialData }));
+  const currentPlayingTrack = await getMyCurrentPlayingTrack();
+  const mostRecentTrack =
+    JSON.stringify(currentPlayingTrack) === '""'
+      ? await getMyRecentlyPlayedTracks(1)
+      : null;
 
+  const track = mostRecentTrack
+    ? mostRecentTrack.items.length === 0
+      ? null
+      : mostRecentTrack.items[0].track
+    : currentPlayingTrack.item;
+
+  console.log(currentPlayingTrack);
+
+  setState(() => ({
+    playStatus: mostRecentTrack === null ? currentPlayingTrack : null,
+    track,
+  }));
+
+  /*
   const fn = async () => {
     const data = await getMyCurrentPlayingTrack();
     setState(() => ({ playerStatus: data }));
   };
-  setInterval(fn, 10000);
+  setInterval(fn, 10000);*/
 };
 
 const PlaybackContainer = styled('div')`
@@ -67,17 +89,23 @@ const Right = styled('div')`
 
 const PlaybackFooter: React.SFC = () => (
   <Container effects={effects} onMount={onMount}>
-    {({ loggedIn, playerStatus, playSpotify, pauseSpotify }) =>
-      playerStatus != null ? (
+    {({ track = null, playStatus = null, playSpotify, pauseSpotify }) =>
+      track !== null ? (
         <PlaybackContainer>
-          <TrackInfo track={playerStatus.item} />
+          <TrackInfo
+            name={track.name}
+            artists={track.artists}
+            image={
+              track.album.images.length !== 0 ? track.album.images[0].url : null
+            }
+          />
 
+          {playStatus.item.duration_ms}
           <Center>
-            <button onClick={playSpotify}>Play</button>
-            <button onClick={pauseSpotify}>Pause</button>
+            <PlayerControls play={playSpotify} pause={pauseSpotify} />
             <ProgressBar
-              progress={playerStatus.progress_ms}
-              duration={playerStatus.item.duration_ms}
+              progress={playStatus !== null ? playStatus.progress_ms : 0}
+              duration={playStatus !== null ? playStatus.item.duration_ms : 1}
             />
           </Center>
 
