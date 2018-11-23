@@ -53,12 +53,11 @@ const onMount = async ({ setState }: any) => {
     track,
   }));
 
-  /*
   const fn = async () => {
     const data = await getMyCurrentPlayingTrack();
-    setState(() => ({ playerStatus: data }));
+    setState(() => ({ playStatus: data }));
   };
-  setInterval(fn, 10000);*/
+  setInterval(fn, 10000);
 };
 
 const PlaybackContainer = styled('div')`
