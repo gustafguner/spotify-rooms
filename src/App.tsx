@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Provider } from 'constate';
+import { useEffect } from 'react';
+import { Provider, useContextState } from 'constate';
 import apolloClient from './graphql/client';
 import { ApolloProvider } from 'react-apollo';
 import styled from 'react-emotion';
@@ -14,21 +15,16 @@ const SiteContainer = styled('div')`
   padding: 0 25px;
 `;
 
-const initialState = {
-  loggedIn: false,
-};
-
-const onMount = ({ setContextState }: any) => {
-  setContextState('auth', {
-    loggedIn: localStorage.getItem('spotify-access-token') ? true : false,
-  });
-};
-
 const App: React.SFC = () => {
   initializeSpotify();
+  const [, setLoggedIn] = useContextState('auth', false);
+  useEffect(() => {
+    setLoggedIn(localStorage.getItem('spotify-access-token') ? true : false);
+  }, []);
+
   return (
     <ApolloProvider client={apolloClient}>
-      <Provider initialState={initialState} onMount={onMount}>
+      <Provider>
         <Header />
         <SiteContainer>
           <BrowserRouter>

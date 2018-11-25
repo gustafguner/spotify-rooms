@@ -2,10 +2,10 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import { colors } from '../../styles';
 import { Button } from '../buttons';
-import { Container, EffectMap, EffectProps } from 'constate';
-import { removeToken } from '../../utils/auth';
+import { useContextState } from 'constate';
 import { getSpotifyAuthorizeUrl } from '../../utils/spotify';
 import spotifyLogo from '../../assets/images/spotify-logo.svg';
+import { logOut } from 'src/utils/auth';
 
 const HeaderWrapper = styled('header')`
   width: 100%;
@@ -53,43 +53,27 @@ const SpotifyLogoImage = styled('img')`
   margin-left: 7px;
 `;
 
-interface State {
-  loggedIn: boolean;
-}
-
-interface Effects {
-  logOut: () => void;
-}
-
-const effects: EffectMap<State, Effects> = {
-  logOut: () => ({ setState }: EffectProps<State>) => {
-    removeToken();
-    setState(() => ({
-      loggedIn: false,
-    }));
-  },
+const isLoggedIn = () => {
+  const [loggedIn, ,] = useContextState('auth');
+  return loggedIn;
 };
 
 const Header: React.SFC = () => (
-  <Container context="auth" effects={effects}>
-    {({ loggedIn, logOut }) => (
-      <>
-        <HeaderWrapperPadding />
-        <HeaderWrapper>
-          <Logo>spots</Logo>
+  <>
+    <HeaderWrapperPadding />
+    <HeaderWrapper>
+      <Logo>spots</Logo>
 
-          {loggedIn ? (
-            <Button onClick={logOut}>Log out</Button>
-          ) : (
-            <SpotifyLoginButton onClick={getSpotifyAuthorizeUrl}>
-              Log in with Spotify
-              <SpotifyLogoImage src={spotifyLogo} alt="Spotify logo" />
-            </SpotifyLoginButton>
-          )}
-        </HeaderWrapper>
-      </>
-    )}
-  </Container>
+      {isLoggedIn() ? (
+        <Button onClick={logOut}>Log out</Button>
+      ) : (
+        <SpotifyLoginButton onClick={getSpotifyAuthorizeUrl}>
+          Log in with Spotify
+          <SpotifyLogoImage src={spotifyLogo} alt="Spotify logo" />
+        </SpotifyLoginButton>
+      )}
+    </HeaderWrapper>
+  </>
 );
 
 export default Header;

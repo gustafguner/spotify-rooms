@@ -1,64 +1,18 @@
 import * as React from 'react';
-import { Container, EffectMap, EffectProps } from 'constate';
+import { useEffect } from 'react';
 import styled from 'react-emotion';
 import { colors } from '../../styles';
+import { useContextState } from 'constate';
 import {
-  getMyCurrentPlayingTrack,
   play,
   pause,
   getMyRecentlyPlayedTracks,
+  getMyCurrentPlaybackState,
 } from '../../utils/spotify';
 
 import ProgressBar from './components/ProgressBar';
 import TrackInfo from './components/TrackInfo';
 import PlayerControls from './components/PlayerControls';
-
-interface State {
-  track?: any;
-  playStatus?: any;
-  spotifyPoll?: any;
-}
-
-interface Effects {
-  playSpotify: () => void;
-  pauseSpotify: () => void;
-}
-
-const effects: EffectMap<State, Effects> = {
-  playSpotify: () => ({ setState }: EffectProps<State>) => {
-    play();
-  },
-  pauseSpotify: () => ({ setState }: EffectProps<State>) => {
-    pause();
-  },
-};
-
-const onMount = async ({ setState }: any) => {
-  const currentPlayingTrack = await getMyCurrentPlayingTrack();
-  const mostRecentTrack =
-    JSON.stringify(currentPlayingTrack) === '""'
-      ? await getMyRecentlyPlayedTracks(1)
-      : null;
-
-  const track = mostRecentTrack
-    ? mostRecentTrack.items.length === 0
-      ? null
-      : mostRecentTrack.items[0].track
-    : currentPlayingTrack.item;
-
-  console.log(currentPlayingTrack);
-
-  setState(() => ({
-    playStatus: mostRecentTrack === null ? currentPlayingTrack : null,
-    track,
-  }));
-
-  const fn = async () => {
-    const data = await getMyCurrentPlayingTrack();
-    setState(() => ({ playStatus: data }));
-  };
-  setInterval(fn, 10000);
-};
 
 const PlaybackContainer = styled('div')`
   width: 100%;
@@ -86,35 +40,79 @@ const Right = styled('div')`
   flex-shrink: 0;
 `;
 
-const PlaybackFooter: React.SFC = () => (
-  <Container effects={effects} onMount={onMount}>
-    {({ track = null, playStatus = null, playSpotify, pauseSpotify }) =>
-      track !== null ? (
-        <PlaybackContainer>
-          <TrackInfo
-            name={track.name}
-            artists={track.artists}
-            image={
-              track.album.images.length !== 0 ? track.album.images[0].url : null
-            }
-          />
+const playSpotify = () => {
+  play();
+};
 
-          {playStatus.item.duration_ms}
-          <Center>
-            <PlayerControls play={playSpotify} pause={pauseSpotify} />
-            <ProgressBar
-              progress={playStatus !== null ? playStatus.progress_ms : 0}
-              duration={playStatus !== null ? playStatus.item.duration_ms : 1}
-            />
-          </Center>
+const pauseSpotify = () => {
+  pause();
+};
 
-          <Right>2</Right>
-        </PlaybackContainer>
-      ) : (
-        <div>...</div>
-      )
-    }
-  </Container>
-);
+const getPlayer = async () => {
+  const currentPlayingTrack = await getMyCurrentPlaybackState();
+
+  const mostRecentTrack =
+    JSON.stringify(currentPlayingTrack) === '""'
+      ? await getMyRecentlyPlayedTracks(1)
+      : null;
+
+  const track = mostRecentTrack
+    ? mostRecentTrack.items.length === 0
+      ? null
+      : mostRecentTrack.items[0].track
+    : currentPlayingTrack.item;
+
+  const status = mostRecentTrack === null ? currentPlayingTrack : null;
+
+  return { track, status };
+};
+
+const onMount = async (setTrack: any, setStatus: any) => {
+  const { track, status } = await getPlayer();
+
+  setTrack(track);
+  setStatus(status);
+
+  const polling = async () => {
+    const data = await getPlayer();
+    setTrack(data.track);
+    setStatus(data.status);
+  };
+
+  setInterval(polling, 10000);
+};
+
+const PlaybackFooter: React.SFC = () => {
+  const [track, setTrack]: any = useContextState('spotify-player', null);
+  const [status, setStatus]: any = useContextState('spotify-player', null);
+
+  useEffect(() => {
+    onMount(setTrack, setStatus);
+  }, []);
+
+  return false ? (
+    <PlaybackContainer>
+      <TrackInfo
+        name={track.name}
+        artists={track.artists}
+        image={
+          track.album.images.length !== 0 ? track.album.images[0].url : null
+        }
+      />
+
+      <Center>
+        <PlayerControls play={playSpotify} pause={pauseSpotify} />
+        <ProgressBar
+          progress={status !== null ? status.progress_ms : 0}
+          duration={status !== null ? status.item.duration_ms : 1}
+        />
+      </Center>
+
+      <Right>2</Right>
+    </PlaybackContainer>
+  ) : (
+    <>...</>
+  );
+};
 
 export default PlaybackFooter;
