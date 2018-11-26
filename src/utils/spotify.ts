@@ -85,6 +85,16 @@ export const pause = async () => {
   return spotifyApi.pause();
 };
 
+export const previous = async () => {
+  await checkAndRefreshAccessToken();
+  return spotifyApi.skipToPrevious();
+};
+
+export const next = async () => {
+  await checkAndRefreshAccessToken();
+  return spotifyApi.skipToNext();
+};
+
 const getTokenExpire = () => {
   const stored = localStorage.getItem('spotify-access-token-expires');
   return stored != null ? Number(stored) : 0;

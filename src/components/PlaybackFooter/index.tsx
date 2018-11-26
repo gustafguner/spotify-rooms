@@ -7,6 +7,8 @@ import { useContextState } from 'constate';
 import {
   play,
   pause,
+  previous,
+  next,
   getMyRecentlyPlayedTracks,
   getMyCurrentPlaybackState,
 } from '../../utils/spotify';
@@ -17,7 +19,7 @@ import PlayerControls from './components/PlayerControls';
 
 const PlaybackContainer = styled('div')`
   width: 100%;
-  height: 95px;
+  height: 90px;
   background-color: ${colors.PRIMARY_DARK};
   position: fixed;
   bottom: 0;
@@ -60,20 +62,20 @@ const getPlayerStatus = async () => {
   return { track, playback };
 };
 
-const onMount = async (setPlayer: any) => {
+const updatePlayer = async (setPlayer: any) => {
   const { track, playback } = await getPlayerStatus();
 
   setPlayer({
     track,
     playback,
   });
+};
+
+const onMount = async (setPlayer: any) => {
+  updatePlayer(setPlayer);
 
   const polling = async () => {
-    const data = await getPlayerStatus();
-    setPlayer({
-      track: data.track,
-      playback: data.playback,
-    });
+    updatePlayer(setPlayer);
   };
 
   setInterval(polling, 10000);
@@ -111,6 +113,14 @@ const PlaybackFooter: React.SFC = () => {
     });
   };
 
+  const previousSpotify = () => {
+    previous();
+  };
+
+  const nextSpotify = () => {
+    next();
+  };
+
   return player.track !== null ? (
     <PlaybackContainer>
       <TrackInfo
@@ -128,6 +138,8 @@ const PlaybackFooter: React.SFC = () => {
           isPlaying={player.playback.is_playing || false}
           play={playSpotify}
           pause={pauseSpotify}
+          previous={previousSpotify}
+          next={nextSpotify}
         />
         <ProgressBar
           progress={player.playback !== null ? player.playback.progress_ms : 0}

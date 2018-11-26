@@ -18,10 +18,10 @@ const Wrapper = styled('div')`
 `;
 
 const AlbumImageContainer = styled('div')`
-  flex-basis: 95px;
+  flex-basis: 90px;
   flex-shrink: 0;
   flex-grow: 0;
-  width: 95px;
+  width: 90px;
   height: 100%;
   overflow: hidden;
   margin-right: 16px;
@@ -30,12 +30,13 @@ const AlbumImageContainer = styled('div')`
 const AlbumImage = styled('img')`
   width: 100%;
   height: 100%;
+  float: left;
 `;
 
 const Headings = styled('div')`
   display: flex;
   flex-flow: row wrap;
-  width: calc(100% - 50px - 16px);
+  width: calc(100% - 95px - 16px);
   flex-direction: column;
 `;
 
