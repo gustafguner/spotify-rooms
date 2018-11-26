@@ -9,6 +9,7 @@ export const removeToken = () => {
 };
 
 export const logOut = () => {
+  alert();
   localStorage.clear();
   const [, setLoggedIn] = useContextState('auth');
   setLoggedIn(false);

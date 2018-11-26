@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { Provider, useContextState } from 'constate';
+import { Provider } from 'constate';
 import apolloClient from './graphql/client';
 import { ApolloProvider } from 'react-apollo';
 import styled from 'react-emotion';
@@ -17,10 +16,6 @@ const SiteContainer = styled('div')`
 
 const App: React.SFC = () => {
   initializeSpotify();
-  const [, setLoggedIn] = useContextState('auth', false);
-  useEffect(() => {
-    setLoggedIn(localStorage.getItem('spotify-access-token') ? true : false);
-  }, []);
 
   return (
     <ApolloProvider client={apolloClient}>

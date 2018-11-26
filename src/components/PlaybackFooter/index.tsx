@@ -49,7 +49,7 @@ const pauseSpotify = () => {
   pause();
 };
 
-const getPlayer = async () => {
+const getPlayerStatus = async () => {
   const currentPlayingTrack = await getMyCurrentPlaybackState();
 
   const mostRecentTrack =
@@ -63,34 +63,34 @@ const getPlayer = async () => {
       : mostRecentTrack.items[0].track
     : currentPlayingTrack.item;
 
-  const status = mostRecentTrack === null ? currentPlayingTrack : null;
+  const playback = mostRecentTrack === null ? currentPlayingTrack : null;
 
-  return { track, status };
+  return { track, playback };
 };
 
 const onMount = async (setPlayer: any) => {
-  const { track, status } = await getPlayer();
+  const { track, playback } = await getPlayerStatus();
 
   setPlayer({
     track,
-    status,
+    playback,
   });
 
   const polling = async () => {
-    const data = await getPlayer();
+    const data = await getPlayerStatus();
     setPlayer({
       track: data.track,
-      status: data.status,
+      playback: data.playback,
     });
   };
 
-  setInterval(polling, 3000);
+  setInterval(polling, 10000);
 };
 
 const PlaybackFooter: React.SFC = () => {
   const [player, setPlayer]: any = useContextState('spotify-player', {
     track: null,
-    status: null,
+    playback: null,
   });
 
   useEffect(() => {
@@ -112,8 +112,10 @@ const PlaybackFooter: React.SFC = () => {
       <Center>
         <PlayerControls play={playSpotify} pause={pauseSpotify} />
         <ProgressBar
-          progress={player.status !== null ? player.status.progress_ms : 0}
-          duration={player.status !== null ? player.status.item.duration_ms : 1}
+          progress={player.playback !== null ? player.playback.progress_ms : 0}
+          duration={
+            player.playback !== null ? player.playback.item.duration_ms : 1
+          }
         />
       </Center>
 
