@@ -80,17 +80,29 @@ const onMount = async (setPlayer: any) => {
     updatePlayer(setPlayer);
   };
 
-  setInterval(polling, 10000);
+  setInterval(polling, 1000);
 };
 
 const PlaybackFooter = () => {
   const [player, setPlayer] = useContextState('spotify');
-  const [count, setCount] = useContextState(null, 0);
 
   useEffect(() => {
     onMount(setPlayer);
     const interval = setInterval(() => {
-      setCount((counter) => counter + 1);
+      setPlayer((p: any) => {
+        return {
+          track: p.track,
+          playback: {
+            ...p.playback,
+            progress_ms:
+              p.playback !== null
+                ? p.playback.is_playing
+                  ? p.playback.progress_ms + 100
+                  : p.playback.progress_ms
+                : 0,
+          },
+        };
+      });
     }, 100);
     return () => {
       clearInterval(interval);
@@ -136,7 +148,6 @@ const PlaybackFooter = () => {
 
   return player && player.track !== null ? (
     <PlaybackContainer>
-      <div>{count}</div>
       <TrackInfo
         name={player.track.name}
         artists={player.track.artists}
