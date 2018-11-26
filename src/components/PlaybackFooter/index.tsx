@@ -17,12 +17,12 @@ import PlayerControls from './components/PlayerControls';
 
 const PlaybackContainer = styled('div')`
   width: 100%;
-  height: 85px;
+  height: 95px;
   background-color: ${colors.PRIMARY_DARK};
   position: fixed;
   bottom: 0;
   left: 0;
-  padding: 0 25px;
+  padding: 20px 0;
   display: flex;
   align-items: center;
 `;
@@ -40,14 +40,6 @@ const Right = styled('div')`
   flex-grow: 0;
   flex-shrink: 0;
 `;
-
-const playSpotify = () => {
-  play();
-};
-
-const pauseSpotify = () => {
-  pause();
-};
 
 const getPlayerStatus = async () => {
   const currentPlayingTrack = await getMyCurrentPlaybackState();
@@ -97,6 +89,28 @@ const PlaybackFooter: React.SFC = () => {
     onMount(setPlayer);
   }, []);
 
+  const playSpotify = () => {
+    play();
+    setPlayer({
+      track: player.track,
+      playback: {
+        ...player.playback,
+        is_playing: true,
+      },
+    });
+  };
+
+  const pauseSpotify = () => {
+    pause();
+    setPlayer({
+      track: player.track,
+      playback: {
+        ...player.playback,
+        is_playing: false,
+      },
+    });
+  };
+
   return player.track !== null ? (
     <PlaybackContainer>
       <TrackInfo
@@ -110,7 +124,11 @@ const PlaybackFooter: React.SFC = () => {
       />
 
       <Center>
-        <PlayerControls play={playSpotify} pause={pauseSpotify} />
+        <PlayerControls
+          isPlaying={player.playback.is_playing || false}
+          play={playSpotify}
+          pause={pauseSpotify}
+        />
         <ProgressBar
           progress={player.playback !== null ? player.playback.progress_ms : 0}
           duration={

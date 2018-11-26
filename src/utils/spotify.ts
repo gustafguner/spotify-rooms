@@ -56,7 +56,7 @@ const getRefreshToken = () => {
 const storeExpire = (expiresIn: number) => {
   localStorage.setItem(
     'spotify-access-token-expires',
-    JSON.stringify(Date.now() + expiresIn - 60),
+    JSON.stringify(Date.now() + expiresIn * 1000 - 600),
   );
 };
 

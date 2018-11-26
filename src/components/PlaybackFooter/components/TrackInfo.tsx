@@ -18,12 +18,11 @@ const Wrapper = styled('div')`
 `;
 
 const AlbumImageContainer = styled('div')`
-  flex-basis: 50px;
+  flex-basis: 95px;
   flex-shrink: 0;
   flex-grow: 0;
-  width: 50px;
-  height: 50px;
-  border-radius: 3px;
+  width: 95px;
+  height: 100%;
   overflow: hidden;
   margin-right: 16px;
 `;
