@@ -41,7 +41,7 @@ const storeAccessToken = (token: string) => {
   localStorage.setItem('spotify-access-token', token);
 };
 
-const getAccessToken = () => {
+export const getAccessToken = () => {
   return localStorage.getItem('spotify-access-token');
 };
 

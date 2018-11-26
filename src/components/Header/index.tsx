@@ -4,9 +4,8 @@ import { colors } from '../../styles';
 import { Button } from '../buttons';
 import { getSpotifyAuthorizeUrl } from '../../utils/spotify';
 import spotifyLogo from '../../assets/images/spotify-logo.svg';
-import { logOut } from 'src/utils/auth';
+import { clear } from 'src/utils/auth';
 import { useContextState } from 'constate';
-import { useEffect } from 'react';
 
 const HeaderWrapper = styled('header')`
   width: 100%;
@@ -55,20 +54,21 @@ const SpotifyLogoImage = styled('img')`
 `;
 
 const Header: React.SFC = () => {
-  const [auth, setAuth] = useContextState('auth', { loggedIn: false });
-  useEffect(() => {
+  const [auth, setAuth] = useContextState('auth');
+  const logOut = () => {
+    clear();
     setAuth({
-      loggedIn: localStorage.getItem('spotify-access-token') ? true : false,
+      ...auth,
+      loggedIn: false,
     });
-  }, []);
-
+  };
   return (
     <>
       <HeaderWrapperPadding />
       <HeaderWrapper>
         <Logo>spots</Logo>
 
-        {auth.loggedIn ? (
+        {auth && auth.loggedIn ? (
           <Button onClick={logOut}>Log out</Button>
         ) : (
           <SpotifyLoginButton onClick={getSpotifyAuthorizeUrl}>
