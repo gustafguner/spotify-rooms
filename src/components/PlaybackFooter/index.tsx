@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import styled from 'react-emotion';
 import { colors } from '../../styles';
 import { useContextState } from 'constate';
+
 import {
   play,
   pause,
@@ -67,44 +68,52 @@ const getPlayer = async () => {
   return { track, status };
 };
 
-const onMount = async (setTrack: any, setStatus: any) => {
+const onMount = async (setPlayer: any) => {
   const { track, status } = await getPlayer();
 
-  setTrack(track);
-  setStatus(status);
+  setPlayer({
+    track,
+    status,
+  });
 
   const polling = async () => {
     const data = await getPlayer();
-    setTrack(data.track);
-    setStatus(data.status);
+    setPlayer({
+      track: data.track,
+      status: data.status,
+    });
   };
 
-  setInterval(polling, 10000);
+  setInterval(polling, 3000);
 };
 
 const PlaybackFooter: React.SFC = () => {
-  const [track, setTrack]: any = useContextState('spotify-player', null);
-  const [status, setStatus]: any = useContextState('spotify-player', null);
+  const [player, setPlayer]: any = useContextState('spotify-player', {
+    track: null,
+    status: null,
+  });
 
   useEffect(() => {
-    onMount(setTrack, setStatus);
+    onMount(setPlayer);
   }, []);
 
-  return false ? (
+  return player.track !== null ? (
     <PlaybackContainer>
       <TrackInfo
-        name={track.name}
-        artists={track.artists}
+        name={player.track.name}
+        artists={player.track.artists}
         image={
-          track.album.images.length !== 0 ? track.album.images[0].url : null
+          player.track.album.images.length !== 0
+            ? player.track.album.images[0].url
+            : null
         }
       />
 
       <Center>
         <PlayerControls play={playSpotify} pause={pauseSpotify} />
         <ProgressBar
-          progress={status !== null ? status.progress_ms : 0}
-          duration={status !== null ? status.item.duration_ms : 1}
+          progress={player.status !== null ? player.status.progress_ms : 0}
+          duration={player.status !== null ? player.status.item.duration_ms : 1}
         />
       </Center>
 

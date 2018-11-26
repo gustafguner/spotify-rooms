@@ -24,7 +24,7 @@ const App: React.SFC = () => {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Provider>
+      <Provider devtools={true}>
         <Header />
         <SiteContainer>
           <BrowserRouter>
