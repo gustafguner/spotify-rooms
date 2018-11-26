@@ -23,6 +23,10 @@ const AppEffects = ({ children }: any) => {
     () => {
       setState({
         ...state,
+        spotify: {
+          track: null,
+          playback: null,
+        },
         auth: {
           loggedIn: getAccessToken() ? true : false,
         },

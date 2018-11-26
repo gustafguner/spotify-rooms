@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import styled from 'react-emotion';
 import { colors } from '../../styles';
 import { useContextState } from 'constate';
-
+import { useEffect } from 'react';
 import {
   play,
   pause,
   previous,
   next,
-  getMyRecentlyPlayedTracks,
   getMyCurrentPlaybackState,
+  getMyRecentlyPlayedTracks,
 } from '../../utils/spotify';
 
 import ProgressBar from './components/ProgressBar';
@@ -72,7 +71,10 @@ const updatePlayer = async (setPlayer: any) => {
 };
 
 const onMount = async (setPlayer: any) => {
-  updatePlayer(setPlayer);
+  if (setPlayer === false) {
+    return;
+  }
+  await updatePlayer(setPlayer);
 
   const polling = async () => {
     updatePlayer(setPlayer);
@@ -81,14 +83,18 @@ const onMount = async (setPlayer: any) => {
   setInterval(polling, 10000);
 };
 
-const PlaybackFooter: React.SFC = () => {
-  const [player, setPlayer]: any = useContextState('spotify-player', {
-    track: null,
-    playback: null,
-  });
+const PlaybackFooter = () => {
+  const [player, setPlayer] = useContextState('spotify');
+  const [count, setCount] = useContextState(null, 0);
 
   useEffect(() => {
     onMount(setPlayer);
+    const interval = setInterval(() => {
+      setCount((counter) => counter + 1);
+    }, 100);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const playSpotify = () => {
@@ -115,14 +121,22 @@ const PlaybackFooter: React.SFC = () => {
 
   const previousSpotify = () => {
     previous();
+    setPlayer({
+      track: player.track,
+      playback: {
+        ...player.playback,
+        progress_ms: 0,
+      },
+    });
   };
 
   const nextSpotify = () => {
     next();
   };
 
-  return player.track !== null ? (
+  return player && player.track !== null ? (
     <PlaybackContainer>
+      <div>{count}</div>
       <TrackInfo
         name={player.track.name}
         artists={player.track.artists}

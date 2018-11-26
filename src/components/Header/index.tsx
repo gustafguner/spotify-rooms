@@ -7,51 +7,54 @@ import spotifyLogo from '../../assets/images/spotify-logo.svg';
 import { clear } from 'src/utils/auth';
 import { useContextState } from 'constate';
 
-const HeaderWrapper = styled('header')`
-  width: 100%;
-  height: 70px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: ${colors.PRIMARY_DARK};
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.08);
-  padding: 0 25px;
-  align-items: center;
-`;
+const HeaderWrapper = styled('header')({
+  width: '100%',
+  height: 70,
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  backgroundColor: colors.PRIMARY_DARK,
+  display: 'flex',
+  justifyContent: 'space-between',
+  boxShadow: '0 3px 7px rgba(0, 0, 0, 0.08)',
+  paddingLeft: 25,
+  paddingRight: 25,
+  alignItems: 'center',
+});
 
-const HeaderWrapperPadding = styled('div')`
-  padding-bottom: 70px;
-`;
+const HeaderWrapperPadding = styled('div')({
+  paddingBottom: 70,
+});
 
-const Logo = styled('div')`
-  width: 100px;
-`;
+const Logo = styled('div')({
+  width: 100,
+});
 
-const SpotifyLoginButton = styled('button')`
-  background-color: ${colors.SPOTIFY_GREEN};
-  color: white;
-  text-decoration: none;
-  padding: 10px 19px;
-  border-radius: 100px;
-  display: flex;
-  align-items: center;
-  position: relative;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  &:hover {
-    background-color: ${colors.SPOTIFY_GREEN_HOVERED};
-  }
-`;
+const SpotifyLoginButton = styled('button')({
+  backgroundColor: colors.SPOTIFY_GREEN,
+  color: colors.WHITE,
+  textDecoration: 'none',
+  paddingTop: 10,
+  paddingBottom: 10,
+  paddingLeft: 19,
+  paddingRight: 19,
+  borderRadius: 100,
+  display: 'flex',
+  alignItems: 'center',
+  position: 'relative',
+  fontSize: 16,
+  border: 'none',
+  cursor: 'pointer',
+  ':hover': {
+    backgroundColor: colors.SPOTIFY_GREEN_HOVERED,
+  },
+});
 
-const SpotifyLogoImage = styled('img')`
-  width: 18px;
-  height: 18px;
-  margin-left: 7px;
-`;
+const SpotifyLogoImage = styled('img')({
+  width: 18,
+  height: 18,
+  marginLeft: 7,
+});
 
 const Header: React.SFC = () => {
   const [auth, setAuth] = useContextState('auth');

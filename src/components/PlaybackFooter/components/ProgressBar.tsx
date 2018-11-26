@@ -76,5 +76,4 @@ const ProgressBar: React.SFC<ProgressBarProps> = ({ progress, duration }) => (
     </Time>
   </Wrapper>
 );
-
 export default ProgressBar;
