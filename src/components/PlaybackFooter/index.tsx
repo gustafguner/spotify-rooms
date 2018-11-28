@@ -80,7 +80,7 @@ const onMount = async (setPlayer: any) => {
     updatePlayer(setPlayer);
   };
 
-  setInterval(polling, 1000);
+  setInterval(polling, 3000);
 };
 
 const PlaybackFooter = () => {
@@ -109,40 +109,23 @@ const PlaybackFooter = () => {
     };
   }, []);
 
-  const playSpotify = () => {
+  const playSpotify = async () => {
+    updatePlayer(setPlayer);
     play();
-    setPlayer({
-      track: player.track,
-      playback: {
-        ...player.playback,
-        is_playing: true,
-      },
-    });
   };
 
-  const pauseSpotify = () => {
+  const pauseSpotify = async () => {
+    updatePlayer(setPlayer);
     pause();
-    setPlayer({
-      track: player.track,
-      playback: {
-        ...player.playback,
-        is_playing: false,
-      },
-    });
   };
 
   const previousSpotify = () => {
+    updatePlayer(setPlayer);
     previous();
-    setPlayer({
-      track: player.track,
-      playback: {
-        ...player.playback,
-        progress_ms: 0,
-      },
-    });
   };
 
-  const nextSpotify = () => {
+  const nextSpotify = async () => {
+    updatePlayer(setPlayer);
     next();
   };
 

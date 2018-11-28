@@ -18,6 +18,7 @@ interface TimeProps {
 }
 
 const Time = styled(Moment)(({ position }: TimeProps) => ({
+  width: 40,
   fontSize: 13,
   fontWeight: 300,
   color: colors.GRAY,
