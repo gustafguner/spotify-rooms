@@ -18,11 +18,13 @@ interface TimeProps {
 }
 
 const Time = styled(Moment)(({ position }: TimeProps) => ({
-  width: 40,
+  flexBasis: 36,
+  flexShrink: 0,
   fontSize: 13,
   fontWeight: 300,
   color: colors.GRAY,
   cursor: 'default',
+  textAlign: position,
   marginRight: position === 'left' ? 12 : 0,
   marginLeft: position === 'right' ? 12 : 0,
 }));

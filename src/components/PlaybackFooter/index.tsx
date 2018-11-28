@@ -16,31 +16,33 @@ import ProgressBar from './components/ProgressBar';
 import TrackInfo from './components/TrackInfo';
 import PlayerControls from './components/PlayerControls';
 
-const PlaybackContainer = styled('div')`
-  width: 100%;
-  height: 90px;
-  background-color: ${colors.PRIMARY_DARK};
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  padding: 20px 0;
-  display: flex;
-  align-items: center;
-`;
+const PlaybackContainer = styled('div')({
+  width: '100%',
+  height: 90,
+  backgroundColor: colors.PRIMARY_DARK,
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  paddingTop: 20,
+  paddingBottom: 20,
+  display: 'flex',
+  alignItems: 'center',
+});
 
-const Center = styled('div')`
-  flex-basis: 60%;
-  flex-grow: 0;
-  padding: 0 20px;
-`;
+const Center = styled('div')({
+  flexBasis: '60%',
+  flexGrow: 0,
+  paddingLeft: 20,
+  paddingRight: 20,
+});
 
-const Right = styled('div')`
-  display: flex;
-  flex-basis: 30%;
-  min-width: 180px;
-  flex-grow: 0;
-  flex-shrink: 0;
-`;
+const Right = styled('div')({
+  display: 'flex',
+  flexBasis: '30%',
+  minWidth: 180,
+  flexGrow: 0,
+  flexShrink: 0,
+});
 
 const getPlayerStatus = async () => {
   const currentPlayingTrack = await getMyCurrentPlaybackState();
@@ -70,24 +72,16 @@ const updatePlayer = async (setPlayer: any) => {
   });
 };
 
-const onMount = async (setPlayer: any) => {
-  if (setPlayer === false) {
-    return;
-  }
-  await updatePlayer(setPlayer);
-
-  const polling = async () => {
-    updatePlayer(setPlayer);
-  };
-
-  setInterval(polling, 3000);
-};
-
 const PlaybackFooter = () => {
   const [player, setPlayer] = useContextState('spotify');
 
   useEffect(() => {
-    onMount(setPlayer);
+    updatePlayer(setPlayer);
+
+    const polling = setInterval(() => {
+      updatePlayer(setPlayer);
+    }, 3000);
+
     const interval = setInterval(() => {
       setPlayer((p: any) => {
         return {
@@ -105,28 +99,41 @@ const PlaybackFooter = () => {
       });
     }, 100);
     return () => {
+      clearInterval(polling);
       clearInterval(interval);
     };
   }, []);
 
   const playSpotify = async () => {
-    updatePlayer(setPlayer);
+    setPlayer((p: any) => ({
+      ...p,
+      playback: {
+        ...p.playback,
+        is_playing: true,
+      },
+    }));
     play();
   };
 
   const pauseSpotify = async () => {
-    updatePlayer(setPlayer);
+    setPlayer((p: any) => ({
+      ...p,
+      playback: {
+        ...p.playback,
+        is_playing: false,
+      },
+    }));
     pause();
   };
 
-  const previousSpotify = () => {
-    updatePlayer(setPlayer);
+  const previousSpotify = async () => {
     previous();
+    updatePlayer(setPlayer);
   };
 
   const nextSpotify = async () => {
-    updatePlayer(setPlayer);
     next();
+    updatePlayer(setPlayer);
   };
 
   return player && player.track !== null ? (
