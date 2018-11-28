@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
+import PlayIcon from './icons/Play';
+
 interface PlayerControlsProps {
   isPlaying: boolean;
   play: () => void;
@@ -20,6 +22,8 @@ const Button = styled('button')({
   width: 34,
   height: 34,
   borderRadius: '50%',
+  border: 'none',
+  background: 'none',
   cursor: 'pointer',
   '&:focus': {
     outline: 'none',
@@ -34,13 +38,15 @@ const PlayerControls: React.SFC<PlayerControlsProps> = ({
   next,
 }) => (
   <Wrapper>
-    <Button onClick={previous}>{'<-'}</Button>
+    <Button onClick={previous}>{'<'}</Button>
     {isPlaying ? (
       <Button onClick={pause}>Pause</Button>
     ) : (
-      <Button onClick={play}>Play</Button>
+      <Button onClick={play}>
+        <PlayIcon />
+      </Button>
     )}
-    <Button onClick={next}>{'->'}</Button>
+    <Button onClick={next}>-></Button>
   </Wrapper>
 );
 
