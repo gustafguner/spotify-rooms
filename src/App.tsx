@@ -11,10 +11,11 @@ import { routes } from './routes';
 import { useContext, useEffect } from 'react';
 import { Context, Provider } from 'constate';
 
-const SiteContainer = styled('div')`
-  width: 100%;
-  padding: 0 25px;
-`;
+const SiteContainer = styled('div')({
+  width: '100%',
+  paddingLeft: 25,
+  paddingRight: 25,
+});
 
 const AppEffects = ({ children }: any) => {
   const [state, setState] = useContext(Context);
