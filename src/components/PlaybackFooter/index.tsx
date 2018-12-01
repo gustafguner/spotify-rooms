@@ -49,6 +49,8 @@ const Center = styled('div')({
 const Right = styled('div')({
   display: 'flex',
   flexBasis: '30%',
+  paddingLeft: 20,
+  paddingRight: 20,
   minWidth: 180,
   flexGrow: 0,
   flexShrink: 0,
