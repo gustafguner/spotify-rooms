@@ -47,19 +47,19 @@ const PlayerControls: React.SFC<PlayerControlsProps> = ({
 }) => (
   <Wrapper>
     <Button onClick={previous}>
-      <Previous size={16} />
+      <Previous />
     </Button>
     {isPlaying ? (
       <PlayPauseButton onClick={pause}>
-        <Pause size={24} />
+        <Pause />
       </PlayPauseButton>
     ) : (
       <PlayPauseButton onClick={play}>
-        <Play size={24} />
+        <Play />
       </PlayPauseButton>
     )}
     <Button onClick={next}>
-      <Next size={16} />
+      <Next />
     </Button>
   </Wrapper>
 );

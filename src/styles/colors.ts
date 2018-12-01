@@ -9,4 +9,5 @@ export const colors = {
   TRANSPARENT: 'transparent',
   WHITE: '#FFFFFF',
   BLACK: '#000000',
+  PLAYBACK_UNHOVERED: 'rgba(255,255,255,0.8)',
 };

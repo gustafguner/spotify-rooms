@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Svg, SvgProps } from 'src/components/icons/Svg';
+import PlaybackIcon from './PlaybackIcon';
 
-const Play: React.SFC<SvgProps> = ({ fill, size }) => (
-  <Svg fill={fill} size={size} viewBox="0 0 30 30">
+const Play: React.SFC = () => (
+  <PlaybackIcon size={24} viewBox="0 0 30 30">
     <path d="M5.14,30V0L27.8,15Z" />
-  </Svg>
+  </PlaybackIcon>
 );
 
 export default Play;

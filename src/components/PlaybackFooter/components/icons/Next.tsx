@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Svg, SvgProps } from 'src/components/icons/Svg';
+import PlaybackIcon from './PlaybackIcon';
 
-const Next: React.SFC<SvgProps> = ({ fill, size }) => (
-  <Svg fill={fill} size={size} viewBox="0 0 30 30">
+const Next: React.SFC = () => (
+  <PlaybackIcon size={16} viewBox="0 0 30 30">
     <rect
       x="23.04"
       y="3.17"
@@ -12,7 +12,7 @@ const Next: React.SFC<SvgProps> = ({ fill, size }) => (
     />
 
     <polygon points="3.15 2.87 21.49 15 3.15 27.14 3.15 2.87" />
-  </Svg>
+  </PlaybackIcon>
 );
 
 export default Next;
