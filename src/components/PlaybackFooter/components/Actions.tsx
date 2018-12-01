@@ -1,10 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import { colors } from '../../../styles/colors';
-import Shuffle from './icons/Shuffle';
-import Replay from './icons/Replay';
-import Volume from './icons/Volume';
-import AddToPlaylist from './icons/AddToPlaylist';
+
+import { Shuffle, Repeat, Volume, AddToPlaylist } from './icons';
 
 const Wrapper = styled('div')({
   width: '100%',
@@ -31,7 +28,7 @@ const Actions: React.SFC = () => (
       <Shuffle />
     </Button>
     <Button>
-      <Replay />
+      <Repeat />
     </Button>
     <Button>
       <Volume />

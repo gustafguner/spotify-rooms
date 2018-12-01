@@ -1,10 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
-import Play from './icons/Play';
-import Pause from './icons/Pause';
-import Previous from './icons/Previous';
-import Next from './icons/Next';
+import { Play, Pause, Previous, Next } from './icons';
 
 interface PlayerControlsProps {
   isPlaying: boolean;
