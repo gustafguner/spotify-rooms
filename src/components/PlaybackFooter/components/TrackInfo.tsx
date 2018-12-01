@@ -8,15 +8,6 @@ interface TrackInfoProps {
   image: string;
 }
 
-const Wrapper = styled('div')`
-  display: flex;
-  flex-basis: 30%;
-  min-width: 180px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  align-items: center;
-`;
-
 const AlbumImageContainer = styled('div')`
   flex-basis: 90px;
   flex-shrink: 0;
@@ -62,7 +53,7 @@ const Artist = styled('div')`
 `;
 
 const TrackInfo: React.SFC<TrackInfoProps> = ({ name, artists, image }) => (
-  <Wrapper>
+  <>
     <AlbumImageContainer>
       <AlbumImage src={image} />
     </AlbumImageContainer>
@@ -80,7 +71,7 @@ const TrackInfo: React.SFC<TrackInfoProps> = ({ name, artists, image }) => (
               .join(', ')}
       </Artist>
     </Headings>
-  </Wrapper>
+  </>
 );
 
 export default TrackInfo;

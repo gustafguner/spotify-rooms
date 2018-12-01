@@ -15,6 +15,7 @@ import {
 import ProgressBar from './components/ProgressBar';
 import TrackInfo from './components/TrackInfo';
 import PlayerControls from './components/PlayerControls';
+import Actions from './components/Actions';
 
 const PlaybackContainer = styled('div')({
   width: '100%',
@@ -26,6 +27,15 @@ const PlaybackContainer = styled('div')({
   paddingTop: 20,
   paddingBottom: 20,
   display: 'flex',
+  alignItems: 'center',
+});
+
+const Left = styled('div')({
+  display: 'flex',
+  flexBasis: '30%',
+  minWidth: 180,
+  flexGrow: 0,
+  flexShrink: 0,
   alignItems: 'center',
 });
 
@@ -138,15 +148,17 @@ const PlaybackFooter = () => {
 
   return player && player.track !== null ? (
     <PlaybackContainer>
-      <TrackInfo
-        name={player.track.name}
-        artists={player.track.artists}
-        image={
-          player.track.album.images.length !== 0
-            ? player.track.album.images[0].url
-            : null
-        }
-      />
+      <Left>
+        <TrackInfo
+          name={player.track.name}
+          artists={player.track.artists}
+          image={
+            player.track.album.images.length !== 0
+              ? player.track.album.images[0].url
+              : null
+          }
+        />
+      </Left>
 
       <Center>
         <PlayerControls
@@ -164,7 +176,9 @@ const PlaybackFooter = () => {
         />
       </Center>
 
-      <Right>2</Right>
+      <Right>
+        <Actions />
+      </Right>
     </PlaybackContainer>
   ) : (
     <>...</>
