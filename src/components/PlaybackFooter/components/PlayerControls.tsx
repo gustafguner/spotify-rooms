@@ -24,7 +24,6 @@ const Wrapper = styled('div')({
 const Button = styled('button')({
   width: 34,
   height: 34,
-  borderRadius: '50%',
   border: 'none',
   background: 'none',
   cursor: 'pointer',
@@ -32,6 +31,11 @@ const Button = styled('button')({
   '&:focus': {
     outline: 'none',
   },
+});
+
+const PlayPauseButton = styled(Button)({
+  marginLeft: 10,
+  marginRight: 10,
 });
 
 const PlayerControls: React.SFC<PlayerControlsProps> = ({
@@ -43,19 +47,19 @@ const PlayerControls: React.SFC<PlayerControlsProps> = ({
 }) => (
   <Wrapper>
     <Button onClick={previous}>
-      <Previous size={34} />
+      <Previous size={16} />
     </Button>
     {isPlaying ? (
-      <Button onClick={pause}>
-        <Pause size={34} />
-      </Button>
+      <PlayPauseButton onClick={pause}>
+        <Pause size={24} />
+      </PlayPauseButton>
     ) : (
-      <Button onClick={play}>
-        <Play size={34} />
-      </Button>
+      <PlayPauseButton onClick={play}>
+        <Play size={24} />
+      </PlayPauseButton>
     )}
     <Button onClick={next}>
-      <Next size={34} />
+      <Next size={16} />
     </Button>
   </Wrapper>
 );
