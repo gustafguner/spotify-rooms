@@ -27,10 +27,14 @@ const Button = styled('button')({
   },
 });
 
-const Actions: React.SFC = () => (
+interface ActionsProps {
+  shuffle: boolean;
+}
+
+const Actions: React.SFC<ActionsProps> = ({ shuffle }) => (
   <Wrapper>
     <Button>
-      <Shuffle />
+      <Shuffle toggled={shuffle} />
     </Button>
     <Button>
       <Repeat />

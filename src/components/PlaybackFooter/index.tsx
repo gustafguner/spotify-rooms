@@ -179,7 +179,7 @@ const PlaybackFooter = () => {
       </Center>
 
       <Right>
-        <Actions />
+        <Actions shuffle={player.playback.shuffle_state} />
       </Right>
     </PlaybackContainer>
   ) : (
