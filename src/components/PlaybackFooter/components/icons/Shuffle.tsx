@@ -2,7 +2,7 @@ import * as React from 'react';
 import ActionIcon from './ActionIcon';
 
 const Shuffle: React.SFC = () => (
-  <ActionIcon size={18} viewBox="0 0 30 30">
+  <ActionIcon viewBox="0 0 30 30">
     <polygon points="18.55 17.23 17.5 18.29 22.34 23.14 19.65 25.83 26.09 25.83 26.09 19.39 23.4 22.08 18.55 17.23" />
 
     <rect

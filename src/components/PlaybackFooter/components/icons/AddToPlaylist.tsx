@@ -2,7 +2,7 @@ import * as React from 'react';
 import ActionIcon from './ActionIcon';
 
 const AddToPlaylist: React.SFC = () => (
-  <ActionIcon size={18} viewBox="0 0 30 30">
+  <ActionIcon viewBox="0 0 30 30">
     <rect x="0.05" y="7.28" width="17.87" height="1.5" />
     <rect x="0.05" y="13.3" width="17.87" height="1.5" />
     <rect x="0.05" y="19.31" width="11.85" height="1.5" />

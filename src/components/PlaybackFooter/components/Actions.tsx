@@ -8,6 +8,9 @@ const Wrapper = styled('div')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
+  flexFlow: 'wrap',
+  paddingLeft: 5,
+  paddingRight: 5,
 });
 
 const Button = styled('button')({
@@ -17,6 +20,8 @@ const Button = styled('button')({
   background: 'none',
   cursor: 'pointer',
   padding: 0,
+  marginLeft: 5,
+  marginRight: 5,
   '&:focus': {
     outline: 'none',
   },

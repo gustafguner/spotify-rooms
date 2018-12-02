@@ -42,8 +42,8 @@ const Left = styled('div')({
 const Center = styled('div')({
   flexBasis: '60%',
   flexGrow: 0,
-  paddingLeft: 20,
-  paddingRight: 20,
+  paddingLeft: 25,
+  paddingRight: 25,
 });
 
 const Right = styled('div')({
