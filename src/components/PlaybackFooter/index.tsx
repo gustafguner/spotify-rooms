@@ -96,6 +96,7 @@ const PlaybackFooter = () => {
 
     const interval = setInterval(() => {
       setPlayer((p: any) => {
+        console.log(p);
         return {
           track: p.track,
           playback: {
@@ -179,7 +180,10 @@ const PlaybackFooter = () => {
       </Center>
 
       <Right>
-        <Actions shuffle={player.playback.shuffle_state} />
+        <Actions
+          shuffle={player.playback.shuffle_state}
+          repeat={player.playback.repeat_state !== 'off'}
+        />
       </Right>
     </PlaybackContainer>
   ) : (

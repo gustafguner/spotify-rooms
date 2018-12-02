@@ -29,15 +29,16 @@ const Button = styled('button')({
 
 interface ActionsProps {
   shuffle: boolean;
+  repeat: boolean;
 }
 
-const Actions: React.SFC<ActionsProps> = ({ shuffle }) => (
+const Actions: React.SFC<ActionsProps> = ({ shuffle, repeat }) => (
   <Wrapper>
     <Button>
       <Shuffle toggled={shuffle} />
     </Button>
     <Button>
-      <Repeat />
+      <Repeat toggled={repeat} />
     </Button>
     <Button>
       <Volume />
