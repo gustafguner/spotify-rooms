@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'react-emotion';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 import { Shuffle, Repeat, Volume, AddToPlaylist } from './icons';
 import VolumeSlider from './VolumeSlider';
@@ -63,19 +64,18 @@ const Actions: React.SFC<ActionsProps> = ({
     <Button onClick={toggleRepeat}>
       <Repeat toggled={repeat} />
     </Button>
-    <VolumeWrapper>
-      {volumeToggled && (
-        <VolumeSlider
-          volume={volume}
-          changeVolume={changeVolume}
-          toggleVolume={toggleVolume}
-        />
-      )}
 
-      <Button onClick={toggleVolume}>
-        <Volume />
-      </Button>
-    </VolumeWrapper>
+    <OutsideClickHandler onOutsideClick={toggleVolume}>
+      <VolumeWrapper>
+        {volumeToggled && (
+          <VolumeSlider volume={volume} changeVolume={changeVolume} />
+        )}
+
+        <Button onClick={toggleVolume}>
+          <Volume />
+        </Button>
+      </VolumeWrapper>
+    </OutsideClickHandler>
 
     <Button>
       <AddToPlaylist />

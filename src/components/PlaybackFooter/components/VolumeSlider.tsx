@@ -2,12 +2,10 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import { colors } from '../../../styles/colors';
 import Draggable from 'react-draggable';
-import OutsideClickHandler from 'react-outside-click-handler';
 
 interface VolumeSliderProps {
   volume: number;
   changeVolume: (volume: number) => void;
-  toggleVolume: () => void;
 }
 
 const Wrapper = styled('div')({
@@ -45,23 +43,20 @@ const Knob = styled('div')({
 const VolumeSlider: React.SFC<VolumeSliderProps> = ({
   volume,
   changeVolume,
-  toggleVolume,
 }) => (
   <Wrapper>
-    <OutsideClickHandler onOutsideClick={toggleVolume}>
-      <Slider>
-        <Draggable
-          defaultPosition={{ x: 0, y: 100 - volume }}
-          axis="y"
-          bounds={{ left: 0, top: 0, right: 0, bottom: 100 }}
-          onStop={(e: any, position: any) => {
-            changeVolume(100 - position.y);
-          }}
-        >
-          <Knob />
-        </Draggable>
-      </Slider>
-    </OutsideClickHandler>
+    <Slider>
+      <Draggable
+        defaultPosition={{ x: 0, y: 100 - volume }}
+        axis="y"
+        bounds={{ left: 0, top: 0, right: 0, bottom: 100 }}
+        onStop={(e: any, position: any) => {
+          changeVolume(100 - position.y);
+        }}
+      >
+        <Knob />
+      </Draggable>
+    </Slider>
   </Wrapper>
 );
 export default VolumeSlider;
