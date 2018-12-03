@@ -6,8 +6,7 @@ import { colors } from 'src/styles';
 
 interface PlayerControlsProps {
   isPlaying: boolean;
-  play: () => void;
-  pause: () => void;
+  playOrPause: () => void;
   previous: () => void;
   next: () => void;
 }
@@ -43,8 +42,7 @@ const PlayPauseButton = styled(Button)({
 
 const PlayerControls: React.SFC<PlayerControlsProps> = ({
   isPlaying,
-  play,
-  pause,
+  playOrPause,
   previous,
   next,
 }) => (
@@ -53,11 +51,11 @@ const PlayerControls: React.SFC<PlayerControlsProps> = ({
       <Previous />
     </Button>
     {isPlaying ? (
-      <PlayPauseButton onClick={pause}>
+      <PlayPauseButton onClick={playOrPause}>
         <Pause />
       </PlayPauseButton>
     ) : (
-      <PlayPauseButton onClick={play}>
+      <PlayPauseButton onClick={playOrPause}>
         <Play />
       </PlayPauseButton>
     )}

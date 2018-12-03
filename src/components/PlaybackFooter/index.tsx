@@ -116,32 +116,37 @@ const PlaybackFooter = () => {
         };
       });
     }, 1000);
+
     return () => {
       clearInterval(polling);
       clearInterval(interval);
     };
   }, []);
 
-  const playSpotify = async () => {
-    setPlayer((p: any) => ({
-      ...p,
-      playback: {
-        ...p.playback,
-        is_playing: true,
-      },
-    }));
-    play();
+  useEffect(
+    () => {
+      document.addEventListener('keydown', handleKeydown);
+      return () => document.removeEventListener('keydown', handleKeydown);
+    },
+    [player],
+  );
+
+  const handleKeydown = (event: KeyboardEvent) => {
+    if (event.keyCode === 32) {
+      playOrPauseSpotify();
+    }
   };
 
-  const pauseSpotify = async () => {
+  const playOrPauseSpotify = async () => {
     setPlayer((p: any) => ({
       ...p,
       playback: {
         ...p.playback,
-        is_playing: false,
+        is_playing: !p.playback.is_playing,
       },
     }));
-    pause();
+
+    player.playback.is_playing ? pause() : play();
   };
 
   const previousSpotify = async () => {
@@ -232,8 +237,7 @@ const PlaybackFooter = () => {
       <Center>
         <PlayerControls
           isPlaying={player.playback.is_playing || false}
-          play={playSpotify}
-          pause={pauseSpotify}
+          playOrPause={playOrPauseSpotify}
           previous={previousSpotify}
           next={nextSpotify}
         />
