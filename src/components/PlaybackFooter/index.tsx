@@ -13,6 +13,7 @@ import {
   setShuffle,
   setRepeat,
   setVolume,
+  seek,
 } from '../../utils/spotify';
 
 import ProgressBar from './components/ProgressBar';
@@ -203,6 +204,17 @@ const PlaybackFooter = () => {
     setRepeat(player.playback.repeat_state === 'off');
   };
 
+  const seekSpotify = (position: number) => {
+    setPlayer((p: any) => ({
+      ...p,
+      playback: {
+        ...p.playback,
+        progress_ms: position,
+      },
+    }));
+    seek(position);
+  };
+
   return player && player.track !== null ? (
     <PlaybackContainer>
       <Left>
@@ -230,6 +242,7 @@ const PlaybackFooter = () => {
           duration={
             player.playback !== null ? player.playback.item.duration_ms : 1
           }
+          seek={seekSpotify}
         />
       </Center>
 

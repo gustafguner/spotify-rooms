@@ -63,9 +63,14 @@ const Knob = styled('div')({
 interface ProgressBarProps {
   progress: number;
   duration: number;
+  seek: (position: number) => void;
 }
 
-const ProgressBar: React.SFC<ProgressBarProps> = ({ progress, duration }) => {
+const ProgressBar: React.SFC<ProgressBarProps> = ({
+  progress,
+  duration,
+  seek,
+}) => {
   let width: number = 0;
   const [w, setW] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -116,6 +121,7 @@ const ProgressBar: React.SFC<ProgressBarProps> = ({ progress, duration }) => {
             }}
             onStop={(a: any, position: any) => {
               const seekToSecond = Math.round((position.x / w) * duration);
+              seek(seekToSecond);
               setIsSeeking(false);
             }}
           >
