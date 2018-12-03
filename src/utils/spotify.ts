@@ -95,6 +95,11 @@ export const next = async () => {
   return spotifyApi.skipToNext();
 };
 
+export const setVolume = async (volume: number) => {
+  await checkAndRefreshAccessToken();
+  return spotifyApi.setVolume(volume, {});
+};
+
 const getTokenExpire = () => {
   const stored = localStorage.getItem('spotify-access-token-expires');
   return stored != null ? Number(stored) : 0;

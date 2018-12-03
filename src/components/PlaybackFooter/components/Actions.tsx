@@ -41,6 +41,7 @@ interface ActionsProps {
   volume: number;
   volumeToggled: boolean;
   toggleVolume: () => void;
+  changeVolume: (volume: number) => void;
 }
 
 const Actions: React.SFC<ActionsProps> = ({
@@ -48,6 +49,7 @@ const Actions: React.SFC<ActionsProps> = ({
   repeat,
   volume,
   volumeToggled,
+  changeVolume,
   toggleVolume,
 }) => (
   <Wrapper>
@@ -58,7 +60,9 @@ const Actions: React.SFC<ActionsProps> = ({
       <Repeat toggled={repeat} />
     </Button>
     <VolumeWrapper>
-      {volumeToggled && <VolumeSlider volume={volume} />}
+      {volumeToggled && (
+        <VolumeSlider volume={volume} changeVolume={changeVolume} />
+      )}
 
       <Button onClick={toggleVolume}>
         <Volume />

@@ -10,6 +10,7 @@ import {
   next,
   getMyCurrentPlaybackState,
   getMyRecentlyPlayedTracks,
+  setVolume,
 } from '../../utils/spotify';
 
 import ProgressBar from './components/ProgressBar';
@@ -174,6 +175,10 @@ const PlaybackFooter = () => {
     }));
   };
 
+  const changeSpotifyVolume = (volume: number) => {
+    setVolume(volume);
+  };
+
   return player && player.track !== null ? (
     <PlaybackContainer>
       <Left>
@@ -210,6 +215,7 @@ const PlaybackFooter = () => {
           repeat={player.playback.repeat_state !== 'off'}
           volume={player.playback.device.volume_percent}
           volumeToggled={player.actions.volumeToggled}
+          changeVolume={changeSpotifyVolume}
           toggleVolume={toggleVolume}
         />
       </Right>

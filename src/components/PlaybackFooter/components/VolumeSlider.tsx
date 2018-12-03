@@ -5,6 +5,7 @@ import Draggable from 'react-draggable';
 
 interface VolumeSliderProps {
   volume: number;
+  changeVolume: (volume: number) => void;
 }
 
 const Wrapper = styled('div')({
@@ -39,13 +40,23 @@ const Knob = styled('div')({
   cursor: 'pointer',
 });
 
-const VolumeSlider: React.SFC<VolumeSliderProps> = ({ volume }) => (
+const handleStop = (e: any, position: any) => {
+  console.log(100 - position.y);
+};
+
+const VolumeSlider: React.SFC<VolumeSliderProps> = ({
+  volume,
+  changeVolume,
+}) => (
   <Wrapper>
     <Slider>
       <Draggable
         defaultPosition={{ x: 0, y: 100 - volume }}
         axis="y"
         bounds={{ left: 0, top: 0, right: 0, bottom: 100 }}
+        onStop={(e: any, position: any) => {
+          changeVolume(100 - position.y);
+        }}
       >
         <Knob />
       </Draggable>
