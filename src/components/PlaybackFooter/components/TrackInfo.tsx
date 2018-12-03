@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import { colors } from '../../../styles/colors';
+import { withRouter } from 'react-router';
 
 interface TrackInfoProps {
   name: string;
@@ -31,19 +32,19 @@ const Headings = styled('div')({
   flexDirection: 'column',
 });
 
-const Title = styled('div')`
-  width: 100%;
-  font-weight: 700;
-  font-size: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 2px;
-  a {
-    color: white;
-    text-decoration: none;
-  }
-`;
+const Title = styled('div')({
+  width: '100%',
+  fontWeight: 700,
+  fontSize: 16,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  marginBottom: 2,
+  a: {
+    color: colors.WHITE,
+    textDecoration: 'none',
+  },
+});
 
 const Artist = styled('div')({
   width: '100%',

@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'react-emotion';
 
 import { Play, Pause, Previous, Next } from './icons';
+import { colors } from 'src/styles';
 
 interface PlayerControlsProps {
   isPlaying: boolean;
@@ -27,6 +28,11 @@ const Button = styled('button')({
   padding: 0,
   '&:focus': {
     outline: 'none',
+  },
+  ':hover': {
+    svg: {
+      fill: colors.WHITE,
+    },
   },
 });
 

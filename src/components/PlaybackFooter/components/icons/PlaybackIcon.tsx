@@ -4,9 +4,6 @@ import { colors } from 'src/styles/colors';
 
 const PlaybackIcon = styled(Svg)({
   fill: colors.PLAYBACK_UNHOVERED,
-  ':hover': {
-    fill: colors.WHITE,
-  },
 });
 
 export default PlaybackIcon;
