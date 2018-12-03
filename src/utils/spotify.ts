@@ -95,6 +95,16 @@ export const next = async () => {
   return spotifyApi.skipToNext();
 };
 
+export const setShuffle = async (shuffle: boolean) => {
+  await checkAndRefreshAccessToken();
+  return spotifyApi.setShuffle(shuffle);
+};
+
+export const setRepeat = async (repeat: boolean) => {
+  await checkAndRefreshAccessToken();
+  return spotifyApi.setRepeat(repeat ? 'track' : 'off');
+};
+
 export const setVolume = async (volume: number) => {
   await checkAndRefreshAccessToken();
   return spotifyApi.setVolume(volume, {});
