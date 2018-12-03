@@ -96,7 +96,7 @@ const PlaybackFooter = () => {
 
     const interval = setInterval(() => {
       setPlayer((p: any) => {
-        console.log(p);
+        console.log(p.playback.progress_ms);
         return {
           track: p.track,
           playback: {
@@ -104,13 +104,13 @@ const PlaybackFooter = () => {
             progress_ms:
               p.playback !== null
                 ? p.playback.is_playing
-                  ? p.playback.progress_ms + 100
+                  ? p.playback.progress_ms + 1000
                   : p.playback.progress_ms
                 : 0,
           },
         };
       });
-    }, 100);
+    }, 1000);
     return () => {
       clearInterval(polling);
       clearInterval(interval);
@@ -140,11 +140,25 @@ const PlaybackFooter = () => {
   };
 
   const previousSpotify = async () => {
+    setPlayer((p: any) => ({
+      ...p,
+      playback: {
+        ...p.playback,
+        progress_ms: 0,
+      },
+    }));
     previous();
     updatePlayer(setPlayer);
   };
 
   const nextSpotify = async () => {
+    setPlayer((p: any) => ({
+      ...p,
+      playback: {
+        ...p.playback,
+        progress_ms: 0,
+      },
+    }));
     next();
     updatePlayer(setPlayer);
   };
@@ -183,6 +197,7 @@ const PlaybackFooter = () => {
         <Actions
           shuffle={player.playback.shuffle_state}
           repeat={player.playback.repeat_state !== 'off'}
+          volume={player.playback.device.volume_percent}
         />
       </Right>
     </PlaybackContainer>

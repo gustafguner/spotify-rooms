@@ -8,28 +8,28 @@ interface TrackInfoProps {
   image: string;
 }
 
-const AlbumImageContainer = styled('div')`
-  flex-basis: 90px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  width: 90px;
-  height: 100%;
-  overflow: hidden;
-  margin-right: 16px;
-`;
+const AlbumImageContainer = styled('div')({
+  flexBasis: 90,
+  flexShrink: 0,
+  flexGrow: 0,
+  width: 90,
+  height: '100%',
+  overflow: 'hidden',
+  marginRight: 16,
+});
 
-const AlbumImage = styled('img')`
-  width: 100%;
-  height: 100%;
-  float: left;
-`;
+const AlbumImage = styled('img')({
+  width: '100%',
+  height: '100%',
+  float: 'left',
+});
 
-const Headings = styled('div')`
-  display: flex;
-  flex-flow: row wrap;
-  width: calc(100% - 95px - 16px);
-  flex-direction: column;
-`;
+const Headings = styled('div')({
+  display: 'flex',
+  flexFlow: 'row wrap',
+  width: 'calc(100% - 95px - 16px)',
+  flexDirection: 'column',
+});
 
 const Title = styled('div')`
   width: 100%;
@@ -45,12 +45,12 @@ const Title = styled('div')`
   }
 `;
 
-const Artist = styled('div')`
-  width: 100%;
-  color: ${colors.GRAY};
-  font-weight: 300;
-  font-size: 14px;
-`;
+const Artist = styled('div')({
+  width: '100%',
+  color: colors.GRAY,
+  fontWeight: 300,
+  fontSize: 14,
+});
 
 const TrackInfo: React.SFC<TrackInfoProps> = ({ name, artists, image }) => (
   <>
