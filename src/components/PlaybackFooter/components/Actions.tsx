@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'react-emotion';
 
 import { Shuffle, Repeat, Volume, AddToPlaylist } from './icons';
+import VolumeSlider from './VolumeSlider';
 
 const Wrapper = styled('div')({
   width: '100%',
@@ -13,11 +14,14 @@ const Wrapper = styled('div')({
   paddingRight: 5,
 });
 
-const VolumeWrapper = styled('div')({});
-
-const VolumeSlider = styled('div')({});
+const VolumeWrapper = styled('div')({
+  position: 'relative',
+  display: 'flex',
+  justifyContent: 'center',
+});
 
 const Button = styled('button')({
+  position: 'relative',
   width: 34,
   height: 34,
   border: 'none',
@@ -34,7 +38,7 @@ const Button = styled('button')({
 interface ActionsProps {
   shuffle: boolean;
   repeat: boolean;
-  volume?: number;
+  volume: number;
   volumeToggled: boolean;
   toggleVolume: () => void;
 }
@@ -54,7 +58,7 @@ const Actions: React.SFC<ActionsProps> = ({
       <Repeat toggled={repeat} />
     </Button>
     <VolumeWrapper>
-      {volumeToggled && <VolumeSlider>{volume}</VolumeSlider>}
+      {volumeToggled && <VolumeSlider volume={volume} />}
 
       <Button onClick={toggleVolume}>
         <Volume />

@@ -5,6 +5,7 @@ export const colors = {
   SPOTIFY_GREEN_HOVERED: '#7FB700',
   DARK_GRAY: '#555555',
   GRAY: '#999999',
+  VOLUME_BG: '#292929',
   DARK_DARK_GRAY: '#404040',
   TRANSPARENT: 'transparent',
   WHITE: '#FFFFFF',
