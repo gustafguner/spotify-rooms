@@ -13,6 +13,10 @@ const Wrapper = styled('div')({
   paddingRight: 5,
 });
 
+const VolumeWrapper = styled('div')({});
+
+const VolumeSlider = styled('div')({});
+
 const Button = styled('button')({
   width: 34,
   height: 34,
@@ -31,9 +35,17 @@ interface ActionsProps {
   shuffle: boolean;
   repeat: boolean;
   volume?: number;
+  volumeToggled: boolean;
+  toggleVolume: () => void;
 }
 
-const Actions: React.SFC<ActionsProps> = ({ shuffle, repeat, volume }) => (
+const Actions: React.SFC<ActionsProps> = ({
+  shuffle,
+  repeat,
+  volume,
+  volumeToggled,
+  toggleVolume,
+}) => (
   <Wrapper>
     <Button>
       <Shuffle toggled={shuffle} />
@@ -41,10 +53,14 @@ const Actions: React.SFC<ActionsProps> = ({ shuffle, repeat, volume }) => (
     <Button>
       <Repeat toggled={repeat} />
     </Button>
-    <Button>
-      <Volume />
-      {volume}
-    </Button>
+    <VolumeWrapper>
+      {volumeToggled && <VolumeSlider>{volume}</VolumeSlider>}
+
+      <Button onClick={toggleVolume}>
+        <Volume />
+      </Button>
+    </VolumeWrapper>
+
     <Button>
       <AddToPlaylist />
     </Button>

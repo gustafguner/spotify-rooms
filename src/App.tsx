@@ -26,6 +26,9 @@ const AppEffects = ({ children }: any) => {
       spotify: {
         track: null,
         playback: null,
+        actions: {
+          volumeToggled: false,
+        },
       },
     });
     return () => {

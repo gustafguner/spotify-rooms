@@ -75,28 +75,28 @@ const getPlayerStatus = async () => {
   return { track, playback };
 };
 
-const updatePlayer = async (setPlayer: any) => {
-  const { track, playback } = await getPlayerStatus();
-
-  setPlayer({
-    track,
-    playback,
-  });
-};
-
 const PlaybackFooter = () => {
   const [player, setPlayer] = useContextState('spotify');
 
+  const updatePlayer = async () => {
+    const { track, playback } = await getPlayerStatus();
+
+    setPlayer((p: any) => ({
+      track,
+      playback,
+      actions: p.actions,
+    }));
+  };
+
   useEffect(() => {
-    updatePlayer(setPlayer);
+    updatePlayer();
 
     const polling = setInterval(() => {
-      updatePlayer(setPlayer);
+      updatePlayer();
     }, 3000);
 
     const interval = setInterval(() => {
       setPlayer((p: any) => {
-        console.log(p.playback.progress_ms);
         return {
           track: p.track,
           playback: {
@@ -108,6 +108,7 @@ const PlaybackFooter = () => {
                   : p.playback.progress_ms
                 : 0,
           },
+          actions: p.actions,
         };
       });
     }, 1000);
@@ -148,7 +149,7 @@ const PlaybackFooter = () => {
       },
     }));
     previous();
-    updatePlayer(setPlayer);
+    updatePlayer();
   };
 
   const nextSpotify = async () => {
@@ -160,7 +161,17 @@ const PlaybackFooter = () => {
       },
     }));
     next();
-    updatePlayer(setPlayer);
+    updatePlayer();
+  };
+
+  const toggleVolume = () => {
+    setPlayer((p: any) => ({
+      ...p,
+      actions: {
+        ...p.actions,
+        volumeToggled: !p.actions.volumeToggled,
+      },
+    }));
   };
 
   return player && player.track !== null ? (
@@ -198,6 +209,8 @@ const PlaybackFooter = () => {
           shuffle={player.playback.shuffle_state}
           repeat={player.playback.repeat_state !== 'off'}
           volume={player.playback.device.volume_percent}
+          volumeToggled={player.actions.volumeToggled}
+          toggleVolume={toggleVolume}
         />
       </Right>
     </PlaybackContainer>
