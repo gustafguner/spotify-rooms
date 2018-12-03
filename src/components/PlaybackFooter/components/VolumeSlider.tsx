@@ -38,6 +38,7 @@ const Knob = styled('div')({
   borderRadius: '50%',
   backgroundColor: colors.WHITE,
   cursor: 'pointer',
+  boxShadow: '0 0 5px rgba(0,0,0,0.3)',
 });
 
 const VolumeSlider: React.SFC<VolumeSliderProps> = ({

@@ -1,12 +1,9 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'react-emotion';
 import { colors } from '../../../styles/colors';
 import Moment from 'react-moment';
-
-interface ProgressBarProps {
-  progress: number;
-  duration: number;
-}
+import Draggable from 'react-draggable';
 
 const Wrapper = styled('div')({
   display: 'flex',
@@ -30,6 +27,7 @@ const Time = styled(Moment)(({ position }: TimeProps) => ({
 }));
 
 const BarContainer = styled('div')({
+  position: 'relative',
   width: '100%',
   height: 3,
   borderRadius: 10,
@@ -46,37 +44,90 @@ const BarFill = styled('div')(({ widthPercent }: BarFillProps) => ({
   borderRadius: '10px',
   backgroundColor: colors.WHITE,
   position: 'relative',
-  ':hover': {
-    '::after': {
-      display: 'block',
-    },
-  },
-  '::after': {
-    content: '""',
-    position: 'absolute',
-    width: '9px',
-    height: '9px',
-    backgroundColor: colors.WHITE,
-    borderRadius: '50%',
-    right: '-4px',
-    bottom: '-3px',
-    boxShadow: '0 0 5px rgba(0,0,0,0.3)',
-    cursor: 'pointer',
-    display: 'none',
-  },
 }));
 
-const ProgressBar: React.SFC<ProgressBarProps> = ({ progress, duration }) => (
-  <Wrapper>
-    <Time position="left" format={'mm:ss'}>
-      {progress}
-    </Time>
-    <BarContainer>
-      <BarFill widthPercent={(progress / duration) * 100} />
-    </BarContainer>
-    <Time position="right" format={'mm:ss'}>
-      {duration}
-    </Time>
-  </Wrapper>
-);
+const Knob = styled('div')({
+  position: 'absolute',
+  width: 9,
+  bottom: -3,
+  left: -3,
+  flexBasis: 9,
+  flexShrink: 0,
+  height: 9,
+  borderRadius: '50%',
+  backgroundColor: colors.WHITE,
+  cursor: 'pointer',
+  boxShadow: '0 0 5px rgba(0,0,0,0.3)',
+});
+
+interface ProgressBarProps {
+  progress: number;
+  duration: number;
+}
+
+const ProgressBar: React.SFC<ProgressBarProps> = ({ progress, duration }) => {
+  let width: number = 0;
+  const [w, setW] = useState(0);
+  const [isSeeking, setIsSeeking] = useState(false);
+  const [x, setX] = useState(0);
+  const [second, setSecond] = useState(progress);
+
+  useEffect(
+    () => {
+      setW(width);
+      console.log(width);
+    },
+    [width],
+  );
+
+  const refCallback = (element: any) => {
+    if (element) {
+      width = element.clientWidth;
+    }
+  };
+
+  return (
+    <Wrapper>
+      <Time position="left" format={'mm:ss'}>
+        {isSeeking ? second : progress}
+      </Time>
+
+      <BarContainer innerRef={refCallback}>
+        <BarFill
+          widthPercent={isSeeking ? (x / w) * 100 : (progress / duration) * 100}
+        />
+        {w !== 0 && (
+          <Draggable
+            position={{
+              x: isSeeking ? x : Math.round((progress / duration) * w),
+              y: 0,
+            }}
+            axis="x"
+            bounds={{ left: 0, top: 0, right: w, bottom: 0 }}
+            onStart={(a: any, position: any) => {
+              const progressInX = Math.round((progress / duration) * w);
+              setX(progressInX);
+              setSecond(progress);
+              setIsSeeking(true);
+            }}
+            onDrag={(a: any, position: any) => {
+              setX(position.x);
+              setSecond(Math.round((position.x / w) * duration));
+            }}
+            onStop={(a: any, position: any) => {
+              const seekToSecond = Math.round((position.x / w) * duration);
+              setIsSeeking(false);
+            }}
+          >
+            <Knob />
+          </Draggable>
+        )}
+      </BarContainer>
+
+      <Time position="right" format={'mm:ss'}>
+        {duration}
+      </Time>
+    </Wrapper>
+  );
+};
 export default ProgressBar;

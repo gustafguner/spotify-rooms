@@ -182,10 +182,24 @@ const PlaybackFooter = () => {
   };
 
   const toggleShuffle = () => {
-    setShuffle(!player.playback.shuffle_state);
+    setPlayer((p: any) => ({
+      ...p,
+      playback: {
+        ...p.playback,
+        shuffle_state: !player.playback.shuffle_state,
+      },
+    }));
+    setShuffle(player.playback.shuffle_state);
   };
 
   const toggleRepeat = () => {
+    setPlayer((p: any) => ({
+      ...p,
+      playback: {
+        ...p.playback,
+        repeat_state: player.playback.repeat_state === 'off' ? 'track' : 'off',
+      },
+    }));
     setRepeat(player.playback.repeat_state === 'off');
   };
 

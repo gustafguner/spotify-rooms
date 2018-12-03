@@ -65,7 +65,9 @@ const Actions: React.SFC<ActionsProps> = ({
       <Repeat toggled={repeat} />
     </Button>
 
-    <OutsideClickHandler onOutsideClick={toggleVolume}>
+    <OutsideClickHandler
+      onOutsideClick={volumeToggled ? toggleVolume : () => undefined}
+    >
       <VolumeWrapper>
         {volumeToggled && (
           <VolumeSlider volume={volume} changeVolume={changeVolume} />
