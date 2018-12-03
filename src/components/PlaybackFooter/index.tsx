@@ -10,6 +10,8 @@ import {
   next,
   getMyCurrentPlaybackState,
   getMyRecentlyPlayedTracks,
+  setShuffle,
+  setRepeat,
   setVolume,
 } from '../../utils/spotify';
 
@@ -179,6 +181,14 @@ const PlaybackFooter = () => {
     setVolume(volume);
   };
 
+  const toggleShuffle = () => {
+    setShuffle(!player.playback.shuffle_state);
+  };
+
+  const toggleRepeat = () => {
+    setRepeat(player.playback.repeat_state === 'off');
+  };
+
   return player && player.track !== null ? (
     <PlaybackContainer>
       <Left>
@@ -212,7 +222,9 @@ const PlaybackFooter = () => {
       <Right>
         <Actions
           shuffle={player.playback.shuffle_state}
+          toggleShuffle={toggleShuffle}
           repeat={player.playback.repeat_state !== 'off'}
+          toggleRepeat={toggleRepeat}
           volume={player.playback.device.volume_percent}
           volumeToggled={player.actions.volumeToggled}
           changeVolume={changeSpotifyVolume}
