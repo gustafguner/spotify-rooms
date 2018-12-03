@@ -65,7 +65,11 @@ const Actions: React.SFC<ActionsProps> = ({
     </Button>
     <VolumeWrapper>
       {volumeToggled && (
-        <VolumeSlider volume={volume} changeVolume={changeVolume} />
+        <VolumeSlider
+          volume={volume}
+          changeVolume={changeVolume}
+          toggleVolume={toggleVolume}
+        />
       )}
 
       <Button onClick={toggleVolume}>
