@@ -47,10 +47,10 @@ const BarFill = styled('div')(({ widthPercent }: BarFillProps) => ({
 }));
 
 interface KnobProps {
-  hover: boolean;
+  visisble: boolean;
 }
 
-const Knob = styled('div')(({ hover }: KnobProps) => ({
+const Knob = styled('div')(({ visisble }: KnobProps) => ({
   position: 'absolute',
   width: 9,
   bottom: -3,
@@ -62,7 +62,7 @@ const Knob = styled('div')(({ hover }: KnobProps) => ({
   backgroundColor: colors.WHITE,
   cursor: 'pointer',
   boxShadow: '0 0 5px rgba(0,0,0,0.3)',
-  opacity: hover ? 1 : 0,
+  opacity: visisble ? 1 : 0,
 }));
 
 interface ProgressBarProps {
@@ -135,7 +135,7 @@ const ProgressBar: React.SFC<ProgressBarProps> = ({
               setIsSeeking(false);
             }}
           >
-            <Knob hover={hover} />
+            <Knob visisble={hover || isSeeking} />
           </Draggable>
         )}
       </BarContainer>
