@@ -21,7 +21,7 @@ const Time = styled(Moment)(({ position }: TimeProps) => ({
   fontWeight: 300,
   color: colors.GRAY,
   cursor: 'default',
-  textAlign: position,
+  textAlign: position === 'left' ? 'right' : 'left',
   marginRight: position === 'left' ? 12 : 0,
   marginLeft: position === 'right' ? 12 : 0,
 }));
@@ -46,7 +46,11 @@ const BarFill = styled('div')(({ widthPercent }: BarFillProps) => ({
   position: 'relative',
 }));
 
-const Knob = styled('div')({
+interface KnobProps {
+  hover: boolean;
+}
+
+const Knob = styled('div')(({ hover }: KnobProps) => ({
   position: 'absolute',
   width: 9,
   bottom: -3,
@@ -58,7 +62,8 @@ const Knob = styled('div')({
   backgroundColor: colors.WHITE,
   cursor: 'pointer',
   boxShadow: '0 0 5px rgba(0,0,0,0.3)',
-});
+  opacity: hover ? 1 : 0,
+}));
 
 interface ProgressBarProps {
   progress: number;
@@ -76,11 +81,11 @@ const ProgressBar: React.SFC<ProgressBarProps> = ({
   const [isSeeking, setIsSeeking] = useState(false);
   const [x, setX] = useState(0);
   const [second, setSecond] = useState(progress);
+  const [hover, setHover] = useState(false);
 
   useEffect(
     () => {
       setW(width);
-      console.log(width);
     },
     [width],
   );
@@ -92,8 +97,15 @@ const ProgressBar: React.SFC<ProgressBarProps> = ({
   };
 
   return (
-    <Wrapper>
-      <Time position="left" format={'mm:ss'}>
+    <Wrapper
+      onMouseEnter={() => {
+        setHover(true);
+      }}
+      onMouseLeave={() => {
+        setHover(false);
+      }}
+    >
+      <Time position="left" format={'m:ss'}>
         {isSeeking ? second : progress}
       </Time>
 
@@ -109,9 +121,8 @@ const ProgressBar: React.SFC<ProgressBarProps> = ({
             }}
             axis="x"
             bounds={{ left: 0, top: 0, right: w, bottom: 0 }}
-            onStart={(a: any, position: any) => {
-              const progressInX = Math.round((progress / duration) * w);
-              setX(progressInX);
+            onStart={() => {
+              setX(Math.round((progress / duration) * w));
               setSecond(progress);
               setIsSeeking(true);
             }}
@@ -120,17 +131,16 @@ const ProgressBar: React.SFC<ProgressBarProps> = ({
               setSecond(Math.round((position.x / w) * duration));
             }}
             onStop={(a: any, position: any) => {
-              const seekToSecond = Math.round((position.x / w) * duration);
-              seek(seekToSecond);
+              seek(Math.round((position.x / w) * duration));
               setIsSeeking(false);
             }}
           >
-            <Knob />
+            <Knob hover={hover} />
           </Draggable>
         )}
       </BarContainer>
 
-      <Time position="right" format={'mm:ss'}>
+      <Time position="right" format={'m:ss'}>
         {duration}
       </Time>
     </Wrapper>
