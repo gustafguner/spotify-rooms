@@ -16,6 +16,7 @@ export const Button = styled('button')({
   outline: 'none',
   fontSize: 16,
   cursor: 'pointer',
+  borderRadius: 40,
   ':focus': {
     outline: 'none',
   },

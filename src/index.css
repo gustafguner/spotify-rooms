@@ -42,4 +42,7 @@ body {
   color: white;
   font-size: 16px;
   background-color: #191919;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }

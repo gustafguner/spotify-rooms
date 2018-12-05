@@ -3,7 +3,7 @@ import apolloClient from './graphql/client';
 import { ApolloProvider } from 'react-apollo';
 import styled from 'react-emotion';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { initializeSpotify } from './utils/spotify';
+import { initializeSpotify, getAccessToken } from './utils/spotify';
 import Header from './components/Header';
 import PlaybackFooter from './components/PlaybackFooter';
 import { routes } from './routes';
@@ -23,6 +23,9 @@ const AppEffects = ({ children }: any) => {
   useEffect(() => {
     setState({
       ...state,
+      auth: {
+        loggedIn: getAccessToken() !== null,
+      },
       spotify: {
         track: null,
         playback: null,
@@ -44,7 +47,7 @@ const App: React.SFC = () => {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Provider>
+      <Provider devtools={true}>
         <AppEffects>
           <Header />
           <SiteContainer>

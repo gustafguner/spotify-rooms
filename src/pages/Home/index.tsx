@@ -10,16 +10,8 @@ const QUERY = gql`
   }
 `;
 
-interface QueryResult {
-  user: User;
-}
-
-interface User {
-  displayName: string;
-}
-
 export const Home = () => (
-  <Query<QueryResult> query={QUERY}>
+  <Query query={QUERY}>
     {({ data, loading }) =>
       !loading && data ? (
         <>

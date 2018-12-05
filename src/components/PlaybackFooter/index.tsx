@@ -81,6 +81,7 @@ const getPlayerStatus = async () => {
 
 const PlaybackFooter = () => {
   const [player, setPlayer] = useContextState('spotify');
+  const [auth] = useContextState('auth');
 
   const updatePlayer = async () => {
     const { track, playback } = await getPlayerStatus();
@@ -220,7 +221,7 @@ const PlaybackFooter = () => {
     seek(position);
   };
 
-  return player && player.track !== null ? (
+  return auth && auth.loggedIn && player && player.track !== null ? (
     <PlaybackContainer>
       <Left>
         <TrackInfo
