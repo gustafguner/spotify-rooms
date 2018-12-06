@@ -109,14 +109,14 @@ const PlaybackFooter = () => {
             progress_ms:
               p.playback !== null
                 ? p.playback.is_playing
-                  ? p.playback.progress_ms + 1000
+                  ? p.playback.progress_ms + 200
                   : p.playback.progress_ms
                 : 0,
           },
           actions: p.actions,
         };
       });
-    }, 1000);
+    }, 200);
 
     return () => {
       clearInterval(polling);

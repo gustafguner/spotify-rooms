@@ -1,5 +1,6 @@
 import SpotifyWebApi from 'spotify-web-api-js';
 import * as queryString from 'query-string';
+import { storeToken } from './auth';
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -9,6 +10,31 @@ export const initializeSpotify = async () => {
   const redirected = storeTokensFromUrl();
   if (redirected) {
     spotifyApi.setAccessToken(getAccessToken()!);
+
+    fetch('http://localhost:8888/auth', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accessToken: getAccessToken(),
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response;
+        }
+        return response;
+      })
+      .then((reponse) => reponse.json())
+      .then((response) => {
+        console.log('json response', response);
+        storeToken(response.token);
+      })
+      .catch((error) => {
+        console.error(error.statusText);
+      });
   } else {
     const accessToken = getAccessToken();
     if (accessToken) {
@@ -34,7 +60,7 @@ const storeTokensFromUrl = () => {
     storeExpire(expiresInFromUrl);
   }
 
-  return getAccessToken() != null;
+  return accessTokenFromUrl && refreshTokenFromUrl && expiresInFromUrl;
 };
 
 const storeAccessToken = (token: string) => {
@@ -42,7 +68,7 @@ const storeAccessToken = (token: string) => {
 };
 
 export const getAccessToken = () => {
-  return localStorage.getItem('spotify-access-token');
+  return localStorage.getItem('spotify-access-token') || null;
 };
 
 const storeRefreshToken = (token: string) => {

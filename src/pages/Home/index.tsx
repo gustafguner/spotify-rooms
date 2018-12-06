@@ -13,7 +13,7 @@ const QUERY = gql`
 export const Home = () => (
   <Query query={QUERY}>
     {({ data, loading }) =>
-      !loading && data ? (
+      !loading && data && data.user ? (
         <>
           <h4>Welcome {data.user.displayName}</h4>
         </>
