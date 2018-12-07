@@ -7,6 +7,16 @@ import spotifyLogo from '../../assets/images/spotify-logo.svg';
 import { clear } from 'src/utils/auth';
 import { useContextState } from 'constate';
 
+import { getRequest } from '../../utils/request';
+
+const makeRequest = () => {
+  getRequest('http://localhost:8888/protected')
+    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+    });
+};
+
 const HeaderWrapper = styled('header')({
   width: '100%',
   height: 70,
@@ -70,6 +80,8 @@ const Header: React.SFC = () => {
       <HeaderWrapperPadding />
       <HeaderWrapper>
         <Logo>spots</Logo>
+
+        <Button onClick={makeRequest}>Make request</Button>
 
         {auth && auth.loggedIn ? (
           <Button onClick={logOut}>Log out</Button>

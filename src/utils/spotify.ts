@@ -29,7 +29,6 @@ export const initializeSpotify = async () => {
       })
       .then((reponse) => reponse.json())
       .then((response) => {
-        console.log('json response', response);
         storeToken(response.token);
       })
       .catch((error) => {
