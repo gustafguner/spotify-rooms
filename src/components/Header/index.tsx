@@ -7,14 +7,14 @@ import spotifyLogo from '../../assets/images/spotify-logo.svg';
 import { clear } from 'src/utils/auth';
 import { useContextState } from 'constate';
 
-import { getRequest } from '../../utils/request';
+import { request } from '../../utils/request';
 
 const makeRequest = () => {
-  getRequest('http://localhost:8888/protected')
-    .then((response) => response.json())
-    .then((response) => {
+  request('http://localhost:8888/protected', { method: 'GET' }).then(
+    (response) => {
       console.log(response);
-    });
+    },
+  );
 };
 
 const HeaderWrapper = styled('header')({

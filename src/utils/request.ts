@@ -1,14 +1,12 @@
 import { getToken } from './auth';
 
-export const getRequest = (url: string) => {
-  return request(url, 'GET');
-};
+interface RequestOptions {
+  method: 'GET' | 'POST';
+  body?: object;
+  raw?: boolean;
+}
 
-export const postRequest = (url: string) => {
-  return request(url, 'POST');
-};
-
-const request = (url: string, method: string, body?: object) => {
+export const request = (url: string, { method, body, raw }: RequestOptions) => {
   return fetch(url, {
     method,
     headers: {
@@ -17,5 +15,10 @@ const request = (url: string, method: string, body?: object) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
+  }).then((response) => {
+    if (!response.ok) {
+      throw response;
+    }
+    return raw ? response : response.json();
   });
 };
