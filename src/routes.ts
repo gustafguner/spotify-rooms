@@ -1,3 +1,3 @@
-import { Home } from './pages/Home';
+import { Discover } from './features/discover';
 
-export const routes = [{ path: '/', Component: Home, exact: true }];
+export const routes = [{ path: '/', Component: Discover, exact: true }];
