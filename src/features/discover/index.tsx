@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import { Button } from 'src/components/buttons';
