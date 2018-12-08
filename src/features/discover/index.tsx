@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { Button } from 'src/components/buttons';
 import { Query, Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
+import styled from 'react-emotion';
+import { colors } from 'src/styles';
+import { Button } from 'src/components/buttons';
+import Room from './components/Room';
 
 const QUERY = gql`
   query getRooms {
@@ -17,32 +20,24 @@ const MUTATION = gql`
   }
 `;
 
+const Rooms = styled('div')({
+  width: '100%',
+  display: 'flex',
+  flexFlow: 'row wrap',
+  marginTop: 25,
+  marginLeft: -15,
+  marginRight: -15,
+});
+
 const Discover = () => (
   <Query query={QUERY}>
     {({ data, loading }) =>
       !loading && data ? (
-        <>
-          {data.rooms.map((room: any) => {
-            console.log(room);
-          })}
-          <Mutation mutation={MUTATION}>
-            {(mutate) => (
-              <Button
-                onClick={() => {
-                  mutate({
-                    variables: {
-                      input: {
-                        name: 'Lorem ipsum',
-                      },
-                    },
-                  });
-                }}
-              >
-                Create a room
-              </Button>
-            )}
-          </Mutation>
-        </>
+        <Rooms>
+          {data.rooms.map((room: any) => (
+            <Room name={room.name} />
+          ))}
+        </Rooms>
       ) : (
         <h5>Loading...</h5>
       )
