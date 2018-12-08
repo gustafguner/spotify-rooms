@@ -9,6 +9,7 @@ import Room from './components/Room';
 const QUERY = gql`
   query getRooms {
     rooms {
+      id
       name
     }
   }
@@ -35,7 +36,7 @@ const Discover = () => (
       !loading && data ? (
         <Rooms>
           {data.rooms.map((room: any) => (
-            <Room name={room.name} />
+            <Room key={room.id} id={room.id} name={room.name} />
           ))}
         </Rooms>
       ) : (

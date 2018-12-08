@@ -1,15 +1,18 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
 
 interface RoomProps {
+  id: string;
   name: string;
 }
 
 const Container = styled('div')({
-  width: 200,
-  height: 200,
-  borderRadius: 5,
+  width: 260,
+  flexBasis: 260,
+  flexShrink: 0,
+  height: 260,
   backgroundColor: colors.DARK_DARK_GRAY,
   marginLeft: 15,
   marginRight: 15,
@@ -18,9 +21,11 @@ const Container = styled('div')({
 
 const Name = styled('div')({});
 
-const Room: React.SFC<RoomProps> = ({ name }) => (
+const Room: React.SFC<RoomProps> = ({ id, name }) => (
   <Container>
-    <Name>{name}</Name>
+    <Link to={'/room/' + id}>
+      <Name>{name}</Name>
+    </Link>
   </Container>
 );
 
