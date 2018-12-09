@@ -24,6 +24,9 @@ const GET_ROOM_QUERY = gql`
           width
           height
         }
+        artists {
+          name
+        }
       }
     }
   }

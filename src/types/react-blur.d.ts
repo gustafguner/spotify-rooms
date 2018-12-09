@@ -1,5 +1,6 @@
 declare module 'react-blur' {
   import * as React from 'react';
+
   interface BlurProps {
     blurRadius?: number;
     children?: JSX.Element;
@@ -10,6 +11,8 @@ declare module 'react-blur' {
     shouldResize?: boolean;
     resizeInterval?: number;
   }
+
   const Blur: React.ComponentType<BlurProps>;
+
   export default Blur;
 }

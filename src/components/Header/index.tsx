@@ -21,6 +21,7 @@ const HeaderWrapper = styled('header')({
   paddingLeft: 25,
   paddingRight: 25,
   alignItems: 'center',
+  zIndex: 1,
 });
 
 const HeaderWrapperPadding = styled('div')({
