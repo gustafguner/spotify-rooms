@@ -1,5 +1,6 @@
 export const colors = {
   PRIMARY_DARK: '#232323',
+  ALMOST_BLACK: '#151515',
   DARK_BG: '#181818',
   SPOTIFY_GREEN: '#84BD00',
   SPOTIFY_GREEN_HOVERED: '#7FB700',

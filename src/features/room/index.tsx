@@ -3,8 +3,10 @@ import { Query, Mutation } from 'react-apollo';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import gql from 'graphql-tag';
+import { useContextState } from 'constate';
 
 import { Sidebar } from './components/Sidebar';
+import { Playback } from './components/Playback';
 
 interface RoomProps {
   match: any;
@@ -14,6 +16,15 @@ const GET_ROOM_QUERY = gql`
   query getRoom($query: ID!) {
     room(query: $query) {
       name
+      playback {
+        uri
+        name
+        images {
+          url
+          width
+          height
+        }
+      }
     }
   }
 `;
@@ -27,27 +38,32 @@ const Content = styled('div')({
   width: '100%',
 });
 
-const Room: React.SFC<RoomProps> = ({ match }) => (
-  <Query
-    query={GET_ROOM_QUERY}
-    variables={{
-      query: match.params.id,
-    }}
-  >
-    {({ loading, data }) =>
-      !loading && data ? (
-        <Container>
-          <Content>
-            <div>Name: {data.room.name}</div>
-          </Content>
+const Room: React.SFC<RoomProps> = ({ match }) => {
+  const [, setVisitingRoom] = useContextState('visitingRoom');
+  return (
+    <Query
+      query={GET_ROOM_QUERY}
+      variables={{
+        query: match.params.id,
+      }}
+    >
+      {({ loading, data }) => {
+        setVisitingRoom(data.room);
 
-          <Sidebar />
-        </Container>
-      ) : (
-        <div>loading</div>
-      )
-    }
-  </Query>
-);
+        return !loading && data ? (
+          <Container>
+            <Content>
+              <Playback track={data.room.playback} />
+            </Content>
+
+            <Sidebar />
+          </Container>
+        ) : (
+          <div>loading</div>
+        );
+      }}
+    </Query>
+  );
+};
 
 export { Room };

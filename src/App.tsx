@@ -31,6 +31,8 @@ const AppEffects = ({ children }: any) => {
           volumeToggled: false,
         },
       },
+      visitingRoom: null,
+      listeningRoom: null,
     });
     return () => {
       console.log(state);
@@ -47,18 +49,20 @@ const App: React.SFC = () => {
     <ApolloProvider client={apolloClient}>
       <Provider devtools={true}>
         <AppEffects>
-          <Header />
           <SiteContainer>
             <BrowserRouter>
               <Switch>
-                {routes.map(({ path, exact, Component }) => (
-                  <Route
-                    key={path}
-                    path={path}
-                    exact={exact}
-                    component={Component}
-                  />
-                ))}
+                <>
+                  <Header />
+                  {routes.map(({ path, exact, Component }) => (
+                    <Route
+                      key={path}
+                      path={path}
+                      exact={exact}
+                      component={Component}
+                    />
+                  ))}
+                </>
               </Switch>
             </BrowserRouter>
           </SiteContainer>

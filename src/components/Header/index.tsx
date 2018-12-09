@@ -6,6 +6,7 @@ import { getSpotifyAuthorizeUrl } from '../../utils/spotify';
 import spotifyLogo from '../../assets/images/spotify-logo.svg';
 import { clear } from 'src/utils/auth';
 import { useContextState } from 'constate';
+import { Link } from 'react-router-dom';
 
 const HeaderWrapper = styled('header')({
   width: '100%',
@@ -58,6 +59,7 @@ const SpotifyLogoImage = styled('img')({
 
 const Header: React.SFC = () => {
   const [auth, setAuth] = useContextState('auth');
+  const [visitingRoom] = useContextState('visitingRoom');
   const logOut = () => {
     clear();
     setAuth({
@@ -69,7 +71,15 @@ const Header: React.SFC = () => {
     <>
       <HeaderWrapperPadding />
       <HeaderWrapper>
-        <Logo>jukebox</Logo>
+        <Link to="/">
+          <Logo>spotify-rooms</Logo>
+        </Link>
+
+        {visitingRoom && visitingRoom !== null ? (
+          <h4>{visitingRoom.name}</h4>
+        ) : (
+          <h4>Enter a room...</h4>
+        )}
 
         {auth && auth.loggedIn ? (
           <Button onClick={logOut}>Log out</Button>
