@@ -4,6 +4,8 @@ import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import gql from 'graphql-tag';
 
+import { Sidebar } from './components/Sidebar';
+
 interface RoomProps {
   match: any;
 }
@@ -16,7 +18,14 @@ const GET_ROOM_QUERY = gql`
   }
 `;
 
-const Container = styled('div')({});
+const Container = styled('div')({
+  display: 'flex',
+});
+
+const Content = styled('div')({
+  display: 'flex',
+  width: '100%',
+});
 
 const Room: React.SFC<RoomProps> = ({ match }) => (
   <Query
@@ -28,7 +37,11 @@ const Room: React.SFC<RoomProps> = ({ match }) => (
     {({ loading, data }) =>
       !loading && data ? (
         <Container>
-          <div>Name: {data.room.name}</div>
+          <Content>
+            <div>Name: {data.room.name}</div>
+          </Content>
+
+          <Sidebar />
         </Container>
       ) : (
         <div>loading</div>

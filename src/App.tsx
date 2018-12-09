@@ -13,8 +13,6 @@ import { Context, Provider } from 'constate';
 
 const SiteContainer = styled('div')({
   width: '100%',
-  paddingLeft: 25,
-  paddingRight: 25,
 });
 
 const AppEffects = ({ children }: any) => {

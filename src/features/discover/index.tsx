@@ -26,6 +26,8 @@ const MUTATION = gql`
 
 const Rooms = styled('div')({
   width: '100%',
+  paddingLeft: 25,
+  paddingRight: 25,
   display: 'flex',
   flexFlow: 'row wrap',
   marginTop: 25,
