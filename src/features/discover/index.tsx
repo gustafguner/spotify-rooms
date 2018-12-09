@@ -11,6 +11,9 @@ const QUERY = gql`
     rooms {
       id
       name
+      host {
+        displayName
+      }
     }
   }
 `;
@@ -34,11 +37,32 @@ const Discover = () => (
   <Query query={QUERY}>
     {({ data, loading }) =>
       !loading && data ? (
-        <Rooms>
-          {data.rooms.map((room: any) => (
-            <Room key={room.id} id={room.id} name={room.name} />
-          ))}
-        </Rooms>
+        <>
+          <Rooms>
+            {data.rooms.map((room: any) => (
+              <Room key={room.id} id={room.id} name={room.name} />
+            ))}
+          </Rooms>
+          <Mutation mutation={MUTATION}>
+            {(mutate) => (
+              <>
+                <Button
+                  onClick={() => {
+                    mutate({
+                      variables: {
+                        input: {
+                          name: 'Test',
+                        },
+                      },
+                    });
+                  }}
+                >
+                  Create room
+                </Button>
+              </>
+            )}
+          </Mutation>
+        </>
       ) : (
         <h5>Loading...</h5>
       )
