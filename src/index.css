@@ -46,3 +46,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 46px;
+}
+
+h2 {
+  font-size: 26px;
+  line-height: 38px;
+}
+
+h3 {
+  font-size: 22px;
+  line-height: 34px;
+}

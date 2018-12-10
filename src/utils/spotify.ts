@@ -1,6 +1,7 @@
 import SpotifyWebApi from 'spotify-web-api-js';
 import * as queryString from 'query-string';
 import { storeToken } from './auth';
+import { request } from './request';
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -81,7 +82,7 @@ const getRefreshToken = () => {
 const storeExpire = (expiresIn: number) => {
   localStorage.setItem(
     'spotify-access-token-expires',
-    JSON.stringify(Date.now() + expiresIn * 1000 - 600),
+    JSON.stringify(Date.now() + expiresIn * 1000 - 1000 * 60 * 5),
   );
 };
 
@@ -149,24 +150,21 @@ const getTokenExpire = () => {
 export const checkAndRefreshAccessToken = async () => {
   if (getTokenExpire()) {
     if (getTokenExpire() < Date.now()) {
-      await fetch(
-        'http://localhost:8888/refreshAccessToken?refresh_token=' +
-          getRefreshToken(),
-      )
-        .then((e) => e.json())
-        .then((data) => {
-          storeAccessToken(data.access_token);
-          spotifyApi.setAccessToken(data.access_token);
-          storeExpire(data.expires_in);
-        });
+      await request('http://localhost:8888/refreshAccessToken', {
+        method: 'GET',
+      }).then((data) => {
+        storeAccessToken(data.access_token);
+        spotifyApi.setAccessToken(data.access_token);
+        storeExpire(data.expires_in);
+      });
     }
   }
 };
 
-export const getSpotifyAuthorizeUrl = () => {
-  fetch('http://localhost:8888/spotifyAuthorizeUrl')
-    .then((e) => e.json())
-    .then((data) => {
-      window.location = data.spotify_authorize_url;
-    });
+export const getSpotifyAuthorizeUrl = async () => {
+  await request('http://localhost:8888/spotifyAuthorizeUrl', {
+    method: 'GET',
+  }).then((data) => {
+    window.location = data.spotify_authorize_url;
+  });
 };
