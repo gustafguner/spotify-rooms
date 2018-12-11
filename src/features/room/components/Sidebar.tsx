@@ -5,9 +5,11 @@ import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import { Queue } from './Queue';
+
 const Container = styled('div')({
-  width: 300,
-  flexBasis: 300,
+  width: 350,
+  flexBasis: 350,
   flexShrink: 0,
   height: 'calc(100vh - 90px - 70px)',
   backgroundColor: colors.ALMOST_BLACK,
@@ -15,12 +17,6 @@ const Container = styled('div')({
   position: 'relative',
   display: 'flex',
   flexFlow: 'column',
-});
-
-const Queue = styled('div')({
-  width: '100%',
-  flexBasis: '100%',
-  height: '100%',
 });
 
 const AddToQueue = styled('div')({
@@ -58,11 +54,7 @@ interface SidebarProps {
 
 const Sidebar: React.SFC<SidebarProps> = ({ room }) => (
   <Container>
-    <Queue>
-      {room.queue.map((track: any) => {
-        return <div key={track.id}>{track.name}</div>;
-      })}
-    </Queue>
+    <Queue queue={room.queue} />
     <AddToQueue>
       <Mutation mutation={MUTATION}>
         {(mutate) => (
@@ -73,7 +65,7 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => (
                   variables: {
                     input: {
                       roomId: room.id,
-                      trackId: '0ud7ma9G6buYyqfaeGRG4Y',
+                      trackId: '1ntxpzIUbSsizvuAy6lTYY',
                     },
                   },
                 });
