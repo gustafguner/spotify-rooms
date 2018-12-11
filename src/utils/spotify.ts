@@ -142,6 +142,11 @@ export const seek = async (position: number) => {
   return spotifyApi.seek(position, {});
 };
 
+export const searchTracks = async (query: string) => {
+  await checkAndRefreshAccessToken();
+  return spotifyApi.searchTracks(query, { limit: 2 });
+};
+
 const getTokenExpire = () => {
   const stored = localStorage.getItem('spotify-access-token-expires');
   return stored != null ? Number(stored) : 0;

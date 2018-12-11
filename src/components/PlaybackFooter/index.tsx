@@ -134,7 +134,7 @@ const PlaybackFooter = () => {
 
   const handleKeydown = (event: KeyboardEvent) => {
     if (event.keyCode === 32) {
-      playOrPauseSpotify();
+      // playOrPauseSpotify();
     }
   };
 

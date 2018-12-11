@@ -1,11 +1,14 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-
+import { useContextState } from 'constate';
 import { Queue } from './Queue';
+
+import { searchTracks } from 'src/utils/spotify';
 
 const Container = styled('div')({
   width: 350,
@@ -21,14 +24,15 @@ const Container = styled('div')({
 
 const AddToQueue = styled('div')({
   width: '100%',
-  flexBasis: 120,
+  flexBasis: 80,
   flexShrink: 0,
-  height: 120,
+  height: 80,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  flexFlow: 'column',
   backgroundColor: colors.DARK_BG,
+  padding: 15,
+  position: 'relative',
 });
 
 const AddToQueueButton = styled(Button)({
@@ -52,33 +56,123 @@ interface SidebarProps {
   room: any;
 }
 
-const Sidebar: React.SFC<SidebarProps> = ({ room }) => (
-  <Container>
-    <Queue queue={room.queue} />
-    <AddToQueue>
-      <Mutation mutation={MUTATION}>
-        {(mutate) => (
-          <>
-            <AddToQueueButton
-              onClick={() => {
-                mutate({
-                  variables: {
-                    input: {
-                      roomId: room.id,
-                      trackId: '1ntxpzIUbSsizvuAy6lTYY',
-                    },
-                  },
-                });
-              }}
-            >
-              Add
-            </AddToQueueButton>
-            <Text>Add your song to the queue 👋</Text>
-          </>
+const TextInput = styled('input')({
+  fontSize: 16,
+  border: 'none',
+  flexBasis: '100%',
+  height: '100%',
+  background: 'none',
+  color: colors.WHITE,
+  ':focus': {
+    outline: 'none',
+  },
+});
+
+const Suggestions = styled('div')({
+  width: '100%',
+  position: 'absolute',
+  backgroundColor: colors.PRIMARY_DARK,
+  height: 240,
+  top: -240,
+  padding: 15,
+});
+
+const SuggestionTrack = styled('div')({
+  width: '100%',
+  display: 'flex',
+});
+
+const CoverImageWrapper = styled('div')({
+  width: 50,
+  height: 50,
+  flexBasis: 50,
+  flexShrink: 0,
+});
+
+const CoverImage = styled('img')({
+  float: 'left',
+  width: '100%',
+  height: '100%',
+});
+
+const TrackInfo = styled('div')({
+  flexBasis: '100%',
+  display: 'flex',
+});
+
+const TrackName = styled('div')({});
+
+let spotifyTrackSearch: any = null;
+let spotifyTrackSearchQuery: any = null;
+
+const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
+  const [searchQuery, setSearchQuery] = useContextState(null, '');
+  const [searchResults, setSearchResults] = useState<null | any[]>(null);
+
+  const handleTrackSearchInputChange = (e: any) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.length === 0) {
+      setSearchResults(null);
+    }
+
+    if (query.length > 0) {
+      if (spotifyTrackSearchQuery) {
+        clearTimeout(spotifyTrackSearchQuery);
+      }
+
+      spotifyTrackSearchQuery = setTimeout(() => {
+        if (spotifyTrackSearch !== null) {
+          spotifyTrackSearch.abort();
+        }
+        spotifyTrackSearch = searchTracks(query)
+          .then(({ tracks }) => {
+            spotifyTrackSearch = null;
+            console.log(tracks.items);
+            setSearchResults(tracks.items);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }, 1000);
+    }
+  };
+
+  return (
+    <Container>
+      <Queue queue={room.queue} />
+      <AddToQueue>
+        {searchResults !== null && (
+          <Suggestions>
+            {searchResults.map((track) => (
+              <SuggestionTrack key={track.id}>
+                <CoverImageWrapper>
+                  <CoverImage src={track.album.images[0].url} />
+                </CoverImageWrapper>
+                <TrackInfo>
+                  <TrackName>{track.name}</TrackName>
+                </TrackInfo>
+              </SuggestionTrack>
+            ))}
+          </Suggestions>
         )}
-      </Mutation>
-    </AddToQueue>
-  </Container>
-);
+
+        <Mutation mutation={MUTATION}>
+          {(mutate) => (
+            <>
+              <TextInput
+                type="text"
+                value={searchQuery}
+                placeholder="Search for a track that you like... 🤘"
+                onChange={handleTrackSearchInputChange}
+              />
+            </>
+          )}
+        </Mutation>
+      </AddToQueue>
+    </Container>
+  );
+};
 
 export { Sidebar };
