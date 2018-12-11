@@ -15,9 +15,22 @@ interface RoomProps {
 const GET_ROOM_QUERY = gql`
   query getRoom($query: ID!) {
     room(query: $query) {
+      id
       name
       playback {
-        uri
+        id
+        name
+        images {
+          url
+          width
+          height
+        }
+        artists {
+          name
+        }
+      }
+      queue {
+        id
         name
         images {
           url
@@ -59,7 +72,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
               <Playback track={data.room.playback} />
             </Content>
 
-            <Sidebar />
+            <Sidebar room={data.room} />
           </Container>
         ) : (
           <div>loading</div>

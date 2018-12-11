@@ -52,9 +52,17 @@ const MUTATION = gql`
   }
 `;
 
-const Sidebar: React.SFC = () => (
+interface SidebarProps {
+  room: any;
+}
+
+const Sidebar: React.SFC<SidebarProps> = ({ room }) => (
   <Container>
-    <Queue>a</Queue>
+    <Queue>
+      {room.queue.map((track: any) => {
+        return <div key={track.id}>{track.name}</div>;
+      })}
+    </Queue>
     <AddToQueue>
       <Mutation mutation={MUTATION}>
         {(mutate) => (
@@ -64,6 +72,7 @@ const Sidebar: React.SFC = () => (
                 mutate({
                   variables: {
                     input: {
+                      roomId: room.id,
                       trackId: '0ud7ma9G6buYyqfaeGRG4Y',
                     },
                   },

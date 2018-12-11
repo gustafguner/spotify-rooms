@@ -8,6 +8,7 @@ interface PlaybackProps {
 }
 
 interface Track {
+  id: string;
   name: string;
   images: Image[];
   artists: Artist[];
