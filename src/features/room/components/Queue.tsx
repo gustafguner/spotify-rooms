@@ -43,16 +43,30 @@ const CoverImage = styled('img')({
 
 const TrackInfo = styled('div')({
   marginLeft: 15,
-  flexBasis: '100%',
+  marginRight: 15,
+  width: 'calc(100% - 65px - 40px - 30px)',
+  display: 'flex',
+  flexDirection: 'column',
+  flexFlow: 'row wrap',
 });
 
-const TrackName = styled('div')({
+const TrackNameContainer = styled('div')({
   fontSize: 15,
   fontWeight: 700,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});
+
+const TrackName = styled('a')({
+  color: colors.WHITE,
+  textDecoration: 'none',
 });
 
 const TrackArtists = styled('div')({
   fontSize: 13,
+  fontWeight: 300,
+  color: colors.GRAY,
 });
 
 const TrackVotes = styled('div')({
@@ -81,7 +95,6 @@ const VoteCount = styled('div')({
   fontSize: 15,
   marginLeft: 3,
 });
-
 const Queue: React.SFC<QueueProps> = ({ queue }) => (
   <Container>
     {queue.map((track: any) => (
@@ -90,7 +103,9 @@ const Queue: React.SFC<QueueProps> = ({ queue }) => (
           <CoverImage src={track.images[0].url} />
         </CoverImageWrapper>
         <TrackInfo>
-          <TrackName>{track.name}</TrackName>
+          <TrackNameContainer>
+            <TrackName href="">{track.name}</TrackName>
+          </TrackNameContainer>
           <TrackArtists>
             {track.artists !== null
               ? track.artists

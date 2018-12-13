@@ -175,7 +175,24 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
                       : ''}
                   </TrackArtists>
                 </TrackInfo>
-                <AddToQueueButton>+</AddToQueueButton>
+                <Mutation mutation={MUTATION}>
+                  {(mutate) => (
+                    <AddToQueueButton
+                      onClick={() => {
+                        mutate({
+                          variables: {
+                            input: {
+                              roomId: room.id,
+                              trackId: track.id,
+                            },
+                          },
+                        });
+                      }}
+                    >
+                      +
+                    </AddToQueueButton>
+                  )}
+                </Mutation>
               </SuggestionTrack>
             ))}
           </Suggestions>
