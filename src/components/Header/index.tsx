@@ -8,6 +8,8 @@ import { clear } from 'src/utils/auth';
 import { useContextState } from 'constate';
 import { Link } from 'react-router-dom';
 
+import logo from 'src/assets/images/logo.svg';
+
 const HeaderWrapper = styled('header')({
   width: '100%',
   height: 70,
@@ -28,8 +30,13 @@ const HeaderWrapperPadding = styled('div')({
   paddingBottom: 70,
 });
 
-const Logo = styled('div')({
-  width: 100,
+const LogoContainer = styled('div')({
+  width: 160,
+  display: 'flex',
+});
+
+const Logo = styled('img')({
+  width: '100%',
 });
 
 const SpotifyLoginButton = styled('button')({
@@ -73,7 +80,9 @@ const Header: React.SFC = () => {
       <HeaderWrapperPadding />
       <HeaderWrapper>
         <Link to="/">
-          <Logo>spotify-rooms</Logo>
+          <LogoContainer>
+            <Logo src={logo} />
+          </LogoContainer>
         </Link>
 
         {visitingRoom && visitingRoom !== null ? (
