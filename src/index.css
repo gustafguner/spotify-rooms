@@ -47,6 +47,15 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
+}
+
 h1,
 h2,
 h3,

@@ -35,17 +35,6 @@ const AddToQueue = styled('div')({
   position: 'relative',
 });
 
-const AddToQueueButton = styled(Button)({
-  marginBottom: 8,
-});
-
-const Text = styled('p')({
-  fontSize: 14,
-  flexBasis: 20,
-  flexShrink: 0,
-  textAlign: 'center',
-});
-
 const MUTATION = gql`
   mutation addTrackToQueue($input: AddTrackToQueueInput!) {
     addTrackToQueue(input: $input)
@@ -72,20 +61,24 @@ const Suggestions = styled('div')({
   width: '100%',
   position: 'absolute',
   backgroundColor: colors.PRIMARY_DARK,
-  height: 240,
-  top: -240,
+  height: 225,
+  top: -225,
   padding: 15,
 });
 
 const SuggestionTrack = styled('div')({
   width: '100%',
   display: 'flex',
+  marginBottom: 15,
+  ':last-child': {
+    marginBottom: 0,
+  },
 });
 
 const CoverImageWrapper = styled('div')({
-  width: 50,
-  height: 50,
-  flexBasis: 50,
+  width: 55,
+  height: 55,
+  flexBasis: 55,
   flexShrink: 0,
 });
 
@@ -93,14 +86,34 @@ const CoverImage = styled('img')({
   float: 'left',
   width: '100%',
   height: '100%',
+  boxShadow: '0 0 5px rgba(0,0,0,0.1)',
 });
 
 const TrackInfo = styled('div')({
   flexBasis: '100%',
   display: 'flex',
+  justifyContent: 'center',
+  flexFlow: 'column',
+  marginLeft: 12,
 });
 
-const TrackName = styled('div')({});
+const TrackName = styled('div')({
+  flexBasis: 20,
+  flexShrink: 0,
+  fontWeight: 700,
+  fontSize: 15,
+});
+
+const TrackArtists = styled('div')({
+  fontSize: 13,
+  flexGrow: 0,
+});
+
+const AddToQueueButton = styled('button')({
+  flexBasis: 50,
+  fontSize: 20,
+  color: 'rgba(255,255,255,0.5)',
+});
 
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
@@ -126,7 +139,7 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
         if (spotifyTrackSearch !== null) {
           spotifyTrackSearch.abort();
         }
-        spotifyTrackSearch = searchTracks(query)
+        spotifyTrackSearch = searchTracks(query, 3)
           .then(({ tracks }) => {
             spotifyTrackSearch = null;
             console.log(tracks.items);
@@ -152,7 +165,17 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
                 </CoverImageWrapper>
                 <TrackInfo>
                   <TrackName>{track.name}</TrackName>
+                  <TrackArtists>
+                    {track.artists !== null
+                      ? track.artists
+                          .map((e: any) => {
+                            return e.name;
+                          })
+                          .join(', ')
+                      : ''}
+                  </TrackArtists>
                 </TrackInfo>
+                <AddToQueueButton>+</AddToQueueButton>
               </SuggestionTrack>
             ))}
           </Suggestions>

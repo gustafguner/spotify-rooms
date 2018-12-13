@@ -142,9 +142,9 @@ export const seek = async (position: number) => {
   return spotifyApi.seek(position, {});
 };
 
-export const searchTracks = async (query: string) => {
+export const searchTracks = async (query: string, limit: number) => {
   await checkAndRefreshAccessToken();
-  return spotifyApi.searchTracks(query, { limit: 2 });
+  return spotifyApi.searchTracks(query, { limit });
 };
 
 const getTokenExpire = () => {
