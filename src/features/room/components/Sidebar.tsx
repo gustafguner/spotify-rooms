@@ -130,7 +130,7 @@ const DarkTint = styled('div')(({ visible = false }: DarkTintProps) => ({
   opacity: visible ? 1 : 0,
 }));
 
-const LoaderContainer = styled('div')({
+const SearchStatusContainer = styled('div')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -179,47 +179,53 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
         {searchQuery !== '' && (
           <Suggestions>
             {searchResults !== null ? (
-              searchResults.map((track) => (
-                <SuggestionTrack key={track.id}>
-                  <CoverImageWrapper>
-                    <CoverImage src={track.album.images[0].url} />
-                  </CoverImageWrapper>
-                  <TrackInfo>
-                    <TrackName>{track.name}</TrackName>
-                    <TrackArtists>
-                      {track.artists !== null
-                        ? track.artists
-                            .map((e: any) => {
-                              return e.name;
-                            })
-                            .join(', ')
-                        : ''}
-                    </TrackArtists>
-                  </TrackInfo>
-                  <Mutation mutation={MUTATION}>
-                    {(mutate) => (
-                      <AddToQueueButton
-                        onClick={() => {
-                          mutate({
-                            variables: {
-                              input: {
-                                roomId: room.id,
-                                trackId: track.id,
+              searchResults.length !== 0 ? (
+                searchResults.map((track) => (
+                  <SuggestionTrack key={track.id}>
+                    <CoverImageWrapper>
+                      <CoverImage src={track.album.images[0].url} />
+                    </CoverImageWrapper>
+                    <TrackInfo>
+                      <TrackName>{track.name}</TrackName>
+                      <TrackArtists>
+                        {track.artists !== null
+                          ? track.artists
+                              .map((e: any) => {
+                                return e.name;
+                              })
+                              .join(', ')
+                          : ''}
+                      </TrackArtists>
+                    </TrackInfo>
+                    <Mutation mutation={MUTATION}>
+                      {(mutate) => (
+                        <AddToQueueButton
+                          onClick={() => {
+                            mutate({
+                              variables: {
+                                input: {
+                                  roomId: room.id,
+                                  trackId: track.id,
+                                },
                               },
-                            },
-                          });
-                        }}
-                      >
-                        +
-                      </AddToQueueButton>
-                    )}
-                  </Mutation>
-                </SuggestionTrack>
-              ))
+                            });
+                          }}
+                        >
+                          +
+                        </AddToQueueButton>
+                      )}
+                    </Mutation>
+                  </SuggestionTrack>
+                ))
+              ) : (
+                <SearchStatusContainer>
+                  <div>We couldn't find any tracks 😢</div>
+                </SearchStatusContainer>
+              )
             ) : (
-              <LoaderContainer>
+              <SearchStatusContainer>
                 <Loader />
-              </LoaderContainer>
+              </SearchStatusContainer>
             )}
           </Suggestions>
         )}
