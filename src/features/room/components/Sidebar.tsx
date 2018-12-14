@@ -7,6 +7,7 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { useContextState } from 'constate';
 import { Queue } from './Queue';
+import Loader from 'src/components/Loader';
 
 import { searchTracks } from 'src/utils/spotify';
 
@@ -115,6 +116,27 @@ const AddToQueueButton = styled('button')({
   color: 'rgba(255,255,255,0.5)',
 });
 
+interface DarkTintProps {
+  visible?: boolean;
+}
+
+const DarkTint = styled('div')(({ visible = false }: DarkTintProps) => ({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  transition: 'visibility 0s, opacity 0.2s',
+  visibility: visible ? 'visible' : 'hidden',
+  opacity: visible ? 1 : 0,
+}));
+
+const LoaderContainer = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100%',
+});
+
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
@@ -125,10 +147,7 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
   const handleTrackSearchInputChange = (e: any) => {
     const query = e.target.value;
     setSearchQuery(query);
-
-    if (query.length === 0) {
-      setSearchResults(null);
-    }
+    setSearchResults(null);
 
     if (query.length > 0) {
       if (spotifyTrackSearchQuery) {
@@ -154,62 +173,63 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
 
   return (
     <Container>
+      <DarkTint visible={searchQuery !== ''} />
       <Queue queue={room.queue} />
       <AddToQueue>
-        {searchResults !== null && (
+        {searchQuery !== '' && (
           <Suggestions>
-            {searchResults.map((track) => (
-              <SuggestionTrack key={track.id}>
-                <CoverImageWrapper>
-                  <CoverImage src={track.album.images[0].url} />
-                </CoverImageWrapper>
-                <TrackInfo>
-                  <TrackName>{track.name}</TrackName>
-                  <TrackArtists>
-                    {track.artists !== null
-                      ? track.artists
-                          .map((e: any) => {
-                            return e.name;
-                          })
-                          .join(', ')
-                      : ''}
-                  </TrackArtists>
-                </TrackInfo>
-                <Mutation mutation={MUTATION}>
-                  {(mutate) => (
-                    <AddToQueueButton
-                      onClick={() => {
-                        mutate({
-                          variables: {
-                            input: {
-                              roomId: room.id,
-                              trackId: track.id,
+            {searchResults !== null ? (
+              searchResults.map((track) => (
+                <SuggestionTrack key={track.id}>
+                  <CoverImageWrapper>
+                    <CoverImage src={track.album.images[0].url} />
+                  </CoverImageWrapper>
+                  <TrackInfo>
+                    <TrackName>{track.name}</TrackName>
+                    <TrackArtists>
+                      {track.artists !== null
+                        ? track.artists
+                            .map((e: any) => {
+                              return e.name;
+                            })
+                            .join(', ')
+                        : ''}
+                    </TrackArtists>
+                  </TrackInfo>
+                  <Mutation mutation={MUTATION}>
+                    {(mutate) => (
+                      <AddToQueueButton
+                        onClick={() => {
+                          mutate({
+                            variables: {
+                              input: {
+                                roomId: room.id,
+                                trackId: track.id,
+                              },
                             },
-                          },
-                        });
-                      }}
-                    >
-                      +
-                    </AddToQueueButton>
-                  )}
-                </Mutation>
-              </SuggestionTrack>
-            ))}
+                          });
+                        }}
+                      >
+                        +
+                      </AddToQueueButton>
+                    )}
+                  </Mutation>
+                </SuggestionTrack>
+              ))
+            ) : (
+              <LoaderContainer>
+                <Loader />
+              </LoaderContainer>
+            )}
           </Suggestions>
         )}
 
-        <Mutation mutation={MUTATION}>
-          {(mutate) => (
-            <>
-              <TextInput
-                type="text"
-                value={searchQuery}
-                placeholder="Search for a track that you like... 🤘"
-                onChange={handleTrackSearchInputChange}
-              />
-            </>
-          )}
-        </Mutation>
+        <TextInput
+          type="text"
+          value={searchQuery}
+          placeholder="Search for a track that you like... 🤘"
+          onChange={handleTrackSearchInputChange}
+        />
       </AddToQueue>
     </Container>
   );

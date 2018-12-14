@@ -215,6 +215,13 @@
     "@types/node" "*"
     "@types/react" "*"
 
+"@types/react-lottie@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@types/react-lottie/-/react-lottie-1.2.1.tgz#4fadbf61295c7fdd33cc0a319341c799c89b6054"
+  integrity sha512-3tIlX0sGvhBcJt/i7+iCFp/Hz7FG8FA0c1I38DjLGSrBRwNASkjntngT+Fsjd6lr6dG2+U8FAdUxh6hFV+0v/A==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-modal@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@types/react-modal/-/react-modal-3.6.0.tgz#57e7c74f2b39b1a90116bdb30aeaac89e5e1866a"
@@ -5211,6 +5218,11 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.3
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lottie-web@^5.1.3:
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.4.2.tgz#efe727ce20170946969929b50f30bfef3ec7ae55"
+  integrity sha512-k1YQaQ14cwiZKRqgQzKIlMhIIIhgtaRR2ngtoXxbLBwtvpu+mPtbaSsIXfB8YIP8SZcB+CUZj6yO/Y5so8JUlg==
+
 loud-rejection@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/loud-rejection/-/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
@@ -6753,6 +6765,14 @@ react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-lottie@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/react-lottie/-/react-lottie-1.2.3.tgz#8544b96939e088658072eea5e12d912cdaa3acc1"
+  integrity sha512-qLCERxUr8M+4mm1LU0Ruxw5Y5Fn/OmYkGfnA+JDM/dZb3oKwVAJCjwnjkj9TMHtzR2U6sMEUD3ZZ1RaHagM7kA==
+  dependencies:
+    babel-runtime "^6.26.0"
+    lottie-web "^5.1.3"
 
 react-minimalist-portal@^2.3.1:
   version "2.3.1"
