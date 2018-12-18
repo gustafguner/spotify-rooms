@@ -1,8 +1,11 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
 
 interface QueueProps {
+  roomId: string;
   queue: any[];
 }
 
@@ -95,7 +98,14 @@ const VoteCount = styled('div')({
   fontSize: 15,
   marginLeft: 3,
 });
-const Queue: React.SFC<QueueProps> = ({ queue }) => (
+
+const VOTE_FOR_TRACK = gql`
+  mutation voteForTrack($input: VoteForTrackInput!) {
+    voteForTrack(input: $input)
+  }
+`;
+
+const Queue: React.SFC<QueueProps> = ({ roomId, queue }) => (
   <Container>
     {queue.map((track: any) => (
       <Item key={track.id}>
@@ -116,10 +126,27 @@ const Queue: React.SFC<QueueProps> = ({ queue }) => (
               : ''}
           </TrackArtists>
         </TrackInfo>
-        <TrackVotes>
-          <VoteButton>👍</VoteButton>
-          <VoteCount>{0}</VoteCount>
-        </TrackVotes>
+        <Mutation mutation={VOTE_FOR_TRACK}>
+          {(mutate) => (
+            <TrackVotes>
+              <VoteButton
+                onClick={() => {
+                  mutate({
+                    variables: {
+                      input: {
+                        roomId,
+                        trackId: track.id,
+                      },
+                    },
+                  });
+                }}
+              >
+                👍
+              </VoteButton>
+              <VoteCount>{0}</VoteCount>
+            </TrackVotes>
+          )}
+        </Mutation>
       </Item>
     ))}
   </Container>

@@ -174,7 +174,7 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
   return (
     <Container>
       <DarkTint visible={searchQuery !== ''} />
-      <Queue queue={room.queue} />
+      <Queue roomId={room.id} queue={room.queue} />
       <AddToQueue>
         {searchQuery !== '' && (
           <Suggestions>

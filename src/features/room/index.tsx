@@ -17,6 +17,9 @@ const GET_ROOM_QUERY = gql`
     room(query: $query) {
       id
       name
+      host {
+        displayName
+      }
       playback {
         id
         name
@@ -39,6 +42,10 @@ const GET_ROOM_QUERY = gql`
         }
         artists {
           name
+        }
+        voters {
+          spotifyId
+          displayName
         }
       }
     }
@@ -65,6 +72,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
     >
       {({ loading, data }) => {
         setVisitingRoom(data.room);
+        console.log(data);
 
         return !loading && data ? (
           <Container>
