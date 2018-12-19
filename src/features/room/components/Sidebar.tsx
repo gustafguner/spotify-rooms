@@ -38,12 +38,15 @@ const AddToQueue = styled('div')({
 
 const MUTATION = gql`
   mutation addTrackToQueue($input: AddTrackToQueueInput!) {
-    addTrackToQueue(input: $input)
+    addTrackToQueue(input: $input) {
+      name
+    }
   }
 `;
 
 interface SidebarProps {
   room: any;
+  subscribeToQueue: () => void;
 }
 
 const TextInput = styled('input')({
@@ -140,7 +143,7 @@ const SearchStatusContainer = styled('div')({
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
-const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
+const Sidebar: React.SFC<SidebarProps> = ({ room, subscribeToQueue }) => {
   const [searchQuery, setSearchQuery] = useContextState(null, '');
   const [searchResults, setSearchResults] = useState<null | any[]>(null);
 
@@ -174,7 +177,12 @@ const Sidebar: React.SFC<SidebarProps> = ({ room }) => {
   return (
     <Container>
       <DarkTint visible={searchQuery !== ''} />
-      <Queue roomId={room.id} queue={room.queue} />
+      <Queue
+        roomId={room.id}
+        queue={room.queue}
+        subscription={subscribeToQueue}
+      />
+
       <AddToQueue>
         {searchQuery !== '' && (
           <Suggestions>

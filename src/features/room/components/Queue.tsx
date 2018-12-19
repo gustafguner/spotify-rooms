@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
@@ -7,6 +8,7 @@ import gql from 'graphql-tag';
 interface QueueProps {
   roomId: string;
   queue: any[];
+  subscription: () => void;
 }
 
 const Container = styled('div')({
@@ -105,51 +107,60 @@ const VOTE_FOR_TRACK = gql`
   }
 `;
 
-const Queue: React.SFC<QueueProps> = ({ roomId, queue }) => (
-  <Container>
-    {queue.map((track: any) => (
-      <Item key={track.id}>
-        <CoverImageWrapper>
-          <CoverImage src={track.images[0].url} />
-        </CoverImageWrapper>
-        <TrackInfo>
-          <TrackNameContainer>
-            <TrackName href="">{track.name}</TrackName>
-          </TrackNameContainer>
-          <TrackArtists>
-            {track.artists !== null
-              ? track.artists
-                  .map((e: any) => {
-                    return e.name;
-                  })
-                  .join(', ')
-              : ''}
-          </TrackArtists>
-        </TrackInfo>
-        <Mutation mutation={VOTE_FOR_TRACK}>
-          {(mutate) => (
-            <TrackVotes>
-              <VoteButton
-                onClick={() => {
-                  mutate({
-                    variables: {
-                      input: {
-                        roomId,
-                        trackId: track.id,
+const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
+  useEffect(() => {
+    subscription();
+    return () => {
+      console.log('queue subscription ended');
+    };
+  }, []);
+
+  return (
+    <Container>
+      {queue.map((track: any) => (
+        <Item key={track.id}>
+          <CoverImageWrapper>
+            <CoverImage src={track.images[0].url} />
+          </CoverImageWrapper>
+          <TrackInfo>
+            <TrackNameContainer>
+              <TrackName href="">{track.name}</TrackName>
+            </TrackNameContainer>
+            <TrackArtists>
+              {track.artists !== null
+                ? track.artists
+                    .map((e: any) => {
+                      return e.name;
+                    })
+                    .join(', ')
+                : ''}
+            </TrackArtists>
+          </TrackInfo>
+          <Mutation mutation={VOTE_FOR_TRACK}>
+            {(mutate) => (
+              <TrackVotes>
+                <VoteButton
+                  onClick={() => {
+                    mutate({
+                      variables: {
+                        input: {
+                          roomId,
+                          trackId: track.id,
+                        },
                       },
-                    },
-                  });
-                }}
-              >
-                👍
-              </VoteButton>
-              <VoteCount>{0}</VoteCount>
-            </TrackVotes>
-          )}
-        </Mutation>
-      </Item>
-    ))}
-  </Container>
-);
+                    });
+                  }}
+                >
+                  👍
+                </VoteButton>
+                <VoteCount>{track.voters.length}</VoteCount>
+              </TrackVotes>
+            )}
+          </Mutation>
+        </Item>
+      ))}
+    </Container>
+  );
+};
 
 export { Queue };

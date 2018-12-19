@@ -7,6 +7,7 @@ import { useContextState } from 'constate';
 
 import { Sidebar } from './components/Sidebar';
 import { Playback } from './components/Playback';
+import Loader from 'src/components/Loader';
 
 interface RoomProps {
   match: any;
@@ -61,8 +62,30 @@ const Content = styled('div')({
   width: '100%',
 });
 
+const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
+  subscription trackAddedToQueue {
+    trackAddedToQueue(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
+      id
+      name
+      images {
+        url
+        width
+        height
+      }
+      artists {
+        name
+      }
+      voters {
+        spotifyId
+        displayName
+      }
+    }
+  }
+`;
+
 const Room: React.SFC<RoomProps> = ({ match }) => {
   const [, setVisitingRoom] = useContextState('visitingRoom');
+
   return (
     <Query
       query={GET_ROOM_QUERY}
@@ -70,7 +93,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
         query: match.params.id,
       }}
     >
-      {({ loading, data }) => {
+      {({ loading, data, subscribeToMore }) => {
         setVisitingRoom(data.room);
         console.log(data);
 
@@ -80,10 +103,34 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
               <Playback track={data.room.playback} />
             </Content>
 
-            <Sidebar room={data.room} />
+            <Sidebar
+              room={data.room}
+              subscribeToQueue={() =>
+                subscribeToMore({
+                  document: TRACK_ADDED_TO_QUEUE_SUBSCRIPTION,
+                  updateQuery: (prev, { subscriptionData }) => {
+                    console.log(subscriptionData);
+                    if (!subscriptionData.data) {
+                      return prev;
+                    }
+
+                    const trackAddedToQueue =
+                      subscriptionData.data.trackAddedToQueue;
+
+                    return Object.assign({}, prev, {
+                      room: {
+                        ...prev.room,
+                        queue: [trackAddedToQueue, ...prev.room.queue],
+                      },
+                    });
+                  },
+                  onError: (err) => console.log(err),
+                })
+              }
+            />
           </Container>
         ) : (
-          <div>loading</div>
+          <Loader />
         );
       }}
     </Query>
