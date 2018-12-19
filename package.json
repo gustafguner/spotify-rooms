@@ -48,6 +48,7 @@
     "react-dom": "^16.7.0-alpha-2",
     "react-draggable": "^3.0.5",
     "react-emotion": "^9.2.12",
+    "react-flip-move": "^3.0.3",
     "react-lottie": "^1.2.3",
     "react-modal": "^3.7.1",
     "react-moment": "^0.8.4",

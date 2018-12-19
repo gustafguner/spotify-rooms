@@ -83,6 +83,27 @@ const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
   }
 `;
 
+const TRACK_VOTED_ON_IN_QUEUE = gql`
+  subscription trackVotedOnInQueue {
+    trackVotedOnInQueue(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
+      id
+      name
+      images {
+        url
+        width
+        height
+      }
+      artists {
+        name
+      }
+      voters {
+        spotifyId
+        displayName
+      }
+    }
+  }
+`;
+
 const Room: React.SFC<RoomProps> = ({ match }) => {
   const [, setVisitingRoom] = useContextState('visitingRoom');
 
@@ -105,7 +126,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
 
             <Sidebar
               room={data.room}
-              subscribeToQueue={() =>
+              subscribeToQueue={() => {
                 subscribeToMore({
                   document: TRACK_ADDED_TO_QUEUE_SUBSCRIPTION,
                   updateQuery: (prev, { subscriptionData }) => {
@@ -125,8 +146,30 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                     });
                   },
                   onError: (err) => console.log(err),
-                })
-              }
+                });
+                subscribeToMore({
+                  document: TRACK_VOTED_ON_IN_QUEUE,
+                  updateQuery: (prev, { subscriptionData }) => {
+                    if (!subscriptionData.data) {
+                      return prev;
+                    }
+
+                    const newTrack = subscriptionData.data.trackVotedOnInQueue;
+
+                    const queue = prev.room.queue.map((track: any) => {
+                      return track.id === newTrack.id ? newTrack : track;
+                    });
+
+                    return Object.assign({}, prev, {
+                      room: {
+                        ...prev.room,
+                        queue,
+                      },
+                    });
+                  },
+                  onError: (err) => console.log(err),
+                });
+              }}
             />
           </Container>
         ) : (
