@@ -94,11 +94,13 @@ const CoverImage = styled('img')({
 });
 
 const TrackInfo = styled('div')({
+  width: 'calc(100% - 55px - 30px - 12px - 12px)',
   flexBasis: '100%',
   display: 'flex',
   justifyContent: 'center',
   flexFlow: 'column',
   marginLeft: 12,
+  marginRight: 12,
 });
 
 const TrackName = styled('div')({
@@ -106,16 +108,27 @@ const TrackName = styled('div')({
   flexShrink: 0,
   fontWeight: 700,
   fontSize: 15,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 });
 
 const TrackArtists = styled('div')({
+  width: '100%',
   fontSize: 13,
+  color: colors.GRAY,
   flexGrow: 0,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 });
 
 const AddToQueueButton = styled('button')({
-  flexBasis: 50,
+  flexBasis: 30,
+  flexShrink: 0,
+  flexGrow: 0,
   fontSize: 20,
+  padding: 0,
   color: 'rgba(255,255,255,0.5)',
 });
 

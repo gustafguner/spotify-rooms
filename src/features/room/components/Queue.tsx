@@ -18,6 +18,7 @@ const Container = styled('div')({
   display: 'flex',
   flexFlow: 'column',
   padding: 15,
+  overflowY: 'scroll',
 });
 
 const Item = styled('div')({
@@ -31,6 +32,9 @@ const Item = styled('div')({
   alignItems: 'center',
   justifyContent: 'space-between',
   marginBottom: 15,
+  ':last-child': {
+    marginBottom: 0,
+  },
 });
 
 const CoverImageWrapper = styled('div')({
@@ -56,6 +60,7 @@ const TrackInfo = styled('div')({
 });
 
 const TrackNameContainer = styled('div')({
+  width: '100%',
   fontSize: 15,
   fontWeight: 700,
   whiteSpace: 'nowrap',
@@ -69,9 +74,13 @@ const TrackName = styled('a')({
 });
 
 const TrackArtists = styled('div')({
+  width: '100%',
   fontSize: 13,
   fontWeight: 300,
   color: colors.GRAY,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 });
 
 const TrackVotes = styled('div')({

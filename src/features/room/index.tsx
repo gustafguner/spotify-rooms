@@ -120,7 +120,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                     return Object.assign({}, prev, {
                       room: {
                         ...prev.room,
-                        queue: [trackAddedToQueue, ...prev.room.queue],
+                        queue: [...prev.room.queue, trackAddedToQueue],
                       },
                     });
                   },
