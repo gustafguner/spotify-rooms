@@ -32,6 +32,7 @@ const GET_ROOM_QUERY = gql`
         artists {
           name
         }
+        timestamp
       }
       queue {
         id
@@ -48,6 +49,7 @@ const GET_ROOM_QUERY = gql`
           spotifyId
           displayName
         }
+        timestamp
       }
     }
   }
@@ -79,6 +81,7 @@ const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
         spotifyId
         displayName
       }
+      timestamp
     }
   }
 `;
@@ -100,6 +103,7 @@ const TRACK_VOTED_ON_IN_QUEUE = gql`
         spotifyId
         displayName
       }
+      timestamp
     }
   }
 `;

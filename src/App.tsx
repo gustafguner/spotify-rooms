@@ -3,7 +3,8 @@ import apolloClient from './graphql/client';
 import { ApolloProvider } from 'react-apollo';
 import styled from 'react-emotion';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { initializeSpotify, getAccessToken } from './utils/spotify';
+import { initializeSpotify } from './utils/spotify';
+import { getToken } from './utils/auth';
 import Header from './components/Header';
 import PlaybackFooter from './components/PlaybackFooter';
 import { routes } from './routes';
@@ -22,7 +23,7 @@ const AppEffects = ({ children }: any) => {
     setState({
       ...state,
       auth: {
-        loggedIn: getAccessToken() !== null,
+        loggedIn: getToken() !== null,
       },
       spotify: {
         track: null,

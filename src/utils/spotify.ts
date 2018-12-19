@@ -1,6 +1,6 @@
 import SpotifyWebApi from 'spotify-web-api-js';
 import * as queryString from 'query-string';
-import { storeToken } from './auth';
+import { storeToken, storeUser } from './auth';
 import { request } from './request';
 
 const spotifyApi = new SpotifyWebApi();
@@ -31,6 +31,7 @@ export const initializeSpotify = async () => {
       .then((reponse) => reponse.json())
       .then((response) => {
         storeToken(response.token);
+        storeUser(response.user);
       })
       .catch((error) => {
         console.error(error.statusText);

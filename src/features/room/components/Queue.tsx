@@ -119,8 +119,10 @@ const VOTE_FOR_TRACK = gql`
 
 const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
   queue.sort((a, b) => {
-    return b.voters.length - a.voters.length || 0;
+    return b.voters.length - a.voters.length || a.timestamp - b.timestamp;
   });
+
+  console.log(queue);
 
   useEffect(() => {
     subscription();
