@@ -4,7 +4,7 @@ import { ApolloProvider } from 'react-apollo';
 import styled from 'react-emotion';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { initializeSpotify } from './utils/spotify';
-import { getToken } from './utils/auth';
+import { getToken, getUser } from './utils/auth';
 import Header from './components/Header';
 import PlaybackFooter from './components/PlaybackFooter';
 import { routes } from './routes';
@@ -24,6 +24,7 @@ const AppEffects = ({ children }: any) => {
       ...state,
       auth: {
         loggedIn: getToken() !== null,
+        user: getUser(),
       },
       spotify: {
         track: null,

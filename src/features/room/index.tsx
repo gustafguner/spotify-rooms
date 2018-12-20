@@ -46,6 +46,7 @@ const GET_ROOM_QUERY = gql`
           name
         }
         voters {
+          id
           spotifyId
           displayName
         }
@@ -78,6 +79,7 @@ const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
         name
       }
       voters {
+        id
         spotifyId
         displayName
       }
@@ -100,6 +102,7 @@ const TRACK_VOTED_ON_IN_QUEUE = gql`
         name
       }
       voters {
+        id
         spotifyId
         displayName
       }
@@ -157,6 +160,8 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                     if (!subscriptionData.data) {
                       return prev;
                     }
+
+                    console.log('subscriptionData', subscriptionData);
 
                     const newTrack = subscriptionData.data.trackVotedOnInQueue;
 

@@ -5,6 +5,7 @@ import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import FlipMove from 'react-flip-move';
+import { useContextState } from 'constate';
 
 interface QueueProps {
   roomId: string;
@@ -104,12 +105,16 @@ const VoteButton = styled('button')({
   padding: 0,
 });
 
-const VoteCount = styled('div')({
+interface VoteCountProps {
+  voted?: boolean;
+}
+
+const VoteCount = styled('div')(({ voted = false }: VoteCountProps) => ({
   textAlign: 'center',
-  color: 'rgba(255,255,255,0.5)',
+  color: voted ? colors.WHITE : 'rgba(255,255,255,0.5)',
   fontSize: 15,
   marginLeft: 3,
-});
+}));
 
 const VOTE_FOR_TRACK = gql`
   mutation voteForTrack($input: VoteForTrackInput!) {
@@ -118,11 +123,11 @@ const VOTE_FOR_TRACK = gql`
 `;
 
 const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
+  const [auth, setAuth] = useContextState('auth');
+
   queue.sort((a, b) => {
     return b.voters.length - a.voters.length || a.timestamp - b.timestamp;
   });
-
-  console.log(queue);
 
   useEffect(() => {
     subscription();

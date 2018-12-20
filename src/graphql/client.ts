@@ -21,6 +21,7 @@ const wsLink = new WebSocketLink({
   uri: `ws://localhost:8888/subscriptions`,
   options: {
     reconnect: true,
+    timeout: 30000,
   },
 });
 
