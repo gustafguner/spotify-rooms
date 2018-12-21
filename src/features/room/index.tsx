@@ -111,6 +111,29 @@ const TRACK_VOTED_ON_IN_QUEUE = gql`
   }
 `;
 
+const TRACK_REMOVED_FROM_QUEUE = gql`
+  subscription trackAddedToQueue {
+    trackRemovedFromQueue(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
+      id
+      name
+      images {
+        url
+        width
+        height
+      }
+      artists {
+        name
+      }
+      voters {
+        id
+        spotifyId
+        displayName
+      }
+      timestamp
+    }
+  }
+`;
+
 const Room: React.SFC<RoomProps> = ({ match }) => {
   const [, setVisitingRoom] = useContextState('visitingRoom');
 
@@ -167,6 +190,31 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
 
                     const queue = prev.room.queue.map((track: any) => {
                       return track.id === newTrack.id ? newTrack : track;
+                    });
+
+                    return Object.assign({}, prev, {
+                      room: {
+                        ...prev.room,
+                        queue,
+                      },
+                    });
+                  },
+                  onError: (err) => console.log(err),
+                });
+                subscribeToMore({
+                  document: TRACK_REMOVED_FROM_QUEUE,
+                  updateQuery: (prev, { subscriptionData }) => {
+                    if (!subscriptionData.data) {
+                      return prev;
+                    }
+
+                    console.log('subscriptionData', subscriptionData);
+
+                    const removedTrack =
+                      subscriptionData.data.trackRemovedFromQueue;
+
+                    const queue = prev.room.queue.filter((track: any) => {
+                      return track.id !== removedTrack.id;
                     });
 
                     return Object.assign({}, prev, {
