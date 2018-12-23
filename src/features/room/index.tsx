@@ -9,6 +9,8 @@ import { Sidebar } from './components/Sidebar';
 import { Playback } from './components/Playback';
 import Loader from 'src/components/Loader';
 
+import { play } from 'src/utils/spotify';
+
 interface RoomProps {
   match: any;
 }
@@ -112,9 +114,33 @@ const TRACK_VOTED_ON_IN_QUEUE = gql`
 `;
 
 const TRACK_REMOVED_FROM_QUEUE = gql`
-  subscription trackAddedToQueue {
+  subscription removedFromQueue {
     trackRemovedFromQueue(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
       id
+      name
+      images {
+        url
+        width
+        height
+      }
+      artists {
+        name
+      }
+      voters {
+        id
+        spotifyId
+        displayName
+      }
+      timestamp
+    }
+  }
+`;
+
+const PLAY_TRACK = gql`
+  subscription playTrack {
+    playTrack(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
+      id
+      uri
       name
       images {
         url
@@ -221,6 +247,28 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                       room: {
                         ...prev.room,
                         queue,
+                      },
+                    });
+                  },
+                  onError: (err) => console.log(err),
+                });
+                subscribeToMore({
+                  document: PLAY_TRACK,
+                  updateQuery: (prev, { subscriptionData }) => {
+                    if (!subscriptionData.data) {
+                      return prev;
+                    }
+
+                    console.log('PLAY TRACK; ', subscriptionData);
+
+                    const track = subscriptionData.data.playTrack;
+
+                    play(track.uri);
+
+                    return Object.assign({}, prev, {
+                      room: {
+                        ...prev.room,
+                        playback: track,
                       },
                     });
                   },

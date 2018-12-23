@@ -99,13 +99,12 @@ export const getMyRecentlyPlayedTracks = async (limit: number) => {
 
 export const getMyCurrentPlaybackState = async () => {
   await checkAndRefreshAccessToken();
-  console.log(await spotifyApi.getMyCurrentPlayingTrack());
   return spotifyApi.getMyCurrentPlaybackState();
 };
 
-export const play = async () => {
+export const play = async (uri?: string) => {
   await checkAndRefreshAccessToken();
-  return spotifyApi.play();
+  return uri ? spotifyApi.play({ uris: [uri] }) : spotifyApi.play();
 };
 
 export const pause = async () => {
