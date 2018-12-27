@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import styled from 'react-emotion';
-import { colors } from 'src/styles';
 import gql from 'graphql-tag';
 import { useContextState } from 'constate';
 
 import { Sidebar } from './components/Sidebar';
 import { Playback } from './components/Playback';
 import Loader from 'src/components/Loader';
-
-import { play } from 'src/utils/spotify';
 
 interface RoomProps {
   match: any;
@@ -34,7 +31,8 @@ const GET_ROOM_QUERY = gql`
         artists {
           name
         }
-        timestamp
+        queueTimestamp
+        playTimestamp
       }
       queue {
         id
@@ -52,7 +50,7 @@ const GET_ROOM_QUERY = gql`
           spotifyId
           displayName
         }
-        timestamp
+        queueTimestamp
       }
     }
   }
@@ -85,7 +83,7 @@ const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
         spotifyId
         displayName
       }
-      timestamp
+      queueTimestamp
     }
   }
 `;
@@ -108,7 +106,7 @@ const TRACK_VOTED_ON_IN_QUEUE = gql`
         spotifyId
         displayName
       }
-      timestamp
+      queueTimestamp
     }
   }
 `;
@@ -131,14 +129,14 @@ const TRACK_REMOVED_FROM_QUEUE = gql`
         spotifyId
         displayName
       }
-      timestamp
+      queueTimestamp
     }
   }
 `;
 
-const PLAY_TRACK = gql`
-  subscription playTrack {
-    playTrack(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
+const PLAYBACK_SUBSCRIPTION = gql`
+  subscription playback {
+    playback(roomId: "5c0fb582b623d1498fff7faf") {
       id
       uri
       name
@@ -155,7 +153,9 @@ const PLAY_TRACK = gql`
         spotifyId
         displayName
       }
-      timestamp
+      queueTimestamp
+      playTimestamp
+      position
     }
   }
 `;
@@ -171,8 +171,9 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
       }}
     >
       {({ loading, data, subscribeToMore }) => {
-        setVisitingRoom(data.room);
-        console.log(data);
+        if (!loading && data) {
+          setVisitingRoom(data.room);
+        }
 
         return !loading && data ? (
           <Container>
@@ -194,6 +195,11 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                     const trackAddedToQueue =
                       subscriptionData.data.trackAddedToQueue;
 
+                    console.log('Track added to queue ', trackAddedToQueue);
+                    console.log('prev ', prev);
+                    const q = [...prev.room.queue, trackAddedToQueue];
+                    console.log('added, new queue: ', q);
+
                     return Object.assign({}, prev, {
                       room: {
                         ...prev.room,
@@ -210,9 +216,9 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                       return prev;
                     }
 
-                    console.log('subscriptionData', subscriptionData);
-
                     const newTrack = subscriptionData.data.trackVotedOnInQueue;
+
+                    console.log('Track voted on in queue', newTrack);
 
                     const queue = prev.room.queue.map((track: any) => {
                       return track.id === newTrack.id ? newTrack : track;
@@ -234,10 +240,10 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                       return prev;
                     }
 
-                    console.log('subscriptionData', subscriptionData);
-
                     const removedTrack =
                       subscriptionData.data.trackRemovedFromQueue;
+
+                    console.log('Track removed from queue', removedTrack);
 
                     const queue = prev.room.queue.filter((track: any) => {
                       return track.id !== removedTrack.id;
@@ -252,18 +258,15 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                   },
                   onError: (err) => console.log(err),
                 });
+
                 subscribeToMore({
-                  document: PLAY_TRACK,
+                  document: PLAYBACK_SUBSCRIPTION,
                   updateQuery: (prev, { subscriptionData }) => {
                     if (!subscriptionData.data) {
                       return prev;
                     }
 
-                    console.log('PLAY TRACK; ', subscriptionData);
-
-                    const track = subscriptionData.data.playTrack;
-
-                    play(track.uri);
+                    const track = subscriptionData.data.playback;
 
                     return Object.assign({}, prev, {
                       room: {

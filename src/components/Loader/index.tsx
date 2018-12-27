@@ -6,9 +6,6 @@ const defaultOptions = {
   loop: true,
   autoplay: true,
   animationData,
-  rendererSettings: {
-    preserveAspectRatio: true,
-  },
 };
 
 const Loader = () => <Lottie options={defaultOptions} height={90} width={90} />;

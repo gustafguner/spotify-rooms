@@ -2,7 +2,6 @@ import SpotifyWebApi from 'spotify-web-api-js';
 import * as queryString from 'query-string';
 import { storeToken, storeUser } from './auth';
 import { request } from './request';
-
 const spotifyApi = new SpotifyWebApi();
 
 export const initializeSpotify = async () => {
@@ -102,9 +101,9 @@ export const getMyCurrentPlaybackState = async () => {
   return spotifyApi.getMyCurrentPlaybackState();
 };
 
-export const play = async (uri?: string) => {
+export const play = async (options?: object) => {
   await checkAndRefreshAccessToken();
-  return uri ? spotifyApi.play({ uris: [uri] }) : spotifyApi.play();
+  return spotifyApi.play(options);
 };
 
 export const pause = async () => {

@@ -126,7 +126,9 @@ const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
   const [auth, setAuth] = useContextState('auth');
 
   queue.sort((a, b) => {
-    return b.voters.length - a.voters.length || a.timestamp - b.timestamp;
+    return (
+      b.voters.length - a.voters.length || a.queueTimestamp - b.queueTimestamp
+    );
   });
 
   useEffect(() => {

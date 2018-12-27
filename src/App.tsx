@@ -10,7 +10,10 @@ import PlaybackFooter from './components/PlaybackFooter';
 import { routes } from './routes';
 
 import { useContext, useEffect } from 'react';
-import { Context, Provider } from 'constate';
+import { Context, Provider, useContextState } from 'constate';
+import { Subscription } from 'react-apollo';
+import gql from 'graphql-tag';
+import Playback from './components/Playback';
 
 const SiteContainer = styled('div')({
   width: '100%',
@@ -33,6 +36,7 @@ const AppEffects = ({ children }: any) => {
           volumeToggled: false,
         },
       },
+      playback: null,
       visitingRoom: null,
       listeningRoom: null,
     });
@@ -64,11 +68,11 @@ const App: React.SFC = () => {
                       component={Component}
                     />
                   ))}
+                  <Playback />
                 </>
               </Switch>
             </BrowserRouter>
           </SiteContainer>
-          <PlaybackFooter />
         </AppEffects>
       </Provider>
     </ApolloProvider>

@@ -12,6 +12,8 @@ interface Track {
   name: string;
   images: Image[];
   artists: Artist[];
+  queueTimestamp: string;
+  playTimestamp: string;
 }
 
 interface Image {
@@ -55,7 +57,7 @@ const CoverImageWrapper = styled('div')({
   animation: `${Spin} 1.8s linear infinite`,
   position: 'relative',
   '::after': {
-    content: '',
+    content: '""',
     position: 'absolute',
     top: 0,
     left: 0,
@@ -118,7 +120,7 @@ const Artists = styled('div')({
 });
 
 const Playback: React.SFC<PlaybackProps> = ({ track }) =>
-  track ? (
+  track && track.id !== null ? (
     <Wrapper>
       <BackgroundBlur img={track.images[0].url} blurRadius={60} />
       <DarkFilter />
