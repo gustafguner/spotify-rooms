@@ -5,7 +5,6 @@ import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import FlipMove from 'react-flip-move';
-import { useContextState } from 'constate';
 
 interface QueueProps {
   roomId: string;
@@ -123,8 +122,6 @@ const VOTE_FOR_TRACK = gql`
 `;
 
 const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
-  const [auth, setAuth] = useContextState('auth');
-
   queue.sort((a, b) => {
     return (
       b.voters.length - a.voters.length || a.queueTimestamp - b.queueTimestamp

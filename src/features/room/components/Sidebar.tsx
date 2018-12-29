@@ -1,11 +1,8 @@
 import * as React from 'react';
-import { useState } from 'react';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
-import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { useContextState } from 'constate';
 import { Queue } from './Queue';
 import Loader from 'src/components/Loader';
 
@@ -157,8 +154,8 @@ let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
 const Sidebar: React.SFC<SidebarProps> = ({ room, subscribeToQueue }) => {
-  const [searchQuery, setSearchQuery] = useContextState(null, '');
-  const [searchResults, setSearchResults] = useState<null | any[]>(null);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
 
   const handleTrackSearchInputChange = (e: any) => {
     const query = e.target.value;

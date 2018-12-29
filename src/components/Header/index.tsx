@@ -1,14 +1,16 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import { colors } from '../../styles';
-import { Button } from '../buttons';
-import { getSpotifyAuthorizeUrl } from '../../utils/spotify';
-import spotifyLogo from '../../assets/images/spotify-logo.svg';
+import { colors } from 'src/styles';
+import { Button } from 'src/components/buttons';
+import { getSpotifyAuthorizeUrl } from 'src/utils/spotify';
+import spotifyLogo from 'src/assets/images/spotify-logo.svg';
 import { clear } from 'src/utils/auth';
-import { useContextState } from 'constate';
 import { Link } from 'react-router-dom';
 
 import logo from 'src/assets/images/logo.svg';
+import { Root } from 'src/Root';
+import { Room } from 'src/features/room';
+import { PlaybackContainer } from '../Playback';
 
 const HeaderWrapper = styled('header')({
   width: '100%',
@@ -66,15 +68,9 @@ const SpotifyLogoImage = styled('img')({
 });
 
 const Header: React.SFC = () => {
-  const [auth, setAuth] = useContextState('auth');
-  const [visitingRoom] = useContextState('visitingRoom');
-  const logOut = () => {
-    clear();
-    setAuth({
-      ...auth,
-      loggedIn: false,
-    });
-  };
+  const { root, setRoot }: any = React.useContext(Root.Context);
+
+  const logOut = () => {};
   return (
     <>
       <HeaderWrapperPadding />
@@ -85,13 +81,13 @@ const Header: React.SFC = () => {
           </LogoContainer>
         </Link>
 
-        {visitingRoom && visitingRoom !== null ? (
-          <h4>{visitingRoom.name}</h4>
+        {root.visitingRoom && root.visitingRoom !== null ? (
+          <h4>{root.visitingRoom.name}</h4>
         ) : (
           <h4>Enter a room...</h4>
         )}
 
-        {auth && auth.loggedIn ? (
+        {root.auth && root.auth.loggedIn ? (
           <Button onClick={logOut}>Log out</Button>
         ) : (
           <SpotifyLoginButton onClick={getSpotifyAuthorizeUrl}>

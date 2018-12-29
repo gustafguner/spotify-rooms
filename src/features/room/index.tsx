@@ -2,11 +2,13 @@ import * as React from 'react';
 import { Query } from 'react-apollo';
 import styled from 'react-emotion';
 import gql from 'graphql-tag';
-import { useContextState } from 'constate';
 
 import { Sidebar } from './components/Sidebar';
 import { Playback } from './components/Playback';
 import Loader from 'src/components/Loader';
+
+import { Root } from 'src/Root';
+import createContainer from 'constate';
 
 interface RoomProps {
   match: any;
@@ -160,9 +162,20 @@ const PLAYBACK_SUBSCRIPTION = gql`
   }
 `;
 
-const Room: React.SFC<RoomProps> = ({ match }) => {
-  const [, setVisitingRoom] = useContextState('visitingRoom');
+interface SetRoomProps {
+  room: object;
+}
 
+const SetRoom: React.SFC<SetRoomProps> = ({ room }) => {
+  const { root, setRoot }: any = React.useContext(Root.Context);
+
+  React.useEffect(() => {
+    setRoot({ ...root, visitingRoom: room });
+  }, []);
+  return null;
+};
+
+const Room: React.SFC<RoomProps> = ({ match }) => {
   return (
     <Query
       query={GET_ROOM_QUERY}
@@ -170,13 +183,10 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
         query: match.params.id,
       }}
     >
-      {({ loading, data, subscribeToMore }) => {
-        if (!loading && data) {
-          setVisitingRoom(data.room);
-        }
-
-        return !loading && data ? (
+      {({ loading, data, error, subscribeToMore }) =>
+        !loading && !error && data ? (
           <Container>
+            <SetRoom room={data.room} />
             <Content>
               <Playback track={data.room.playback} />
             </Content>
@@ -282,8 +292,8 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
           </Container>
         ) : (
           <Loader />
-        );
-      }}
+        )
+      }
     </Query>
   );
 };
