@@ -35,6 +35,8 @@ const GET_ROOM_QUERY = gql`
         }
         queueTimestamp
         playTimestamp
+        position
+        duration
       }
       queue {
         id
@@ -86,6 +88,8 @@ const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
         displayName
       }
       queueTimestamp
+      playTimestamp
+      position
     }
   }
 `;
@@ -109,6 +113,8 @@ const TRACK_VOTED_ON_IN_QUEUE = gql`
         displayName
       }
       queueTimestamp
+      playTimestamp
+      position
     }
   }
 `;
@@ -132,6 +138,8 @@ const TRACK_REMOVED_FROM_QUEUE = gql`
         displayName
       }
       queueTimestamp
+      playTimestamp
+      position
     }
   }
 `;
@@ -168,7 +176,7 @@ interface SetRoomProps {
 
 const SetRoom: React.SFC<SetRoomProps> = ({ room }) => {
   const { root, setRoot }: any = React.useContext(Root.Context);
-
+  console.log(room);
   React.useEffect(() => {
     setRoot({ ...root, visitingRoom: room });
   }, []);

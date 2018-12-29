@@ -14,6 +14,8 @@ interface Track {
   artists: Artist[];
   queueTimestamp: string;
   playTimestamp: string;
+  duration: number;
+  position: number;
 }
 
 interface Image {
@@ -99,11 +101,17 @@ const ProgressBarContainer = styled('div')({
   height: 3,
 });
 
-const ProgressBarFill = styled('div')({
-  width: '44%',
-  height: '100%',
-  backgroundColor: 'rgba(255,255,255,0.24)',
-});
+interface ProgressBarFillProps {
+  widthPercent: number;
+}
+
+const ProgressBarFill = styled('div')(
+  ({ widthPercent }: ProgressBarFillProps) => ({
+    width: widthPercent + '%',
+    height: '100%',
+    backgroundColor: 'rgba(255,255,255,0.24)',
+  }),
+);
 
 const TrackInfo = styled('div')({
   width: '100%',
@@ -125,7 +133,9 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) =>
       <BackgroundBlur img={track.images[0].url} blurRadius={60} />
       <DarkFilter />
       <ProgressBarContainer>
-        <ProgressBarFill />
+        <ProgressBarFill
+          widthPercent={(track.position / track.duration) * 100}
+        />
       </ProgressBarContainer>
 
       <Container>
