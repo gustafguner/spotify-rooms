@@ -55,6 +55,9 @@ const GET_ROOM_QUERY = gql`
           displayName
         }
         queueTimestamp
+        playTimestamp
+        position
+        duration
       }
     }
   }
@@ -90,6 +93,7 @@ const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
       queueTimestamp
       playTimestamp
       position
+      duration
     }
   }
 `;
@@ -115,6 +119,7 @@ const TRACK_VOTED_ON_IN_QUEUE = gql`
       queueTimestamp
       playTimestamp
       position
+      duration
     }
   }
 `;
@@ -140,6 +145,7 @@ const TRACK_REMOVED_FROM_QUEUE = gql`
       queueTimestamp
       playTimestamp
       position
+      duration
     }
   }
 `;
@@ -166,6 +172,7 @@ const PLAYBACK_SUBSCRIPTION = gql`
       queueTimestamp
       playTimestamp
       position
+      duration
     }
   }
 `;

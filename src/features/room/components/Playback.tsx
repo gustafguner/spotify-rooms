@@ -110,6 +110,7 @@ const ProgressBarFill = styled('div')(
     width: widthPercent + '%',
     height: '100%',
     backgroundColor: 'rgba(255,255,255,0.24)',
+    transition: 'width 1s linear',
   }),
 );
 
@@ -127,17 +128,28 @@ const Artists = styled('div')({
   color: 'rgba(255, 255, 255, 0.55)',
 });
 
-const Playback: React.SFC<PlaybackProps> = ({ track }) =>
-  track && track.id !== null ? (
+const Playback: React.SFC<PlaybackProps> = ({ track }) => {
+  const [position, setPosition] = React.useState(
+    track && track.id !== null ? track.position : 0,
+  );
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setPosition((p: any) => p + 1000);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  return track && track.id !== null ? (
     <Wrapper>
       <BackgroundBlur img={track.images[0].url} blurRadius={60} />
       <DarkFilter />
       <ProgressBarContainer>
-        <ProgressBarFill
-          widthPercent={(track.position / track.duration) * 100}
-        />
+        <ProgressBarFill widthPercent={(position / track.duration) * 100} />
       </ProgressBarContainer>
-
       <Container>
         <CoverImageWrapper>
           <CoverImage src={track.images[0].url} />
@@ -159,5 +171,6 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) =>
   ) : (
     <div>loading</div>
   );
+};
 
 export { Playback };
