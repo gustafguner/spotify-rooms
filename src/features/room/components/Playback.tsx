@@ -75,12 +75,28 @@ const CoverImage = styled('img')({
   height: '100%',
 });
 
+const DefaultCoverImage = styled('div')({
+  width: '100%',
+  height: '100%',
+  backgroundColor: colors.PRIMARY_DARK,
+});
+
 const BackgroundBlur = styled(Blur)({
   width: '100%',
   height: '100%',
   position: 'absolute',
   left: 0,
   top: 0,
+});
+
+const DefaultBackground = styled('div')({
+  width: '100%',
+  height: '100%',
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  background: 'linear-gradient(#009FAE, #1ED760)',
+  // 009FAE, 1ED760
 });
 
 const DarkFilter = styled('div')({
@@ -178,7 +194,18 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
       </Container>
     </Wrapper>
   ) : (
-    <div>loading</div>
+    <Wrapper>
+      <DefaultBackground />
+      <DarkFilter />
+      <Container>
+        <CoverImageWrapper>
+          <DefaultCoverImage />
+        </CoverImageWrapper>
+        <TrackInfo>
+          <TrackName>No currently playing track</TrackName>
+        </TrackInfo>
+      </Container>
+    </Wrapper>
   );
 };
 
