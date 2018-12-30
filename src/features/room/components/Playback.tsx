@@ -110,7 +110,6 @@ const ProgressBarFill = styled('div')(
     width: widthPercent + '%',
     height: '100%',
     backgroundColor: 'rgba(255,255,255,0.24)',
-    transition: 'width 1s linear',
   }),
 );
 
@@ -129,19 +128,29 @@ const Artists = styled('div')({
 });
 
 const Playback: React.SFC<PlaybackProps> = ({ track }) => {
-  const [position, setPosition] = React.useState(
-    track && track.id !== null ? track.position : 0,
+  const isTrack = track && track.id !== null;
+
+  const [position, setPosition] = React.useState(isTrack ? track.position : 0);
+
+  console.log(track);
+
+  React.useEffect(
+    () => {
+      setPosition(isTrack ? track.position : 0);
+      const interval = isTrack
+        ? setInterval(() => {
+            setPosition((p: any) => p + 200);
+          }, 200)
+        : null;
+
+      return () => {
+        if (interval !== null) {
+          clearInterval(interval);
+        }
+      };
+    },
+    [track],
   );
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setPosition((p: any) => p + 1000);
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   return track && track.id !== null ? (
     <Wrapper>
