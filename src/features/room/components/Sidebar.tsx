@@ -12,7 +12,7 @@ const Container = styled('div')({
   width: 350,
   flexBasis: 350,
   flexShrink: 0,
-  height: 'calc(100vh - 90px - 70px)',
+  height: 'calc(100vh - 70px)',
   backgroundColor: colors.ALMOST_BLACK,
   boxShadow: '-2px 0 18px rgba(0,0,0,0.2)',
   position: 'relative',

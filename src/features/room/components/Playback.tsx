@@ -96,7 +96,6 @@ const DefaultBackground = styled('div')({
   left: 0,
   top: 0,
   background: 'linear-gradient(#009FAE, #1ED760)',
-  // 009FAE, 1ED760
 });
 
 const DarkFilter = styled('div')({
@@ -147,8 +146,6 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
   const isTrack = track && track.id !== null;
 
   const [position, setPosition] = React.useState(isTrack ? track.position : 0);
-
-  console.log(track);
 
   React.useEffect(
     () => {

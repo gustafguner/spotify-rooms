@@ -4,6 +4,9 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { play } from 'src/utils/spotify';
 import { Root } from 'src/Root';
+import styled from 'react-emotion';
+import { colors } from 'src/styles';
+import { transform } from 'async';
 
 const PLAYBACK_QUERY = gql`
   query playback($roomId: ID!) {
@@ -68,6 +71,21 @@ interface SubscriptionProps {
   subscription: (playback: any) => void;
 }
 
+interface ContainerProps {
+  toggled: boolean;
+}
+
+const Container = styled('div')(({ toggled }: ContainerProps) => ({
+  position: 'fixed',
+  left: 0,
+  bottom: 0,
+  width: '100%',
+  background: colors.PRIMARY_DARK,
+  height: 90,
+  transition: 'transform 0.15s ease',
+  transform: `translateY(${toggled ? 90 : 0}px)`,
+}));
+
 const Subscription: React.SFC<SubscriptionProps> = ({ subscription }) => {
   const { playback, setPlayback } = React.useContext(PlaybackContainer.Context);
   const [unsubscribe, setUnsubscribe]: any = React.useState(null);
@@ -90,52 +108,60 @@ const Subscription: React.SFC<SubscriptionProps> = ({ subscription }) => {
 };
 
 const Playback = () => {
+  const { root }: any = React.useContext(Root.Context);
   console.log('Playback component');
 
-  return (
-    <Query
-      query={PLAYBACK_QUERY}
-      variables={{ roomId: '5c0fb582b623d1498fff7faf' }}
-    >
-      {({ data, loading, error, subscribeToMore }) => {
-        return !loading && !error && data ? (
-          <PlaybackContainer.Provider initialPlayback={data.playback}>
-            <Subscription
-              subscription={(setPlayback: (playback: any) => void) => {
-                subscribeToMore({
-                  document: PLAYBACK_SUBSCRIPTION,
-                  variables: { roomId: '5c0fb582b623d1498fff7faf' },
-                  updateQuery: (prev, { subscriptionData }) => {
-                    if (!subscriptionData.data) {
-                      return prev;
-                    }
+  return root ? (
+    <Container toggled={root.visitingRoom !== null}>
+      {root.visitingRoom !== null ? (
+        <Query
+          query={PLAYBACK_QUERY}
+          variables={{ roomId: root.visitingRoom.id }}
+        >
+          {({ data, loading, error, subscribeToMore }) => {
+            return !loading && !error && data ? (
+              <PlaybackContainer.Provider initialPlayback={data.playback}>
+                <Subscription
+                  subscription={(setPlayback: (playback: any) => void) => {
+                    subscribeToMore({
+                      document: PLAYBACK_SUBSCRIPTION,
+                      variables: { roomId: root.visitingRoom.id },
+                      updateQuery: (prev, { subscriptionData }) => {
+                        if (!subscriptionData.data) {
+                          return prev;
+                        }
 
-                    console.log(
-                      'Playback component play track ',
-                      subscriptionData,
-                    );
+                        console.log(
+                          'Playback component play track ',
+                          subscriptionData,
+                        );
 
-                    const track = subscriptionData.data.playback;
-                    if (track !== null && track.id) {
-                      play({ uris: [track.uri], position_ms: track.position });
-                      setPlayback(track);
-                    }
+                        const track = subscriptionData.data.playback;
+                        if (track !== null && track.id) {
+                          play({
+                            uris: [track.uri],
+                            position_ms: track.position,
+                          });
+                          setPlayback(track);
+                        }
 
-                    return Object.assign({}, prev, {
-                      ...prev,
+                        return Object.assign({}, prev, {
+                          ...prev,
+                        });
+                      },
+                      onError: (err) => console.log(err),
                     });
-                  },
-                  onError: (err) => console.log(err),
-                });
-              }}
-            />
-          </PlaybackContainer.Provider>
-        ) : (
-          <div>Loading...</div>
-        );
-      }}
-    </Query>
-  );
+                  }}
+                />
+              </PlaybackContainer.Provider>
+            ) : (
+              <div>Loading...</div>
+            );
+          }}
+        </Query>
+      ) : null}
+    </Container>
+  ) : null;
 };
 
 export { Playback, PlaybackContainer };

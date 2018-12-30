@@ -5,6 +5,7 @@ import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import { Button } from 'src/components/buttons';
 import Room from './components/Room';
+import { Root } from 'src/Root';
 
 const QUERY = gql`
   query getRooms {
@@ -35,41 +36,50 @@ const Rooms = styled('div')({
   marginRight: -15,
 });
 
-const Discover = () => (
-  <Query query={QUERY}>
-    {({ data, loading }) =>
-      !loading && data ? (
-        <>
-          <Rooms>
-            {data.rooms.map((room: any) => (
-              <Room key={room.id} id={room.id} name={room.name} />
-            ))}
-          </Rooms>
-          <Mutation mutation={MUTATION}>
-            {(mutate) => (
-              <>
-                <Button
-                  onClick={() => {
-                    mutate({
-                      variables: {
-                        input: {
-                          name: 'Test',
+const Discover = () => {
+  const { root, setRoot }: any = React.useContext(Root.Context);
+  React.useEffect(() => {
+    setRoot({
+      ...root,
+      visitingRoom: null,
+    });
+  }, []);
+  return (
+    <Query query={QUERY}>
+      {({ data, error, loading }) =>
+        !loading && !error && data ? (
+          <>
+            <Rooms>
+              {data.rooms.map((room: any) => (
+                <Room key={room.id} id={room.id} name={room.name} />
+              ))}
+            </Rooms>
+            <Mutation mutation={MUTATION}>
+              {(mutate) => (
+                <>
+                  <Button
+                    onClick={() => {
+                      mutate({
+                        variables: {
+                          input: {
+                            name: 'Test',
+                          },
                         },
-                      },
-                    });
-                  }}
-                >
-                  Create room
-                </Button>
-              </>
-            )}
-          </Mutation>
-        </>
-      ) : (
-        <h5>Loading...</h5>
-      )
-    }
-  </Query>
-);
+                      });
+                    }}
+                  >
+                    Create room
+                  </Button>
+                </>
+              )}
+            </Mutation>
+          </>
+        ) : (
+          <h5>Loading...</h5>
+        )
+      }
+    </Query>
+  );
+};
 
 export { Discover };
