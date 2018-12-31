@@ -197,6 +197,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
       variables={{
         query: match.params.id,
       }}
+      fetchPolicy={'network-only'}
     >
       {({ loading, data, error, subscribeToMore }) =>
         !loading && !error && data ? (

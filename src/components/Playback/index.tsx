@@ -92,6 +92,7 @@ const Subscription: React.SFC<SubscriptionProps> = ({ subscription }) => {
 
   React.useEffect(() => {
     if (playback !== null && playback.id) {
+      console.log('Play');
       play({ uris: [playback.uri], position_ms: playback.position });
     }
     setUnsubscribe(subscription(setPlayback));
@@ -117,6 +118,7 @@ const Playback = () => {
         <Query
           query={PLAYBACK_QUERY}
           variables={{ roomId: root.visitingRoom.id }}
+          fetchPolicy={'network-only'}
         >
           {({ data, loading, error, subscribeToMore }) => {
             return !loading && !error && data ? (
