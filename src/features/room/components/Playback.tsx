@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled, { keyframes } from 'react-emotion';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
+import { CSSTransition, Transition } from 'react-transition-group';
 
 interface PlaybackProps {
   track: Track;
@@ -131,6 +132,31 @@ const ProgressBarFill = styled('div')(
 const TrackInfo = styled('div')({
   width: '100%',
   marginLeft: 40,
+  '&.track-info-enter': {
+    opacity: 0.01,
+    top: 1000,
+  },
+  '&.track-info-enter-active': {
+    opacity: 1,
+    transition: 'opacity 500ms ease-in',
+  },
+  '&.track-info-leave': {
+    opacity: 1,
+  },
+  '&.track-info-leave-active': {
+    opacity: 0.01,
+    transition: 'opacity 300ms ease-in',
+  },
+  '&.track-info-appear': {
+    opacity: 0.01,
+  },
+  '&.track-info-appear-active': {
+    opacity: 1,
+    transition: 'opacity 500ms ease-in',
+  },
+  '&.track-info-enter-done': {
+    opacity: 1,
+  },
 });
 
 const TrackName = styled('h1')({
@@ -146,6 +172,7 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
   const isTrack = track && track.id !== null;
 
   const [position, setPosition] = React.useState(isTrack ? track.position : 0);
+  const [animated, setAnimated] = React.useState(false);
 
   React.useEffect(
     () => {
@@ -156,6 +183,7 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
           }, 200)
         : null;
 
+      setAnimated(true);
       return () => {
         if (interval !== null) {
           clearInterval(interval);
@@ -176,18 +204,21 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
         <CoverImageWrapper>
           <CoverImage src={track.images[0].url} />
         </CoverImageWrapper>
-        <TrackInfo>
-          <TrackName>{track.name}</TrackName>
-          <Artists>
-            {track.artists !== null
-              ? track.artists
-                  .map((e: any) => {
-                    return e.name;
-                  })
-                  .join(', ')
-              : ''}
-          </Artists>
-        </TrackInfo>
+
+        <CSSTransition in={animated} classNames="track-info" timeout={800}>
+          <TrackInfo>
+            <TrackName>{track.name}</TrackName>
+            <Artists>
+              {track.artists !== null
+                ? track.artists
+                    .map((e: any) => {
+                      return e.name;
+                    })
+                    .join(', ')
+                : ''}
+            </Artists>
+          </TrackInfo>
+        </CSSTransition>
       </Container>
     </Wrapper>
   ) : (
@@ -198,9 +229,11 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
         <CoverImageWrapper>
           <DefaultCoverImage />
         </CoverImageWrapper>
-        <TrackInfo>
-          <TrackName>No currently playing track</TrackName>
-        </TrackInfo>
+        <CSSTransition in={animated} classNames="track-info" timeout={800}>
+          <TrackInfo>
+            <TrackName>No currently playing track</TrackName>
+          </TrackInfo>
+        </CSSTransition>
       </Container>
     </Wrapper>
   );
