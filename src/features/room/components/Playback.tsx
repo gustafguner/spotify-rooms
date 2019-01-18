@@ -2,7 +2,11 @@ import * as React from 'react';
 import styled, { keyframes } from 'react-emotion';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
-import { CSSTransition, Transition } from 'react-transition-group';
+import {
+  CSSTransition,
+  Transition,
+  TransitionGroup,
+} from 'react-transition-group';
 
 interface PlaybackProps {
   track: Track;
@@ -142,6 +146,7 @@ const ProgressBarFill = styled('div')(
 const TrackInfo = styled('div')({
   width: '100%',
   marginLeft: 40,
+  transition: 'all 300ms ease-in-out',
   '&.track-info-enter': {
     opacity: 0.01,
     top: 1000,
@@ -150,10 +155,10 @@ const TrackInfo = styled('div')({
     opacity: 1,
     transition: 'opacity 500ms ease-in',
   },
-  '&.track-info-leave': {
+  '&.track-info-exit': {
     opacity: 1,
   },
-  '&.track-info-leave-active': {
+  '&.track-info-exit-active': {
     opacity: 0.01,
     transition: 'opacity 300ms ease-in',
   },
@@ -163,9 +168,6 @@ const TrackInfo = styled('div')({
   '&.track-info-appear-active': {
     opacity: 1,
     transition: 'opacity 500ms ease-in',
-  },
-  '&.track-info-enter-done': {
-    opacity: 1,
   },
 });
 
@@ -178,6 +180,13 @@ const Artists = styled('div')({
   color: 'rgba(255, 255, 255, 0.55)',
 });
 
+type TransitionState = 'entering' | 'entered';
+
+const transitionStyles = {
+  entering: { opacity: 0 },
+  entered: { opacity: 1 },
+};
+
 const Playback: React.SFC<PlaybackProps> = ({ track }) => {
   const isTrack = track && track.id !== null;
 
@@ -188,11 +197,86 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
     () => {
       setPosition(isTrack ? track.position : 0);
       setAnimated(true);
-      return () => {};
+
+      console.log('useEFFECT HT!');
+
+      return () => {
+        setAnimated(false);
+        console.log('useEFFECT RETUR HIT!');
+      };
     },
     [track],
   );
 
+  return (
+    <Wrapper>
+      {isTrack ? (
+        <>
+          <BackgroundBlur img={track.images[0].url} blurRadius={60} />
+        </>
+      ) : (
+        <DefaultBackground />
+      )}
+      <DarkFilter />
+
+      {isTrack && (
+        <ProgressBarContainer>
+          <ProgressBarFill
+            widthPercent={(position / track.duration) * 100}
+            position={position}
+            duration={track.duration}
+          />
+        </ProgressBarContainer>
+      )}
+
+      <Container>
+        <CoverImageWrapper>
+          {isTrack ? (
+            <CoverImage src={track.images[0].url} />
+          ) : (
+            <DefaultCoverImage />
+          )}
+        </CoverImageWrapper>
+        <TransitionGroup className="track-info-container">
+          {isTrack ? (
+            <Transition in={true} appear={true} timeout={400} key="track">
+              {(state: TransitionState) => (
+                <TrackInfo
+                  style={{
+                    ...transitionStyles[state],
+                  }}
+                >
+                  <TrackName>{track.name}</TrackName>
+                  <Artists>
+                    {track.artists !== null
+                      ? track.artists
+                          .map((e: any) => {
+                            return e.name;
+                          })
+                          .join(', ')
+                      : ''}
+                  </Artists>
+                </TrackInfo>
+              )}
+            </Transition>
+          ) : (
+            <Transition in={true} appear={true} timeout={400} key="no-track">
+              {(state: TransitionState) => (
+                <TrackInfo
+                  style={{
+                    ...transitionStyles[state],
+                  }}
+                >
+                  <TrackName>No currently playing track</TrackName>
+                </TrackInfo>
+              )}
+            </Transition>
+          )}
+        </TransitionGroup>
+      </Container>
+    </Wrapper>
+  );
+  /*
   return track && track.id !== null ? (
     <Wrapper>
       <BackgroundBlur img={track.images[0].url} blurRadius={60} />
@@ -209,7 +293,12 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
           <CoverImage src={track.images[0].url} />
         </CoverImageWrapper>
 
-        <CSSTransition in={animated} classNames="track-info" timeout={800}>
+        <CSSTransition
+          in={animated}
+          classNames="track-info"
+          timeout={800}
+          unmountOnExit={true}
+        >
           <TrackInfo>
             <TrackName>{track.name}</TrackName>
             <Artists>
@@ -233,14 +322,19 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
         <CoverImageWrapper>
           <DefaultCoverImage />
         </CoverImageWrapper>
-        <CSSTransition in={animated} classNames="track-info" timeout={800}>
+        <CSSTransition
+          in={animated}
+          classNames="track-info"
+          timeout={800}
+          unmountOnExit={true}
+        >
           <TrackInfo>
             <TrackName>No currently playing track</TrackName>
           </TrackInfo>
         </CSSTransition>
       </Container>
     </Wrapper>
-  );
+  );*/
 };
 
 export { Playback };
