@@ -119,13 +119,23 @@ const ProgressBarContainer = styled('div')({
 
 interface ProgressBarFillProps {
   widthPercent: number;
+  position: number;
+  duration: number;
 }
 
+const ProgressGrow = (width: number) =>
+  keyframes({
+    '0%': { width: `${width}%` },
+    '100%': { width: '100%' },
+  });
+
 const ProgressBarFill = styled('div')(
-  ({ widthPercent }: ProgressBarFillProps) => ({
+  ({ widthPercent, position, duration }: ProgressBarFillProps) => ({
     width: widthPercent + '%',
     height: '100%',
     backgroundColor: 'rgba(255,255,255,0.24)',
+    animation: `${ProgressGrow(widthPercent)} ${duration -
+      position}ms linear forwards`,
   }),
 );
 
@@ -177,18 +187,8 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
   React.useEffect(
     () => {
       setPosition(isTrack ? track.position : 0);
-      const interval = isTrack
-        ? setInterval(() => {
-            setPosition((p: any) => p + 200);
-          }, 200)
-        : null;
-
       setAnimated(true);
-      return () => {
-        if (interval !== null) {
-          clearInterval(interval);
-        }
-      };
+      return () => {};
     },
     [track],
   );
@@ -198,7 +198,11 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
       <BackgroundBlur img={track.images[0].url} blurRadius={60} />
       <DarkFilter />
       <ProgressBarContainer>
-        <ProgressBarFill widthPercent={(position / track.duration) * 100} />
+        <ProgressBarFill
+          widthPercent={(position / track.duration) * 100}
+          position={position}
+          duration={track.duration}
+        />
       </ProgressBarContainer>
       <Container>
         <CoverImageWrapper>
