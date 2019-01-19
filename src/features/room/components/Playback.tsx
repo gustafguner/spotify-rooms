@@ -7,6 +7,7 @@ import {
   Transition,
   TransitionGroup,
 } from 'react-transition-group';
+import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 interface PlaybackProps {
   track: Track;
@@ -146,29 +147,6 @@ const ProgressBarFill = styled('div')(
 const TrackInfo = styled('div')({
   width: '100%',
   marginLeft: 40,
-  transition: 'all 300ms ease-in-out',
-  '&.track-info-enter': {
-    opacity: 0.01,
-    top: 1000,
-  },
-  '&.track-info-enter-active': {
-    opacity: 1,
-    transition: 'opacity 500ms ease-in',
-  },
-  '&.track-info-exit': {
-    opacity: 1,
-  },
-  '&.track-info-exit-active': {
-    opacity: 0.01,
-    transition: 'opacity 300ms ease-in',
-  },
-  '&.track-info-appear': {
-    opacity: 0.01,
-  },
-  '&.track-info-appear-active': {
-    opacity: 1,
-    transition: 'opacity 500ms ease-in',
-  },
 });
 
 const TrackName = styled('h1')({
@@ -185,6 +163,8 @@ type TransitionState = 'entering' | 'entered';
 const transitionStyles = {
   entering: { opacity: 0 },
   entered: { opacity: 1 },
+  leaving: { opacity: 1 },
+  leaved: { opacity: 0 },
 };
 
 const Playback: React.SFC<PlaybackProps> = ({ track }) => {
@@ -237,6 +217,34 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
             <DefaultCoverImage />
           )}
         </CoverImageWrapper>
+        <ReactCSSTransitionReplace
+          transitionName="fade-wait"
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={400}
+          overflowHidden={false}
+          transitionAppear={true}
+        >
+          {isTrack ? (
+            <TrackInfo key="track">
+              <TrackName>{track.name}</TrackName>
+              <Artists>
+                {track.artists !== null
+                  ? track.artists
+                      .map((e: any) => {
+                        return e.name;
+                      })
+                      .join(', ')
+                  : ''}
+              </Artists>
+            </TrackInfo>
+          ) : (
+            <TrackInfo key="no-track">
+              <TrackName>No currently playing track</TrackName>
+            </TrackInfo>
+          )}
+        </ReactCSSTransitionReplace>
+
+        {/*
         <TransitionGroup className="track-info-container">
           {isTrack ? (
             <Transition in={true} appear={true} timeout={400} key="track">
@@ -273,6 +281,7 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
             </Transition>
           )}
         </TransitionGroup>
+                */}
       </Container>
     </Wrapper>
   );
