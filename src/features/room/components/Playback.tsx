@@ -2,11 +2,6 @@ import * as React from 'react';
 import styled, { keyframes } from 'react-emotion';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
-import {
-  CSSTransition,
-  Transition,
-  TransitionGroup,
-} from 'react-transition-group';
 import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 interface PlaybackProps {
@@ -147,6 +142,9 @@ const ProgressBarFill = styled('div')(
 const TrackInfo = styled('div')({
   width: '100%',
   marginLeft: 40,
+  position: 'absolute',
+  top: '50%',
+  transform: 'translateY(-50%)',
 });
 
 const TrackName = styled('h1')({
@@ -217,15 +215,20 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
             <DefaultCoverImage />
           )}
         </CoverImageWrapper>
+
         <ReactCSSTransitionReplace
           transitionName="fade-wait"
           transitionEnterTimeout={1000}
           transitionLeaveTimeout={400}
           overflowHidden={false}
           transitionAppear={true}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
         >
           {isTrack ? (
-            <TrackInfo key="track">
+            <TrackInfo key={`track-${track.id}`}>
               <TrackName>{track.name}</TrackName>
               <Artists>
                 {track.artists !== null
@@ -243,107 +246,9 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
             </TrackInfo>
           )}
         </ReactCSSTransitionReplace>
-
-        {/*
-        <TransitionGroup className="track-info-container">
-          {isTrack ? (
-            <Transition in={true} appear={true} timeout={400} key="track">
-              {(state: TransitionState) => (
-                <TrackInfo
-                  style={{
-                    ...transitionStyles[state],
-                  }}
-                >
-                  <TrackName>{track.name}</TrackName>
-                  <Artists>
-                    {track.artists !== null
-                      ? track.artists
-                          .map((e: any) => {
-                            return e.name;
-                          })
-                          .join(', ')
-                      : ''}
-                  </Artists>
-                </TrackInfo>
-              )}
-            </Transition>
-          ) : (
-            <Transition in={true} appear={true} timeout={400} key="no-track">
-              {(state: TransitionState) => (
-                <TrackInfo
-                  style={{
-                    ...transitionStyles[state],
-                  }}
-                >
-                  <TrackName>No currently playing track</TrackName>
-                </TrackInfo>
-              )}
-            </Transition>
-          )}
-        </TransitionGroup>
-                */}
       </Container>
     </Wrapper>
   );
-  /*
-  return track && track.id !== null ? (
-    <Wrapper>
-      <BackgroundBlur img={track.images[0].url} blurRadius={60} />
-      <DarkFilter />
-      <ProgressBarContainer>
-        <ProgressBarFill
-          widthPercent={(position / track.duration) * 100}
-          position={position}
-          duration={track.duration}
-        />
-      </ProgressBarContainer>
-      <Container>
-        <CoverImageWrapper>
-          <CoverImage src={track.images[0].url} />
-        </CoverImageWrapper>
-
-        <CSSTransition
-          in={animated}
-          classNames="track-info"
-          timeout={800}
-          unmountOnExit={true}
-        >
-          <TrackInfo>
-            <TrackName>{track.name}</TrackName>
-            <Artists>
-              {track.artists !== null
-                ? track.artists
-                    .map((e: any) => {
-                      return e.name;
-                    })
-                    .join(', ')
-                : ''}
-            </Artists>
-          </TrackInfo>
-        </CSSTransition>
-      </Container>
-    </Wrapper>
-  ) : (
-    <Wrapper>
-      <DefaultBackground />
-      <DarkFilter />
-      <Container>
-        <CoverImageWrapper>
-          <DefaultCoverImage />
-        </CoverImageWrapper>
-        <CSSTransition
-          in={animated}
-          classNames="track-info"
-          timeout={800}
-          unmountOnExit={true}
-        >
-          <TrackInfo>
-            <TrackName>No currently playing track</TrackName>
-          </TrackInfo>
-        </CSSTransition>
-      </Container>
-    </Wrapper>
-  );*/
 };
 
 export { Playback };

@@ -97,14 +97,6 @@ h3 {
   transition: opacity 0.4s ease-in;
 }
 
-.fade-wait-leave {
-  opacity: 1;
-}
-.fade-wait-leave.fade-wait-leave-active {
-  opacity: 0;
-  transition: opacity 0.4s ease-in;
-}
-
 .fade-wait-enter {
   opacity: 0;
 }
