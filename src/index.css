@@ -81,6 +81,30 @@ h3 {
   line-height: 34px;
 }
 
+.cross-fade-leave {
+  opacity: 1;
+}
+.cross-fade-leave.cross-fade-leave-active {
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+
+.cross-fade-appear {
+  opacity: 0;
+}
+.cross-fade-appear.cross-fade-appear-active {
+  opacity: 1;
+  transition: opacity 0.4s ease-in;
+}
+
+.cross-fade-enter {
+  opacity: 0;
+}
+.cross-fade-enter.cross-fade-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
 .fade-wait-appear {
   opacity: 0;
 }
@@ -110,3 +134,6 @@ h3 {
   transition: height 0.6s ease-in-out;
 }
 */
+.absolute-react-replace {
+  position: absolute !important;
+}

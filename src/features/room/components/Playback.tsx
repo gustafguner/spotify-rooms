@@ -188,13 +188,33 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
 
   return (
     <Wrapper>
-      {isTrack ? (
-        <>
-          <BackgroundBlur img={track.images[0].url} blurRadius={60} />
-        </>
-      ) : (
-        <DefaultBackground />
-      )}
+      <ReactCSSTransitionReplace
+        transitionName="cross-fade"
+        transitionEnterTimeout={1000}
+        transitionLeaveTimeout={400}
+        overflowHidden={false}
+        transitionAppear={true}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+        }}
+        className={'absolute-react-replace'}
+      >
+        {isTrack && track.images[0].url !== null ? (
+          <div style={{ width: '100%', height: '100%' }}>
+            <BackgroundBlur
+              key={`track-bg-${track.id}`}
+              img={track.images[0].url}
+              blurRadius={60}
+              enableStyles={true}
+            />
+          </div>
+        ) : (
+          <DefaultBackground key={`track-default-bg`} />
+        )}
+      </ReactCSSTransitionReplace>
+
       <DarkFilter />
 
       {isTrack && (
