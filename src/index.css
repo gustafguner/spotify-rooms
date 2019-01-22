@@ -86,7 +86,7 @@ h3 {
 }
 .cross-fade-leave.cross-fade-leave-active {
   opacity: 0;
-  transition: opacity 1s ease-in;
+  transition: opacity 0.7s ease-in;
 }
 
 .cross-fade-appear {
@@ -94,15 +94,15 @@ h3 {
 }
 .cross-fade-appear.cross-fade-appear-active {
   opacity: 1;
-  transition: opacity 0.4s ease-in;
+  transition: opacity 0.7s ease-in;
 }
 
 .cross-fade-enter {
   opacity: 0;
 }
 .cross-fade-enter.cross-fade-enter-active {
-  opacity: 1;
-  transition: opacity 1s ease-in;
+  opacity: 0.5;
+  transition: opacity 0.7s ease-in;
 }
 
 .fade-wait-appear {

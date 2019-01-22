@@ -191,7 +191,7 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
       <ReactCSSTransitionReplace
         transitionName="cross-fade"
         transitionEnterTimeout={1000}
-        transitionLeaveTimeout={400}
+        transitionLeaveTimeout={1000}
         overflowHidden={false}
         transitionAppear={true}
         style={{
@@ -202,9 +202,11 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
         className={'absolute-react-replace'}
       >
         {isTrack && track.images[0].url !== null ? (
-          <div style={{ width: '100%', height: '100%' }}>
+          <div
+            key={`track-bg-${track.id}`}
+            style={{ width: '100%', height: '100%' }}
+          >
             <BackgroundBlur
-              key={`track-bg-${track.id}`}
               img={track.images[0].url}
               blurRadius={60}
               enableStyles={true}
