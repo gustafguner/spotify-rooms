@@ -117,10 +117,13 @@ const VoteCount = styled('div')(({ voted = false }: VoteCountProps) => ({
 
 const EmptyQueueContainer = styled('div')({
   width: '100%',
-  height: '100%',
+  height: 'calc(100% - 80px)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  position: 'absolute',
+  top: 0,
+  left: 0,
 });
 
 const EmptyQueueText = styled('p')({
@@ -150,56 +153,55 @@ const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
 
   return (
     <Container>
-      {queue.length !== 0 ? (
-        <FlipMove>
-          {queue.map((track: any) => (
-            <Item key={track.id}>
-              <CoverImageWrapper>
-                <CoverImage src={track.images[0].url} />
-              </CoverImageWrapper>
-              <TrackInfo>
-                <TrackNameContainer>
-                  <TrackName href="">{track.name}</TrackName>
-                </TrackNameContainer>
-                <TrackArtists>
-                  {track.artists !== null
-                    ? track.artists
-                        .map((e: any) => {
-                          return e.name;
-                        })
-                        .join(', ')
-                    : ''}
-                </TrackArtists>
-              </TrackInfo>
-              <Mutation mutation={VOTE_FOR_TRACK}>
-                {(mutate) => (
-                  <TrackVotes>
-                    <VoteButton
-                      onClick={() => {
-                        mutate({
-                          variables: {
-                            input: {
-                              roomId,
-                              trackId: track.id,
-                            },
-                          },
-                        });
-                      }}
-                    >
-                      👍
-                    </VoteButton>
-                    <VoteCount>{track.voters.length}</VoteCount>
-                  </TrackVotes>
-                )}
-              </Mutation>
-            </Item>
-          ))}
-        </FlipMove>
-      ) : (
+      {queue.length === 0 && (
         <EmptyQueueContainer>
           <EmptyQueueText>The queue is empty</EmptyQueueText>
         </EmptyQueueContainer>
       )}
+      <FlipMove>
+        {queue.map((track: any) => (
+          <Item key={track.id}>
+            <CoverImageWrapper>
+              <CoverImage src={track.images[0].url} />
+            </CoverImageWrapper>
+            <TrackInfo>
+              <TrackNameContainer>
+                <TrackName href="">{track.name}</TrackName>
+              </TrackNameContainer>
+              <TrackArtists>
+                {track.artists !== null
+                  ? track.artists
+                      .map((e: any) => {
+                        return e.name;
+                      })
+                      .join(', ')
+                  : ''}
+              </TrackArtists>
+            </TrackInfo>
+            <Mutation mutation={VOTE_FOR_TRACK}>
+              {(mutate) => (
+                <TrackVotes>
+                  <VoteButton
+                    onClick={() => {
+                      mutate({
+                        variables: {
+                          input: {
+                            roomId,
+                            trackId: track.id,
+                          },
+                        },
+                      });
+                    }}
+                  >
+                    👍
+                  </VoteButton>
+                  <VoteCount>{track.voters.length}</VoteCount>
+                </TrackVotes>
+              )}
+            </Mutation>
+          </Item>
+        ))}
+      </FlipMove>
     </Container>
   );
 };
