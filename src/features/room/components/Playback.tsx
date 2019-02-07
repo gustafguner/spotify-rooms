@@ -82,6 +82,11 @@ const DefaultCoverImage = styled('div')({
   backgroundColor: colors.PRIMARY_DARK,
 });
 
+const BackgroundWrapper = styled('div')({
+  width: '100%',
+  height: '100%',
+});
+
 const BackgroundBlur = styled(Blur)({
   width: '100%',
   height: '100%',
@@ -156,15 +161,6 @@ const Artists = styled('div')({
   color: 'rgba(255, 255, 255, 0.55)',
 });
 
-type TransitionState = 'entering' | 'entered';
-
-const transitionStyles = {
-  entering: { opacity: 0 },
-  entered: { opacity: 1 },
-  leaving: { opacity: 1 },
-  leaved: { opacity: 0 },
-};
-
 const Playback: React.SFC<PlaybackProps> = ({ track }) => {
   const isTrack = track && track.id !== null;
 
@@ -176,11 +172,8 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
       setPosition(isTrack ? track.position : 0);
       setAnimated(true);
 
-      console.log('useEFFECT HT!');
-
       return () => {
         setAnimated(false);
-        console.log('useEFFECT RETUR HIT!');
       };
     },
     [track],
@@ -202,18 +195,17 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
         className={'absolute-react-replace'}
       >
         {isTrack && track.images[0].url !== null ? (
-          <div
-            key={`track-bg-${track.id}`}
-            style={{ width: '100%', height: '100%' }}
-          >
+          <BackgroundWrapper key={`track-bg-${track.id}`}>
             <BackgroundBlur
               img={track.images[0].url}
               blurRadius={60}
               enableStyles={true}
             />
-          </div>
+          </BackgroundWrapper>
         ) : (
-          <DefaultBackground key={`track-default-bg`} />
+          <BackgroundWrapper key="track-default-bg">
+            <DefaultBackground key="track-default-bg" />
+          </BackgroundWrapper>
         )}
       </ReactCSSTransitionReplace>
 
