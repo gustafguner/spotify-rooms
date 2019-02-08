@@ -191,6 +191,7 @@ const SetRoom: React.SFC<SetRoomProps> = ({ room }) => {
 };
 
 const Room: React.SFC<RoomProps> = ({ match }) => {
+  console.log('Room render');
   return (
     <Query
       query={GET_ROOM_QUERY}

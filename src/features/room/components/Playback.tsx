@@ -3,6 +3,8 @@ import styled, { keyframes } from 'react-emotion';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
 import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
+import * as chance from 'chance';
+import { v4 as uuid } from 'uuid';
 
 interface PlaybackProps {
   track: Track;
@@ -123,23 +125,25 @@ const ProgressBarContainer = styled('div')({
 });
 
 interface ProgressBarFillProps {
-  widthPercent: number;
   position: number;
   duration: number;
 }
 
 const ProgressGrow = (width: number) =>
   keyframes({
-    '0%': { width: `${width}%` },
+    '0%': {
+      width: `${width}%`,
+      content: '"' + uuid() + '"',
+    },
     '100%': { width: '100%' },
   });
 
 const ProgressBarFill = styled('div')(
-  ({ widthPercent, position, duration }: ProgressBarFillProps) => ({
-    width: widthPercent + '%',
+  ({ position, duration }: ProgressBarFillProps) => ({
+    width: (position / duration) * 100 + '%',
     height: '100%',
     backgroundColor: 'rgba(255,255,255,0.24)',
-    animation: `${ProgressGrow(widthPercent)} ${duration -
+    animation: `${ProgressGrow((position / duration) * 100)} ${duration -
       position}ms linear forwards`,
   }),
 );
@@ -163,18 +167,14 @@ const Artists = styled('div')({
 
 const Playback: React.SFC<PlaybackProps> = ({ track }) => {
   const isTrack = track && track.id !== null;
-
   const [position, setPosition] = React.useState(isTrack ? track.position : 0);
-  const [animated, setAnimated] = React.useState(false);
-
+  console.log('Playback component: TRACK : ', track);
   React.useEffect(
     () => {
+      console.log('Track', track);
       setPosition(isTrack ? track.position : 0);
-      setAnimated(true);
 
-      return () => {
-        setAnimated(false);
-      };
+      return () => {};
     },
     [track],
   );
@@ -204,7 +204,7 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
           </BackgroundWrapper>
         ) : (
           <BackgroundWrapper key="track-default-bg">
-            <DefaultBackground key="track-default-bg" />
+            <DefaultBackground />
           </BackgroundWrapper>
         )}
       </ReactCSSTransitionReplace>
@@ -213,11 +213,7 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
 
       {isTrack && (
         <ProgressBarContainer>
-          <ProgressBarFill
-            widthPercent={(position / track.duration) * 100}
-            position={position}
-            duration={track.duration}
-          />
+          <ProgressBarFill position={position} duration={track.duration} />
         </ProgressBarContainer>
       )}
 
