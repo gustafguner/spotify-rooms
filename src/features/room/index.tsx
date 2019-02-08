@@ -4,7 +4,7 @@ import styled from 'react-emotion';
 import gql from 'graphql-tag';
 
 import { Sidebar } from './components/Sidebar';
-import { Playback } from './components/Playback';
+import Playback from './playback';
 import Loader from 'src/components/Loader';
 
 import { Root } from 'src/Root';
@@ -183,7 +183,6 @@ interface SetRoomProps {
 
 const SetRoom: React.SFC<SetRoomProps> = ({ room }) => {
   const { root, setRoot }: any = React.useContext(Root.Context);
-  console.log(room);
   React.useEffect(() => {
     setRoot({ ...root, visitingRoom: room });
   }, []);
@@ -205,7 +204,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
           <Container>
             <SetRoom room={data.room} />
             <Content>
-              <Playback track={data.room.playback} />
+              <Playback roomId={match.params.id} />
             </Content>
 
             <Sidebar
@@ -214,23 +213,17 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                 subscribeToMore({
                   document: TRACK_ADDED_TO_QUEUE_SUBSCRIPTION,
                   updateQuery: (prev, { subscriptionData }) => {
-                    console.log(subscriptionData);
                     if (!subscriptionData.data) {
                       return prev;
                     }
 
-                    const trackAddedToQueue =
-                      subscriptionData.data.trackAddedToQueue;
-
-                    console.log('Track added to queue ', trackAddedToQueue);
-                    console.log('prev ', prev);
-                    const q = [...prev.room.queue, trackAddedToQueue];
-                    console.log('added, new queue: ', q);
-
                     return Object.assign({}, prev, {
                       room: {
                         ...prev.room,
-                        queue: [...prev.room.queue, trackAddedToQueue],
+                        queue: [
+                          ...prev.room.queue,
+                          subscriptionData.data.trackAddedToQueue,
+                        ],
                       },
                     });
                   },
@@ -280,25 +273,6 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                       room: {
                         ...prev.room,
                         queue,
-                      },
-                    });
-                  },
-                  onError: (err) => console.log(err),
-                });
-
-                subscribeToMore({
-                  document: PLAYBACK_SUBSCRIPTION,
-                  updateQuery: (prev, { subscriptionData }) => {
-                    if (!subscriptionData.data) {
-                      return prev;
-                    }
-
-                    const track = subscriptionData.data.playback;
-
-                    return Object.assign({}, prev, {
-                      room: {
-                        ...prev.room,
-                        playback: track,
                       },
                     });
                   },

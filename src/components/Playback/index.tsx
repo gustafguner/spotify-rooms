@@ -110,7 +110,6 @@ const Subscription: React.SFC<SubscriptionProps> = ({ subscription }) => {
 
 const Playback = () => {
   const { root }: any = React.useContext(Root.Context);
-  console.log('Playback component');
 
   return root ? (
     <Container toggled={root.visitingRoom !== null}>
