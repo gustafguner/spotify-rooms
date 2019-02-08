@@ -3,12 +3,11 @@ import { Query } from 'react-apollo';
 import styled from 'react-emotion';
 import gql from 'graphql-tag';
 
-import { Sidebar } from './components/Sidebar';
+import Sidebar from './sidebar';
 import Playback from './playback';
 import Loader from 'src/components/Loader';
 
 import { Root } from 'src/Root';
-import createContainer from 'constate';
 
 interface RoomProps {
   match: any;
@@ -72,111 +71,6 @@ const Content = styled('div')({
   width: '100%',
 });
 
-const TRACK_ADDED_TO_QUEUE_SUBSCRIPTION = gql`
-  subscription trackAddedToQueue {
-    trackAddedToQueue(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
-      id
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
-        id
-        spotifyId
-        displayName
-      }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
-    }
-  }
-`;
-
-const TRACK_VOTED_ON_IN_QUEUE = gql`
-  subscription trackVotedOnInQueue {
-    trackVotedOnInQueue(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
-      id
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
-        id
-        spotifyId
-        displayName
-      }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
-    }
-  }
-`;
-
-const TRACK_REMOVED_FROM_QUEUE = gql`
-  subscription removedFromQueue {
-    trackRemovedFromQueue(input: { roomId: "5c0fb582b623d1498fff7faf" }) {
-      id
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
-        id
-        spotifyId
-        displayName
-      }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
-    }
-  }
-`;
-
-const PLAYBACK_SUBSCRIPTION = gql`
-  subscription playback {
-    playback(roomId: "5c0fb582b623d1498fff7faf") {
-      id
-      uri
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
-        id
-        spotifyId
-        displayName
-      }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
-    }
-  }
-`;
-
 interface SetRoomProps {
   room: object;
 }
@@ -207,6 +101,9 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
               <Playback roomId={match.params.id} />
             </Content>
 
+            <Sidebar roomId={match.params.id} />
+
+            {/*
             <Sidebar
               room={data.room}
               subscribeToQueue={() => {
@@ -280,6 +177,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
                 });
               }}
             />
+            */}
           </Container>
         ) : (
           <Loader />
