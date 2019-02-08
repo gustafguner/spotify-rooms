@@ -6,10 +6,12 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import FlipMove from 'react-flip-move';
 
-interface QueueProps {
+interface Props {
+  queue: any;
   roomId: string;
-  queue: any[];
-  subscription: () => void;
+  addSubscribe: () => void;
+  voteSubscribe: () => void;
+  removeSubscribe: () => void;
 }
 
 const Container = styled('div')({
@@ -137,17 +139,38 @@ const VOTE_FOR_TRACK = gql`
   }
 `;
 
-const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
-  queue.sort((a, b) => {
+const QueueView: React.SFC<Props> = ({
+  queue,
+  roomId,
+  addSubscribe,
+  voteSubscribe,
+  removeSubscribe,
+}) => {
+  const [addUnsubscribe, setAddUnsubscribe]: any = React.useState(null);
+  const [voteUnsubscribe, setVoteUnsubscribe]: any = React.useState(null);
+  const [removeUnsubscribe, setRemoveUnsubscribe]: any = React.useState(null);
+
+  queue.sort((a: any, b: any) => {
     return (
       b.voters.length - a.voters.length || a.queueTimestamp - b.queueTimestamp
     );
   });
 
   useEffect(() => {
-    subscription();
+    setAddUnsubscribe(addSubscribe());
+    setVoteUnsubscribe(voteSubscribe());
+    setRemoveUnsubscribe(removeSubscribe());
+
     return () => {
-      console.log('queue subscription ended');
+      if (addUnsubscribe !== null) {
+        addUnsubscribe();
+      }
+      if (voteUnsubscribe !== null) {
+        voteUnsubscribe();
+      }
+      if (removeUnsubscribe !== null) {
+        removeUnsubscribe();
+      }
     };
   }, []);
 
@@ -206,4 +229,4 @@ const Queue: React.SFC<QueueProps> = ({ roomId, queue, subscription }) => {
   );
 };
 
-export { Queue };
+export default QueueView;

@@ -1,9 +1,10 @@
 import * as React from 'react';
+import Queue from './components/queue';
+
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Queue } from './Queue';
 import Loader from 'src/components/Loader';
 
 import { searchTracks } from 'src/utils/spotify';
@@ -41,9 +42,8 @@ const MUTATION = gql`
   }
 `;
 
-interface SidebarProps {
-  room: any;
-  subscribeToQueue: () => void;
+interface Props {
+  roomId: string;
 }
 
 const TextInput = styled('input')({
@@ -153,7 +153,7 @@ const SearchStatusContainer = styled('div')({
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
-const Sidebar: React.SFC<SidebarProps> = ({ room, subscribeToQueue }) => {
+const Sidebar: React.SFC<Props> = ({ roomId }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
 
@@ -187,11 +187,7 @@ const Sidebar: React.SFC<SidebarProps> = ({ room, subscribeToQueue }) => {
   return (
     <Container>
       <DarkTint visible={searchQuery !== ''} />
-      <Queue
-        roomId={room.id}
-        queue={room.queue}
-        subscription={subscribeToQueue}
-      />
+      <Queue roomId={roomId} />
 
       <AddToQueue>
         {searchQuery !== '' && (
@@ -222,7 +218,7 @@ const Sidebar: React.SFC<SidebarProps> = ({ room, subscribeToQueue }) => {
                             mutate({
                               variables: {
                                 input: {
-                                  roomId: room.id,
+                                  roomId,
                                   trackId: track.id,
                                 },
                               },
@@ -259,4 +255,4 @@ const Sidebar: React.SFC<SidebarProps> = ({ room, subscribeToQueue }) => {
   );
 };
 
-export { Sidebar };
+export default Sidebar;

@@ -3,11 +3,11 @@ import styled, { keyframes } from 'react-emotion';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
 import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
-import * as chance from 'chance';
 import { v4 as uuid } from 'uuid';
 
-interface PlaybackProps {
+interface Props {
   track: Track;
+  subscribe: () => void;
 }
 
 interface Track {
@@ -165,16 +165,25 @@ const Artists = styled('div')({
   color: 'rgba(255, 255, 255, 0.55)',
 });
 
-const Playback: React.SFC<PlaybackProps> = ({ track }) => {
+const PlaybackView: React.SFC<Props> = ({ track, subscribe }) => {
   const isTrack = track && track.id !== null;
   const [position, setPosition] = React.useState(isTrack ? track.position : 0);
-  console.log('Playback component: TRACK : ', track);
+  const [unsubscribe, setUnsubscribe]: any = React.useState(null);
+
+  React.useEffect(() => {
+    console.log('Playback view with track ', track);
+    setUnsubscribe(subscribe());
+
+    return () => {
+      if (unsubscribe !== null) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
   React.useEffect(
     () => {
-      console.log('Track', track);
       setPosition(isTrack ? track.position : 0);
-
-      return () => {};
     },
     [track],
   );
@@ -261,4 +270,4 @@ const Playback: React.SFC<PlaybackProps> = ({ track }) => {
   );
 };
 
-export { Playback };
+export default PlaybackView;
