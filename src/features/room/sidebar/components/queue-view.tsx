@@ -9,9 +9,9 @@ import FlipMove from 'react-flip-move';
 interface Props {
   queue: any;
   roomId: string;
-  addSubscription: () => void;
-  voteSubscription: () => void;
-  removeSubscription: () => void;
+  addSubscribe: () => void;
+  voteSubscribe: () => void;
+  removeSubscribe: () => void;
 }
 
 const Container = styled('div')({
@@ -142,9 +142,9 @@ const VOTE_FOR_TRACK = gql`
 const QueueView: React.SFC<Props> = ({
   queue,
   roomId,
-  addSubscription,
-  voteSubscription,
-  removeSubscription,
+  addSubscribe,
+  voteSubscribe,
+  removeSubscribe,
 }) => {
   const [addUnsubscribe, setAddUnsubscribe]: any = React.useState(null);
   const [voteUnsubscribe, setVoteUnsubscribe]: any = React.useState(null);
@@ -157,9 +157,9 @@ const QueueView: React.SFC<Props> = ({
   });
 
   useEffect(() => {
-    setAddUnsubscribe(addSubscription());
-    setVoteUnsubscribe(voteSubscription());
-    setRemoveUnsubscribe(removeSubscription());
+    setAddUnsubscribe(addSubscribe());
+    setVoteUnsubscribe(voteSubscribe());
+    setRemoveUnsubscribe(removeSubscribe());
 
     return () => {
       if (addUnsubscribe !== null) {

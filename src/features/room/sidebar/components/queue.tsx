@@ -7,10 +7,6 @@ interface Props {
   roomId: string;
 }
 
-interface VoteCountProps {
-  voted?: boolean;
-}
-
 const QUEUE_QUERY = gql`
   query queue($roomId: ID!) {
     queue(roomId: $roomId) {
@@ -133,7 +129,7 @@ const Queue: React.SFC<Props> = ({ roomId }) => {
           <QueueView
             queue={data.queue}
             roomId={roomId}
-            addSubscription={() => {
+            addSubscribe={() => {
               subscribeToMore({
                 document: QUEUE_ADD_SUBSCRIPTION,
                 variables: { roomId },
@@ -152,7 +148,7 @@ const Queue: React.SFC<Props> = ({ roomId }) => {
                 onError: (err) => console.log(err),
               });
             }}
-            voteSubscription={() => {
+            voteSubscribe={() => {
               subscribeToMore({
                 document: QUEUE_VOTE_SUBSCRIPTION,
                 variables: { roomId },
@@ -174,7 +170,7 @@ const Queue: React.SFC<Props> = ({ roomId }) => {
                 onError: (err) => console.log(err),
               });
             }}
-            removeSubscription={() => {
+            removeSubscribe={() => {
               subscribeToMore({
                 document: QUEUE_REMOVE_SUBSCRIPTION,
                 variables: { roomId },
