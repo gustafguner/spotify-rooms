@@ -172,7 +172,6 @@ const PlaybackView: React.SFC<Props> = ({ track, subscribe }) => {
 
   React.useEffect(() => {
     console.log('Playback view with track ', track);
-    setPosition(isTrack ? track.position : 0);
     setUnsubscribe(subscribe());
 
     return () => {
@@ -181,6 +180,13 @@ const PlaybackView: React.SFC<Props> = ({ track, subscribe }) => {
       }
     };
   }, []);
+
+  React.useEffect(
+    () => {
+      setPosition(isTrack ? track.position : 0);
+    },
+    [track],
+  );
 
   return (
     <Wrapper>
