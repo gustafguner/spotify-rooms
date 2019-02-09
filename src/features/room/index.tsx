@@ -2,10 +2,11 @@ import * as React from 'react';
 import { Query } from 'react-apollo';
 import styled from 'react-emotion';
 import gql from 'graphql-tag';
+import Loader from 'src/components/Loader';
 
 import Sidebar from './sidebar';
 import Playback from './playback';
-import Loader from 'src/components/Loader';
+import Chat from './chat';
 
 import { Root } from 'src/Root';
 
@@ -69,6 +70,20 @@ const Container = styled('div')({
 const Content = styled('div')({
   display: 'flex',
   width: '100%',
+  flexFlow: 'column',
+});
+
+const PlaybackContainer = styled('div')({
+  width: '100%',
+  flexBasis: 230,
+  flexShrink: 0,
+  flexGrow: 0,
+  position: 'relative',
+});
+
+const ChatContainer = styled('div')({
+  width: '100%',
+  flexBasis: '100%',
 });
 
 interface SetRoomProps {
@@ -98,7 +113,13 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
           <Container>
             <SetRoom room={data.room} />
             <Content>
-              <Playback roomId={match.params.id} />
+              <PlaybackContainer>
+                <Playback roomId={match.params.id} />
+              </PlaybackContainer>
+
+              <ChatContainer>
+                <Chat roomId={match.params.id} />
+              </ChatContainer>
             </Content>
 
             <Sidebar roomId={match.params.id} />

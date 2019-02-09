@@ -193,11 +193,7 @@ const QueueView: React.SFC<Props> = ({
               </TrackNameContainer>
               <TrackArtists>
                 {track.artists !== null
-                  ? track.artists
-                      .map((e: any) => {
-                        return e.name;
-                      })
-                      .join(', ')
+                  ? track.artists.map((a: any) => a.name).join(', ')
                   : ''}
               </TrackArtists>
             </TrackInfo>

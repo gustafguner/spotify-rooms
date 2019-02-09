@@ -189,7 +189,7 @@ const PlaybackView: React.SFC<Props> = ({ track, subscribe }) => {
   );
 
   return (
-    <Wrapper>
+    <>
       <ReactCSSTransitionReplace
         transitionName="cross-fade"
         transitionEnterTimeout={1000}
@@ -266,7 +266,7 @@ const PlaybackView: React.SFC<Props> = ({ track, subscribe }) => {
           )}
         </ReactCSSTransitionReplace>
       </Container>
-    </Wrapper>
+    </>
   );
 };
 
