@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import styled from 'react-emotion';
 import gql from 'graphql-tag';
 import Loader from 'src/components/Loader';
+
+import { Mount, Unmount } from 'src/components/lifecycle';
 
 import Sidebar from './sidebar';
 import Playback from './playback';
@@ -16,8 +18,8 @@ interface RoomProps {
 }
 
 const GET_ROOM_QUERY = gql`
-  query getRoom($query: ID!) {
-    room(query: $query) {
+  query getRoom($roomId: ID!) {
+    room(roomId: $roomId) {
       id
       name
       host {
@@ -61,6 +63,18 @@ const GET_ROOM_QUERY = gql`
         duration
       }
     }
+  }
+`;
+
+const JOIN_ROOM = gql`
+  mutation joinRoom($roomId: ID!) {
+    joinRoom(roomId: $roomId)
+  }
+`;
+
+const LEAVE_ROOM = gql`
+  mutation leaveRoom($roomId: ID!) {
+    leaveRoom(roomId: $roomId)
   }
 `;
 
@@ -113,13 +127,46 @@ const SetRoom: React.SFC<SetRoomProps> = ({ room }) => {
   return null;
 };
 
+const PLAYBACK_SUBSCRIPTION = gql`
+  subscription playback($roomId: ID!) {
+    playback(roomId: $roomId) {
+      id
+      uri
+      name
+      images {
+        url
+        width
+        height
+      }
+      artists {
+        name
+      }
+      voters {
+        id
+        spotifyId
+        displayName
+      }
+      queueTimestamp
+      playTimestamp
+      position
+      duration
+    }
+  }
+`;
+
 const Room: React.SFC<RoomProps> = ({ match }) => {
-  console.log('Room render');
+  console.log('<Room> render');
+  const [unsubscribeToPlayback, setUnsubscribeToPlayback]: any = React.useState(
+    null,
+  );
+
+  const roomId = match.params.id;
+
   return (
     <Query
       query={GET_ROOM_QUERY}
       variables={{
-        query: match.params.id,
+        roomId,
       }}
       fetchPolicy={'network-only'}
     >
@@ -128,14 +175,64 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
           <Container>
             <SetRoom room={data.room} />
 
+            <Mutation mutation={JOIN_ROOM}>
+              {(mutate) => (
+                <Mount
+                  event={() => {
+                    setUnsubscribeToPlayback(() => {
+                      subscribeToMore({
+                        document: PLAYBACK_SUBSCRIPTION,
+                        variables: { roomId },
+                        updateQuery: (prev, { subscriptionData }) => {
+                          if (!subscriptionData.data) {
+                            return prev;
+                          }
+
+                          return Object.assign({}, prev, {
+                            room: {
+                              ...prev.room,
+                              playback: subscriptionData.data.playback,
+                            },
+                          });
+                        },
+                        onError: (err) => console.log(err),
+                      });
+                    });
+                    mutate({
+                      variables: {
+                        roomId: data.room.id,
+                      },
+                    });
+                  }}
+                />
+              )}
+            </Mutation>
+
+            <Mutation mutation={LEAVE_ROOM}>
+              {(mutate) => (
+                <Unmount
+                  event={() => {
+                    if (unsubscribeToPlayback !== null) {
+                      unsubscribeToPlayback();
+                    }
+                    mutate({
+                      variables: {
+                        roomId: data.room.id,
+                      },
+                    });
+                  }}
+                />
+              )}
+            </Mutation>
+
             <Content>
               <Top>
-                <Playback roomId={match.params.id} />
+                <Playback track={data.room.playback} />
               </Top>
 
               <Bottom>
                 <StatusContainer>
-                  <Status room={data.room} />
+                  <Status room={data.room} roomId={match.params.id} />
                 </StatusContainer>
 
                 <ChatContainer>

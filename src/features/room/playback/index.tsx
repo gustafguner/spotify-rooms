@@ -1,17 +1,12 @@
 import * as React from 'react';
-import PlaybackView from './components/playback-view';
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-import Loader from 'src/components/Loader';
+import styled, { keyframes } from 'react-emotion';
+import { colors } from 'src/styles';
+import Blur from 'react-blur';
+import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
+import { v4 as uuid } from 'uuid';
 
-interface Image {
-  url: string;
-  width: number;
-  height: number;
-}
-
-interface Artist {
-  name: string;
+interface Props {
+  track: Track;
 }
 
 interface Track {
@@ -25,104 +20,240 @@ interface Track {
   position: number;
 }
 
-interface PlaybackProps {
-  roomId: string;
+interface Image {
+  url: string;
+  width: number;
+  height: number;
 }
 
-const GET_PLAYBACK_QUERY = gql`
-  query playback($roomId: ID!) {
-    playback(roomId: $roomId) {
-      id
-      uri
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
-        id
-        spotifyId
-        displayName
-      }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
-    }
-  }
-`;
+interface Artist {
+  name: string;
+}
 
-const PLAYBACK_SUBSCRIPTION = gql`
-  subscription playback($roomId: ID!) {
-    playback(roomId: $roomId) {
-      id
-      uri
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
-        id
-        spotifyId
-        displayName
-      }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
-    }
-  }
-`;
+const Wrapper = styled('div')({
+  width: '100%',
+  height: 230,
+  position: 'relative',
+});
 
-const Playback: React.SFC<PlaybackProps> = ({ roomId }) => {
-  React.useEffect(() => {
-    console.log('Root Playback component with roomId: ', roomId);
-    return () => {};
-  }, []);
+const Container = styled('div')({
+  display: 'flex',
+  width: '100%',
+  alignItems: 'center',
+  padding: 25,
+  height: '100%',
+  position: 'relative',
+});
+
+const Spin = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+});
+
+const CoverImageWrapper = styled('div')({
+  width: 180,
+  flexBasis: 180,
+  flexShrink: 0,
+  height: 180,
+  boxShadow: '0 0 30px rgba(0, 0, 0, 0.5)',
+  borderRadius: '50%',
+  overflow: 'hidden',
+  animation: `${Spin} 1.8s linear infinite`,
+  position: 'relative',
+  '::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 4,
+    height: 4,
+    backgroundColor: colors.BLACK,
+  },
+});
+
+const CoverImage = styled('img')({
+  float: 'left',
+  width: '100%',
+  height: '100%',
+});
+
+const DefaultCoverImage = styled('div')({
+  width: '100%',
+  height: '100%',
+  backgroundColor: colors.PRIMARY_DARK,
+});
+
+const BackgroundWrapper = styled('div')({
+  width: '100%',
+  height: '100%',
+});
+
+const BackgroundBlur = styled(Blur)({
+  width: '100%',
+  height: '100%',
+  position: 'absolute',
+  left: 0,
+  top: 0,
+});
+
+const DefaultBackground = styled('div')({
+  width: '100%',
+  height: '100%',
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  background: 'linear-gradient(#009FAE, #1ED760)',
+});
+
+const DarkFilter = styled('div')({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(0, 0, 0, 0.36)',
+  backgroundImage:
+    'linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.10))',
+});
+
+const ProgressBarContainer = styled('div')({
+  width: '100%',
+  position: 'absolute',
+  bottom: 0,
+  height: 3,
+});
+
+interface ProgressBarFillProps {
+  position: number;
+  duration: number;
+}
+
+const ProgressGrow = (width: number) =>
+  keyframes({
+    '0%': {
+      width: `${width}%`,
+      content: '"' + uuid() + '"',
+    },
+    '100%': { width: '100%' },
+  });
+
+const ProgressBarFill = styled('div')(
+  ({ position, duration }: ProgressBarFillProps) => ({
+    width: (position / duration) * 100 + '%',
+    height: '100%',
+    backgroundColor: 'rgba(255,255,255,0.24)',
+    animation: `${ProgressGrow((position / duration) * 100)} ${duration -
+      position}ms linear forwards`,
+  }),
+);
+
+const TrackInfo = styled('div')({
+  width: '100%',
+  marginLeft: 40,
+  position: 'absolute',
+  top: '50%',
+  transform: 'translateY(-50%)',
+});
+
+const TrackName = styled('h1')({
+  margin: '0 0 7px 0',
+});
+
+const Artists = styled('div')({
+  fontSize: 22,
+  color: 'rgba(255, 255, 255, 0.55)',
+});
+
+const Playback: React.SFC<Props> = ({ track }) => {
+  const isTrack = track && track.id !== null;
+  const [position, setPosition] = React.useState(isTrack ? track.position : 0);
+
+  React.useEffect(
+    () => {
+      setPosition(isTrack ? track.position : 0);
+    },
+    [track],
+  );
 
   return (
-    <Query
-      query={GET_PLAYBACK_QUERY}
-      variables={{
-        roomId,
-      }}
-      fetchPolicy={'network-only'}
-    >
-      {({ loading, data, error, subscribeToMore }) =>
-        !loading && !error && data ? (
-          <PlaybackView
-            track={data.playback}
-            subscribe={() => {
-              subscribeToMore({
-                document: PLAYBACK_SUBSCRIPTION,
-                variables: { roomId },
-                updateQuery: (prev, { subscriptionData }) => {
-                  if (!subscriptionData.data) {
-                    return prev;
-                  }
-
-                  return Object.assign({}, prev, {
-                    playback: subscriptionData.data.playback,
-                  });
-                },
-                onError: (err) => console.log(err),
-              });
-            }}
-          />
+    <>
+      <ReactCSSTransitionReplace
+        transitionName="cross-fade"
+        transitionEnterTimeout={1000}
+        transitionLeaveTimeout={1000}
+        overflowHidden={false}
+        transitionAppear={true}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+        }}
+        className={'absolute-react-replace'}
+      >
+        {isTrack && track.images[0].url !== null ? (
+          <BackgroundWrapper key={`track-bg-${track.id}`}>
+            <BackgroundBlur
+              img={track.images[0].url}
+              blurRadius={60}
+              enableStyles={true}
+            />
+          </BackgroundWrapper>
         ) : (
-          <Loader />
-        )
-      }
-    </Query>
+          <BackgroundWrapper key="track-default-bg">
+            <DefaultBackground />
+          </BackgroundWrapper>
+        )}
+      </ReactCSSTransitionReplace>
+
+      <DarkFilter />
+
+      {isTrack && (
+        <ProgressBarContainer>
+          <ProgressBarFill position={position} duration={track.duration} />
+        </ProgressBarContainer>
+      )}
+
+      <Container>
+        <CoverImageWrapper>
+          {isTrack ? (
+            <CoverImage src={track.images[0].url} />
+          ) : (
+            <DefaultCoverImage />
+          )}
+        </CoverImageWrapper>
+
+        <ReactCSSTransitionReplace
+          transitionName="fade-wait"
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={400}
+          overflowHidden={false}
+          transitionAppear={true}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          {isTrack ? (
+            <TrackInfo key={`track-${track.id}`}>
+              <TrackName>{track.name}</TrackName>
+              <Artists>
+                {track.artists !== null
+                  ? track.artists
+                      .map((e: any) => {
+                        return e.name;
+                      })
+                      .join(', ')
+                  : ''}
+              </Artists>
+            </TrackInfo>
+          ) : (
+            <TrackInfo key="no-track">
+              <TrackName>No currently playing track</TrackName>
+            </TrackInfo>
+          )}
+        </ReactCSSTransitionReplace>
+      </Container>
+    </>
   );
 };
 

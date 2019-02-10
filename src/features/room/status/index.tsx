@@ -1,33 +1,67 @@
 import * as React from 'react';
+import { Query } from 'react-apollo';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
+import gql from 'graphql-tag';
+import StatusView from './components/status-view';
+
+const USERS_IN_ROOM = gql`
+  query usersInRoom($roomId: ID!) {
+    usersInRoom(roomId: $roomId) {
+      displayName
+    }
+  }
+`;
+
+const USERS_IN_ROOM_SUBSCRIPTION = gql`
+  subscription usersInRoom($roomId: ID!) {
+    usersInRoom(roomId: $roomId) {
+      displayName
+    }
+  }
+`;
 
 interface Props {
   room: any;
+  roomId: string;
 }
 
-const Container = styled('div')({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  background: colors.DARK_BG,
-  paddingLeft: 25,
-  paddingRight: 25,
-});
-
-const Name = styled('div')({
-  color: colors.WHITE,
-  fontSize: 18,
-  height: 22,
-});
-
-const Status: React.SFC<Props> = ({ room }) => {
-  console.log(room);
+const Status: React.SFC<Props> = ({ room, roomId }) => {
   return (
-    <Container>
-      <Name>{room.name}</Name>
-    </Container>
+    <Query
+      query={USERS_IN_ROOM}
+      variables={{
+        roomId,
+      }}
+      fetchPolicy={'network-only'}
+    >
+      {({ loading, data, error, subscribeToMore }) =>
+        !loading && !error && data ? (
+          <StatusView
+            room={room}
+            users={data.usersInRoom}
+            subscribe={() => {
+              subscribeToMore({
+                document: USERS_IN_ROOM_SUBSCRIPTION,
+                variables: { roomId },
+                updateQuery: (prev, { subscriptionData }) => {
+                  if (!subscriptionData.data) {
+                    return prev;
+                  }
+
+                  console.log(subscriptionData);
+
+                  return Object.assign({}, prev, {
+                    usersInRoom: subscriptionData.data.usersInRoom,
+                  });
+                },
+                onError: (err) => console.log(err),
+              });
+            }}
+          />
+        ) : null
+      }
+    </Query>
   );
 };
 
