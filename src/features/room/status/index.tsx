@@ -11,6 +11,7 @@ const USERS_IN_ROOM = gql`
     usersInRoom(roomId: $roomId) {
       id
       displayName
+      image
     }
   }
 `;
@@ -20,6 +21,7 @@ const USER_ENTERED_ROOM_SUBSCRIPTION = gql`
     userEnteredRoom(roomId: $roomId) {
       id
       displayName
+      image
     }
   }
 `;
@@ -29,6 +31,7 @@ const USER_LEFT_ROOM_SUBSCRIPTION = gql`
     userLeftRoom(roomId: $roomId) {
       id
       displayName
+      image
     }
   }
 `;

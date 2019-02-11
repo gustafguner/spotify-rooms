@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
+import Users from './users';
 
 interface Props {
   room: any;
@@ -17,12 +18,13 @@ const Container = styled('div')({
   background: colors.DARK_BG,
   paddingLeft: 25,
   paddingRight: 25,
+  justifyContent: 'space-between',
 });
 
 const Name = styled('div')({
   color: colors.WHITE,
-  fontSize: 18,
-  height: 22,
+  fontSize: 16,
+  letterSpacing: 0.2,
 });
 
 const StatusView: React.SFC<Props> = ({
@@ -53,9 +55,8 @@ const StatusView: React.SFC<Props> = ({
 
   return (
     <Container>
-      <Name>
-        {room.name} {users.length} people
-      </Name>
+      <Name>{room.name}</Name>
+      <Users users={users} />
     </Container>
   );
 };
