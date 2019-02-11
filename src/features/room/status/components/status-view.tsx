@@ -5,7 +5,8 @@ import { colors } from 'src/styles';
 interface Props {
   room: any;
   users: any[];
-  subscribe: () => void;
+  userEnteredSubscribe: () => void;
+  userLeftSubscribe: () => void;
 }
 
 const Container = styled('div')({
@@ -24,17 +25,28 @@ const Name = styled('div')({
   height: 22,
 });
 
-const StatusView: React.SFC<Props> = ({ room, users, subscribe }) => {
-  const [
-    usersInRoomUnsubscribe,
-    setUsersInRoomUnsubscribe,
-  ]: any = React.useState(null);
+const StatusView: React.SFC<Props> = ({
+  room,
+  users,
+  userEnteredSubscribe,
+  userLeftSubscribe,
+}) => {
+  const [userEnteredUnubscribe, setUserEnteredUnubscribe]: any = React.useState(
+    null,
+  );
+
+  const [userLeftUnubscribe, setUserLeftUnubscribe]: any = React.useState(null);
 
   React.useEffect(() => {
-    setUsersInRoomUnsubscribe(subscribe());
+    setUserEnteredUnubscribe(userEnteredSubscribe());
+    setUserLeftUnubscribe(userLeftSubscribe());
     return () => {
-      if (usersInRoomUnsubscribe !== null) {
-        usersInRoomUnsubscribe();
+      if (userEnteredUnubscribe !== null) {
+        userEnteredUnubscribe();
+      }
+
+      if (userLeftUnubscribe !== null) {
+        userLeftUnubscribe();
       }
     };
   }, []);

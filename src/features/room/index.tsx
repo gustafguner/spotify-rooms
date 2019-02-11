@@ -66,9 +66,9 @@ const GET_ROOM_QUERY = gql`
   }
 `;
 
-const JOIN_ROOM = gql`
-  mutation joinRoom($roomId: ID!) {
-    joinRoom(roomId: $roomId)
+const ENTER_ROOM = gql`
+  mutation enterRoom($roomId: ID!) {
+    enterRoom(roomId: $roomId)
   }
 `;
 
@@ -175,7 +175,7 @@ const Room: React.SFC<RoomProps> = ({ match }) => {
           <Container>
             <SetRoom room={data.room} />
 
-            <Mutation mutation={JOIN_ROOM}>
+            <Mutation mutation={ENTER_ROOM}>
               {(mutate) => (
                 <Mount
                   event={() => {
