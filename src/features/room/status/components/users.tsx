@@ -96,8 +96,8 @@ const Users: React.SFC<Props> = ({ users }) => {
       </Avatars>
 
       <Quantity>
-        <Digit>100+</Digit>
-        <Text>listeners</Text>
+        <Digit>{users.length <= 100 ? users.length : '100+'}</Digit>
+        <Text>{users.length === 1 ? 'listener' : 'listeners'}</Text>
       </Quantity>
     </Container>
   );
