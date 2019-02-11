@@ -29,7 +29,7 @@ const AddToQueue = styled('div')({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: colors.DARK_BG,
+  backgroundColor: colors.DARK_GRAY,
   padding: 15,
   position: 'relative',
 });
@@ -61,7 +61,7 @@ const TextInput = styled('input')({
 const Suggestions = styled('div')({
   width: '100%',
   position: 'absolute',
-  backgroundColor: colors.PRIMARY_DARK,
+  backgroundColor: colors.PRIMARY_GRAY,
   height: 225,
   top: -225,
   padding: 15,

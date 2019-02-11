@@ -19,7 +19,7 @@ const FadeOut = styled('div')({
   left: 0,
   height: '100%',
   width: 50,
-  background: `linear-gradient(to right, ${colors.DARK_BG} 0%, ${
+  background: `linear-gradient(to right, ${colors.DARK_GRAY} 0%, ${
     colors.TRANSPARENT
   } 100%)`,
   zIndex: 1,
@@ -82,25 +82,22 @@ const Avatars = styled(FlipMove)({
   flexFlow: 'row-reverse',
 });
 
-const Users: React.SFC<Props> = ({ users }) => {
-  console.log(users);
-  return (
-    <Container>
-      <FadeOut />
-      <Avatars>
-        {users.map((user: any) => (
-          <Avatar key={user.id}>
-            <AvatarImage src={user.image} />
-          </Avatar>
-        ))}
-      </Avatars>
+const Users: React.SFC<Props> = ({ users }) => (
+  <Container>
+    <FadeOut />
+    <Avatars>
+      {users.map((user: any) => (
+        <Avatar key={user.id}>
+          <AvatarImage src={user.image} />
+        </Avatar>
+      ))}
+    </Avatars>
 
-      <Quantity>
-        <Digit>{users.length <= 100 ? users.length : '100+'}</Digit>
-        <Text>{users.length === 1 ? 'listener' : 'listeners'}</Text>
-      </Quantity>
-    </Container>
-  );
-};
+    <Quantity>
+      <Digit>{users.length <= 100 ? users.length : '100+'}</Digit>
+      <Text>{users.length === 1 ? 'listener' : 'listeners'}</Text>
+    </Quantity>
+  </Container>
+);
 
 export default Users;

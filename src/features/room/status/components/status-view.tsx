@@ -15,7 +15,7 @@ const Container = styled('div')({
   height: '100%',
   display: 'flex',
   alignItems: 'center',
-  background: colors.DARK_BG,
+  background: colors.DARK_GRAY,
   paddingLeft: 25,
   paddingRight: 25,
   justifyContent: 'space-between',
@@ -24,6 +24,7 @@ const Container = styled('div')({
 const Name = styled('div')({
   color: colors.WHITE,
   fontSize: 16,
+  fontWeight: 600,
   letterSpacing: 0.2,
 });
 

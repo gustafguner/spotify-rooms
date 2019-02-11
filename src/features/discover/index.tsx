@@ -4,16 +4,36 @@ import gql from 'graphql-tag';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
 import { Button } from 'src/components/buttons';
-import Room from './components/Room';
+import Room from './components/room';
 import { Root } from 'src/Root';
 
-const QUERY = gql`
+const ROOMS_QUERY = gql`
   query getRooms {
     rooms {
       id
       name
       host {
         displayName
+      }
+      users {
+        displayName
+        image
+      }
+      playback {
+        id
+        name
+        images {
+          url
+          width
+          height
+        }
+        artists {
+          name
+        }
+        queueTimestamp
+        playTimestamp
+        position
+        duration
       }
     }
   }
@@ -45,15 +65,16 @@ const Discover = () => {
     });
   }, []);
   return (
-    <Query query={QUERY}>
+    <Query query={ROOMS_QUERY}>
       {({ data, error, loading }) =>
         !loading && !error && data ? (
           <>
             <Rooms>
               {data.rooms.map((room: any) => (
-                <Room key={room.id} id={room.id} name={room.name} />
+                <Room key={room.id} room={room} />
               ))}
             </Rooms>
+            {/*
             <Mutation mutation={MUTATION}>
               {(mutate) => (
                 <>
@@ -73,6 +94,7 @@ const Discover = () => {
                 </>
               )}
             </Mutation>
+                  */}
           </>
         ) : (
           <h5>Loading...</h5>

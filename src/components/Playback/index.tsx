@@ -80,7 +80,7 @@ const Container = styled('div')(({ toggled }: ContainerProps) => ({
   left: 0,
   bottom: 0,
   width: '100%',
-  background: colors.PRIMARY_DARK,
+  background: colors.PRIMARY_GRAY,
   height: 90,
   transition: 'transform 0.15s ease',
   transform: `translateY(${toggled ? 90 : 0}px)`,

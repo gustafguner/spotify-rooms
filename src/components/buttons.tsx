@@ -2,7 +2,7 @@ import { colors } from '../styles';
 import styled from 'react-emotion';
 
 export const Button = styled('button')({
-  backgroundColor: colors.DARK_GRAY,
+  backgroundColor: colors.GRAY,
   color: colors.WHITE,
   textDecoration: 'none',
   paddingTop: 10,

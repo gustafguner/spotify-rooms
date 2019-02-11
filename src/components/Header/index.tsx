@@ -18,7 +18,7 @@ const HeaderWrapper = styled('header')({
   position: 'fixed',
   top: 0,
   left: 0,
-  backgroundColor: colors.PRIMARY_DARK,
+  backgroundColor: colors.PRIMARY_GRAY,
   display: 'flex',
   justifyContent: 'space-between',
   boxShadow: '0 3px 7px rgba(0, 0, 0, 0.08)',
@@ -42,7 +42,7 @@ const Logo = styled('img')({
 });
 
 const SpotifyLoginButton = styled('button')({
-  backgroundColor: colors.SPOTIFY_GREEN,
+  backgroundColor: colors.GREEN,
   color: colors.WHITE,
   textDecoration: 'none',
   paddingTop: 10,
@@ -57,7 +57,7 @@ const SpotifyLoginButton = styled('button')({
   border: 'none',
   cursor: 'pointer',
   ':hover': {
-    backgroundColor: colors.SPOTIFY_GREEN_HOVERED,
+    backgroundColor: colors.GREEN,
   },
 });
 

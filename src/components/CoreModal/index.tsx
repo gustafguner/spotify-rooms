@@ -20,7 +20,7 @@ const CoreModal: React.SFC<ModalProps> = ({ open, close }) => (
       },
       modal: {
         width: '600px',
-        backgroundColor: colors.PRIMARY_DARK,
+        backgroundColor: colors.PRIMARY_GRAY,
       },
     }}
   >

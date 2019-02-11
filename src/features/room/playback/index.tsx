@@ -80,7 +80,7 @@ const CoverImage = styled('img')({
 const DefaultCoverImage = styled('div')({
   width: '100%',
   height: '100%',
-  backgroundColor: colors.PRIMARY_DARK,
+  backgroundColor: colors.PRIMARY_GRAY,
 });
 
 const BackgroundWrapper = styled('div')({

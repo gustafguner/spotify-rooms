@@ -29,7 +29,7 @@ const Item = styled('div')({
   flexBasis: 80,
   flexShrink: 0,
   padding: 8,
-  backgroundColor: colors.PRIMARY_DARK,
+  backgroundColor: colors.PRIMARY_GRAY,
   display: 'flex',
   flexFlow: 'row',
   alignItems: 'center',
@@ -129,7 +129,7 @@ const EmptyQueueContainer = styled('div')({
 });
 
 const EmptyQueueText = styled('p')({
-  color: colors.DARK_GRAY,
+  color: colors.GRAY,
   textAlign: 'center',
 });
 
