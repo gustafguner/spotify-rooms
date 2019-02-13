@@ -14,7 +14,6 @@ const Container = styled('div')({
   flexBasis: 260,
   flexShrink: 0,
   height: 260,
-  backgroundColor: colors.ALMOST_BLACK,
   marginLeft: 15,
   marginRight: 15,
   position: 'relative',
@@ -103,12 +102,13 @@ const CoverContainer = styled('div')({
 const MetaInfoContainer = styled('div')({
   width: '100%',
   height: 100,
-  padding: 15,
+  paddingTop: 15,
+  paddingBottom: 15,
   position: 'relative',
   display: 'flex',
   justifyContent: 'center',
-  flexFlow: 'row wrap',
-  backgroundColor: colors.ALMOST_BLACK,
+  flexFlow: 'column',
+  backgroundColor: colors.PRIMARY_GRAY,
   '&:before': {
     position: 'absolute',
     content: '""',
@@ -117,7 +117,7 @@ const MetaInfoContainer = styled('div')({
     height: '100%',
     width: 15,
     backgroundImage: `linear-gradient(to left, rgba(0,0,0,0), ${
-      colors.ALMOST_BLACK
+      colors.PRIMARY_GRAY
     } 40%)`,
     zIndex: 1,
   },
@@ -129,7 +129,7 @@ const MetaInfoContainer = styled('div')({
     height: '100%',
     width: 15,
     backgroundImage: `linear-gradient(to right, rgba(0,0,0,0), ${
-      colors.ALMOST_BLACK
+      colors.PRIMARY_GRAY
     } 40%)`,
     zIndex: 1,
   },
@@ -141,36 +141,45 @@ const Name = styled('div')({
   textAlign: 'center',
   fontSize: 18,
   fontWeight: 600,
-  flexBasis: '100%',
+  flexBasis: 26,
   flexShrink: 0,
   flexGrow: 0,
-  marginBottom: 8,
-  height: 26,
-});
-
-const Roll = keyframes({
-  '0%': { left: 0 },
-  '100%': { left: '100%', transform: 'translateX(-100%)' },
+  marginBottom: 5,
+  width: '100%',
 });
 
 const TrackContainer = styled('div')({
-  flexBasis: '100%',
+  flexBasis: 28,
   flexShrink: 0,
   flexGrow: 0,
+  width: '100%',
   position: 'relative',
 });
 
-const Track = styled('div')({
-  color: 'rgba(255,255,255,0.2)',
+const Roll = (parentWidth: number | null) =>
+  keyframes({
+    '0%': { transform: 'translateX(15px)' },
+    '100%': { transform: `translateX(calc(${parentWidth}px - 100% - 15px))` },
+  });
+
+interface TrackProps {
+  parentWidth: number | null;
+}
+
+const Track = styled('div')(({ parentWidth = null }: TrackProps) => ({
+  color: 'rgba(255,255,255,0.5)',
   whiteSpace: 'nowrap',
   position: 'absolute',
   fontSize: 15,
+  lineHeight: '26px',
   fontWeight: 300,
-  animation: `${Roll} 3s infinite alternate linear`,
-});
+  animation: `${Roll(parentWidth)} 5s infinite alternate ease-in-out`,
+}));
 
 const Room: React.SFC<Props> = ({ room }) => {
   const isTrack = room.playback && room.playback.id !== null;
+  const trackRef: any = React.useRef(null);
+  console.log(trackRef);
   return (
     <Container>
       <Link to={`/room/${room.id}`}>
@@ -214,13 +223,29 @@ const Room: React.SFC<Props> = ({ room }) => {
         </CoverContainer>
         <MetaInfoContainer>
           <Name>{room.name}</Name>
-          {isTrack ? (
-            <TrackContainer>
-              <Track>{room.playback.name}</Track>
-            </TrackContainer>
-          ) : (
-            <TrackContainer>No playback</TrackContainer>
-          )}
+          <TrackContainer innerRef={trackRef}>
+            <Track
+              parentWidth={
+                trackRef.current !== null ? trackRef.current.offsetWidth : null
+              }
+            >
+              {isTrack ? (
+                <>
+                  {room.playback.name}
+                  {' – '}
+                  {room.playback.artists !== null
+                    ? room.playback.artists
+                        .map((e: any) => {
+                          return e.name;
+                        })
+                        .join(', ')
+                    : ''}
+                </>
+              ) : (
+                <>{'No currently playing track'}</>
+              )}
+            </Track>
+          </TrackContainer>
         </MetaInfoContainer>
       </Link>
     </Container>
