@@ -6,7 +6,7 @@ import { colors } from 'src/styles';
 import { Button, LargeButton } from 'src/components/buttons';
 import Room from './components/room';
 import { Root } from 'src/Root';
-import CoreModal from 'src/components/CoreModal';
+import CreateRoomModal from './components/create-room-modal';
 
 const ROOMS_QUERY = gql`
   query getRooms {
@@ -120,9 +120,9 @@ const Discover = () => {
             </Mutation>
                   */}
 
-            <CoreModal
-              open={createRoomModalIsOpen}
-              onClose={() => {
+            <CreateRoomModal
+              isOpen={createRoomModalIsOpen}
+              close={() => {
                 setCreateRoomModalIsOpen(false);
               }}
             />

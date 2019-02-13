@@ -1,31 +1,46 @@
 import * as React from 'react';
 import Modal from 'react-responsive-modal';
 import { colors } from 'src/styles';
+import styled from 'react-emotion';
 
 interface ModalProps {
-  open: boolean;
-  onClose: () => void;
+  isOpen: boolean;
+  close?: () => void;
 }
 
-const CoreModal: React.SFC<ModalProps> = ({ open, onClose }) => (
-  <Modal
-    open={open}
-    onClose={onClose}
-    onEscKeyDown={onClose}
-    onOverlayClick={onClose}
+const StyledModal = styled(Modal)({
+  backgroundColor: colors.PRIMARY_GRAY,
+  modal: {
+    width: '1000px',
+  },
+});
+
+const CoreModal: React.SFC<ModalProps> = ({
+  isOpen,
+  close = () => {},
+  children,
+}) => (
+  <StyledModal
+    open={isOpen}
+    onClose={close}
+    onEscKeyDown={close}
+    onOverlayClick={close}
     center={true}
     styles={{
       overlay: {
         backgroundColor: 'rgba(0,0,0,0.4)',
       },
       modal: {
-        width: '600px',
         backgroundColor: colors.PRIMARY_GRAY,
+        width: 600,
+      },
+      closeIcon: {
+        fill: colors.WHITE,
       },
     }}
   >
-    <h1>Create a room</h1>
-  </Modal>
+    {children}
+  </StyledModal>
 );
 
 export default CoreModal;

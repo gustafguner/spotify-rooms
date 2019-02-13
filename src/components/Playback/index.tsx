@@ -112,7 +112,7 @@ const Playback = () => {
   const { root }: any = React.useContext(Root.Context);
 
   return root ? (
-    <Container toggled={root.visitingRoom !== null && false}>
+    <Container toggled={root.visitingRoom !== null || true}>
       {root.visitingRoom !== null ? (
         <Query
           query={PLAYBACK_QUERY}
