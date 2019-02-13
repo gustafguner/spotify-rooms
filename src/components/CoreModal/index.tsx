@@ -4,15 +4,15 @@ import { colors } from 'src/styles';
 
 interface ModalProps {
   open: boolean;
-  close: () => void;
+  onClose: () => void;
 }
 
-const CoreModal: React.SFC<ModalProps> = ({ open, close }) => (
+const CoreModal: React.SFC<ModalProps> = ({ open, onClose }) => (
   <Modal
     open={open}
-    onClose={close}
-    onEscKeyDown={close}
-    onOverlayClick={close}
+    onClose={onClose}
+    onEscKeyDown={onClose}
+    onOverlayClick={onClose}
     center={true}
     styles={{
       overlay: {
@@ -24,7 +24,7 @@ const CoreModal: React.SFC<ModalProps> = ({ open, close }) => (
       },
     }}
   >
-    <h1>Modal</h1>
+    <h1>Create a room</h1>
   </Modal>
 );
 

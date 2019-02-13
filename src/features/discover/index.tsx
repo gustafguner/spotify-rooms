@@ -3,9 +3,10 @@ import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'react-emotion';
 import { colors } from 'src/styles';
-import { Button } from 'src/components/buttons';
+import { Button, LargeButton } from 'src/components/buttons';
 import Room from './components/room';
 import { Root } from 'src/Root';
+import CoreModal from 'src/components/CoreModal';
 
 const ROOMS_QUERY = gql`
   query getRooms {
@@ -56,8 +57,23 @@ const Rooms = styled('div')({
   marginRight: -15,
 });
 
+const CreateRoomButton = styled(LargeButton)({
+  background: 'linear-gradient(#009FAE, #1ED760)',
+  position: 'fixed',
+  bottom: 25,
+  left: '50%',
+  transform: 'translateX(-50%)',
+  transition: 'transform 0.05s ease-in-out',
+  ':active': {
+    transform: `translateX(-50%) scale(0.95)`,
+  },
+});
+
 const Discover = () => {
   const { root, setRoot }: any = React.useContext(Root.Context);
+  const [createRoomModalIsOpen, setCreateRoomModalIsOpen] = React.useState(
+    false,
+  );
   React.useEffect(() => {
     setRoot({
       ...root,
@@ -74,6 +90,14 @@ const Discover = () => {
                 <Room key={room.id} room={room} />
               ))}
             </Rooms>
+
+            <CreateRoomButton
+              onClick={() => {
+                setCreateRoomModalIsOpen(true);
+              }}
+            >
+              Create room
+            </CreateRoomButton>
             {/*
             <Mutation mutation={MUTATION}>
               {(mutate) => (
@@ -95,6 +119,13 @@ const Discover = () => {
               )}
             </Mutation>
                   */}
+
+            <CoreModal
+              open={createRoomModalIsOpen}
+              onClose={() => {
+                setCreateRoomModalIsOpen(false);
+              }}
+            />
           </>
         ) : (
           <h5>Loading...</h5>

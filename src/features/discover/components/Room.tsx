@@ -19,6 +19,11 @@ const Container = styled('div')({
   position: 'relative',
   borderRadius: 4,
   overflow: 'hidden',
+  boxShadow: '0 0 13px rgba(0,0,0,0.2)',
+  transition: 'transform 0.15s ease-in-out',
+  '&:hover': {
+    transform: 'scale(1.022)',
+  },
 });
 
 const Link = styled(ReactLink)({
@@ -76,7 +81,7 @@ const DefaultBackground = styled('div')({
   position: 'absolute',
   left: 0,
   top: 0,
-  background: 'linear-gradient(#009FAE, #1ED760)',
+  background: `linear-gradient(${colors.PRIMARY_GRAY}, rgba(0,0,0,0.8))`,
 });
 
 const DarkFilter = styled('div')({

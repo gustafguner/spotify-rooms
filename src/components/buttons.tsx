@@ -1,7 +1,7 @@
-import { colors } from '../styles';
+import { colors } from 'src/styles';
 import styled from 'react-emotion';
 
-export const Button = styled('button')({
+const Button = styled('button')({
   backgroundColor: colors.GRAY,
   color: colors.WHITE,
   textDecoration: 'none',
@@ -21,3 +21,13 @@ export const Button = styled('button')({
     outline: 'none',
   },
 });
+
+const LargeButton = styled(Button)({
+  paddingTop: 16,
+  paddingBottom: 16,
+  paddingLeft: 30,
+  paddingRight: 30,
+  fontSize: 18,
+});
+
+export { Button, LargeButton };

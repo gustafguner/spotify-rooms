@@ -38,7 +38,9 @@ const App: React.SFC = () => {
               </>
             </Switch>
           </BrowserRouter>
-          <Playback />
+          {
+            // <Playback />
+          }
         </SiteContainer>
       </Root.Provider>
     </ApolloProvider>
