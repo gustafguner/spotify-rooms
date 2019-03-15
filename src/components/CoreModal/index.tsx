@@ -35,7 +35,7 @@ const CoreModal: React.SFC<ModalProps> = ({
         width: 600,
       },
       closeIcon: {
-        fill: colors.WHITE,
+        fill: 'rgba(255,255,255,0.5)',
       },
     }}
   >

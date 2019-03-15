@@ -62,6 +62,7 @@ const CreateRoomButton = styled(LargeButton)({
   position: 'fixed',
   bottom: 25,
   left: '50%',
+  overflow: 'hidden',
   transform: 'translateX(-50%)',
   transition: 'transform 0.05s ease-in-out',
   ':active': {
