@@ -27,6 +27,7 @@ const defaultStyles: ModalStyles = {
   },
   closeIcon: {
     fill: 'rgba(0, 0, 0, 0.15)',
+    zIndex: 1,
   },
 };
 

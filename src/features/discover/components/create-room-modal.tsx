@@ -6,7 +6,7 @@ import { TextInputModal } from 'src/components/input';
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
-import { SubTitle } from 'src/components/text';
+import { ModalParagraph, ModalSubtitle } from 'src/components/text';
 import { colors } from 'src/styles';
 import { Svg } from 'src/components/icons';
 
@@ -32,6 +32,7 @@ const CurveSvg = styled(Svg)({
   right: -195,
   bottom: 0,
   height: '100%',
+  fill: colors.ALMOST_WHITE,
 });
 
 const FormContainer = styled('div')({
@@ -39,18 +40,26 @@ const FormContainer = styled('div')({
   flexShrink: 0,
   padding: 25,
   height: '100%',
-  background: colors.WHITE,
+  background: colors.ALMOST_WHITE,
   position: 'relative',
 });
 
 const TitleContainer = styled('div')({
   width: '100%',
   height: '100%',
-  marginLeft: 125,
+  marginLeft: 110,
   paddingLeft: 25,
   paddingRight: 25,
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1,
+});
+
+const Title = styled('h1')({
+  fontSize: 56,
+  lineHeight: '56px',
+  textAlign: 'left',
 });
 
 const modalStyles = {
@@ -71,6 +80,9 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
     <Modal isOpen={isOpen} close={close} styles={modalStyles}>
       <Container>
         <FormContainer>
+          <ModalSubtitle>Create a room</ModalSubtitle>
+          <ModalParagraph>Create your own room</ModalParagraph>
+
           <CurveSvg viewBox="0 0 300 768">
             <path d="M63.5,0H0v768h168.2C216.5,538.1,57,583.4,57,449c0-95,136-143.6,136-288C193,99.1,138.9,45.2,63.5,0z" />
           </CurveSvg>
@@ -102,7 +114,6 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
               handleBlur,
               handleSubmit,
               isSubmitting,
-              /* and other goodies */
             }) => (
               <form onSubmit={handleSubmit}>
                 <TextInputModal
@@ -149,7 +160,7 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
         </FormContainer>
 
         <TitleContainer>
-          <h2>Create a room</h2>
+          <Title>It’s better together</Title>
         </TitleContainer>
       </Container>
     </Modal>
