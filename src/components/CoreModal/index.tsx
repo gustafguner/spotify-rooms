@@ -3,45 +3,59 @@ import Modal from 'react-responsive-modal';
 import { colors } from 'src/styles';
 import styled from 'react-emotion';
 
+interface ModalStyles {
+  overlay?: object;
+  modal?: object;
+  closeIcon?: object;
+}
+
 interface ModalProps {
   isOpen: boolean;
   close?: () => void;
+  styles?: ModalStyles;
 }
 
-const StyledModal = styled(Modal)({
-  backgroundColor: colors.WHITE,
-  borderRadius: 2,
-  modal: {
-    width: '1000px',
+const defaultStyles: ModalStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
   },
-});
+  modal: {
+    background: colors.WHITE,
+    width: 800,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  closeIcon: {
+    fill: 'rgba(0, 0, 0, 0.15)',
+  },
+};
 
 const CoreModal: React.SFC<ModalProps> = ({
   isOpen,
   close = () => {},
+  styles = {},
   children,
-}) => (
-  <StyledModal
-    open={isOpen}
-    onClose={close}
-    onEscKeyDown={close}
-    onOverlayClick={close}
-    center={true}
-    styles={{
-      overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.15)',
-      },
-      modal: {
-        backgroundColor: colors.WHITE,
-        width: 800,
-      },
-      closeIcon: {
-        fill: 'rgba(0, 0, 0, 0.3)',
-      },
-    }}
-  >
-    {children}
-  </StyledModal>
-);
+}) => {
+  console.log({
+    ...defaultStyles,
+    styles,
+  });
+  return (
+    <Modal
+      open={isOpen}
+      onClose={close}
+      onEscKeyDown={close}
+      onOverlayClick={close}
+      center={true}
+      styles={{
+        modal: Object.assign({}, defaultStyles.modal, styles.modal),
+        overlay: Object.assign({}, defaultStyles.overlay, styles.overlay),
+        closeIcon: Object.assign({}, defaultStyles.closeIcon, styles.closeIcon),
+      }}
+    >
+      {children}
+    </Modal>
+  );
+};
 
 export default CoreModal;

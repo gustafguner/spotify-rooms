@@ -1,15 +1,17 @@
 import styled from 'react-emotion';
 import { colors } from 'src/styles/colors';
+import { string } from 'prop-types';
 
 export interface SvgProps {
   fill?: string;
-  size?: number | string;
+  width?: number | string;
+  height?: number | string;
 }
 
 export const Svg = styled('svg')(
-  ({ fill = colors.WHITE, size = 32 }: SvgProps) => ({
+  ({ fill = colors.WHITE, width = 32, height }: SvgProps) => ({
     fill,
-    width: size,
-    height: size,
+    width,
+    height: height !== null ? height : width,
   }),
 );
