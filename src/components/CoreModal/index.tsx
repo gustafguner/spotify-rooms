@@ -9,7 +9,8 @@ interface ModalProps {
 }
 
 const StyledModal = styled(Modal)({
-  backgroundColor: colors.PRIMARY_GRAY,
+  backgroundColor: colors.WHITE,
+  borderRadius: 2,
   modal: {
     width: '1000px',
   },
@@ -28,14 +29,14 @@ const CoreModal: React.SFC<ModalProps> = ({
     center={true}
     styles={{
       overlay: {
-        backgroundColor: 'rgba(0,0,0,0.4)',
+        backgroundColor: 'rgba(0, 0, 0, 0.15)',
       },
       modal: {
-        backgroundColor: colors.PRIMARY_GRAY,
-        width: 600,
+        backgroundColor: colors.WHITE,
+        width: 800,
       },
       closeIcon: {
-        fill: 'rgba(255,255,255,0.5)',
+        fill: 'rgba(0, 0, 0, 0.3)',
       },
     }}
   >
