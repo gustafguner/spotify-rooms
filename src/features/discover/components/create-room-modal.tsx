@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import { Formik } from 'formik';
 import CoreModal from 'src/components/CoreModal';
-import { TextInputModal } from 'src/components/input';
+import { ModalTextInput } from 'src/components/input';
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
@@ -44,6 +44,13 @@ const FormContainer = styled('div')({
   position: 'relative',
 });
 
+const Form = styled('form')({
+  width: '100%',
+  ModalTextInput: {
+    marginBottom: 10,
+  },
+});
+
 const TitleContainer = styled('div')({
   width: '100%',
   height: '100%',
@@ -60,6 +67,21 @@ const Title = styled('h1')({
   fontSize: 56,
   lineHeight: '56px',
   textAlign: 'left',
+});
+
+const Headings = styled('div')({
+  marginBottom: 20,
+});
+
+const FormTitle = styled(ModalSubtitle)({
+  marginBottom: 10,
+});
+
+const TextInput = styled(ModalTextInput)({
+  marginBottom: 20,
+  ':last-child': {
+    marginBottom: 0,
+  },
 });
 
 const modalStyles = {
@@ -80,22 +102,21 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
     <Modal isOpen={isOpen} close={close} styles={modalStyles}>
       <Container>
         <FormContainer>
-          <ModalSubtitle>Create a room</ModalSubtitle>
-          <ModalParagraph>Create your own room</ModalParagraph>
-
           <CurveSvg viewBox="0 0 300 768">
             <path d="M63.5,0H0v768h168.2C216.5,538.1,57,583.4,57,449c0-95,136-143.6,136-288C193,99.1,138.9,45.2,63.5,0z" />
           </CurveSvg>
+
+          <Headings>
+            <FormTitle>Create a room</FormTitle>
+            <ModalParagraph>Customize your room as you wish</ModalParagraph>
+          </Headings>
+
           <Formik
-            initialValues={{ email: '', password: '' }}
+            initialValues={{ name: '', description: '' }}
             validate={(values) => {
               const errors: any = {};
-              if (!values.email) {
-                errors.email = 'Required';
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = 'Invalid email address';
+              if (!values.name) {
+                errors.name = 'Required';
               }
               return errors;
             }}
@@ -115,29 +136,36 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
               handleSubmit,
               isSubmitting,
             }) => (
-              <form onSubmit={handleSubmit}>
-                <TextInputModal
-                  type="email"
-                  name="email"
+              <Form onSubmit={handleSubmit}>
+                <TextInput
+                  type="text"
+                  name="name"
+                  placeholder="Name"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.email}
+                  value={values.name}
+                  autoComplete="off"
                 />
-                {errors.email && touched.email && errors.email}
-                <TextInputModal
-                  type="password"
-                  name="password"
+                {errors.name && touched.name && errors.name}
+                <TextInput
+                  type="text"
+                  name="description"
+                  placeholder="Description"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.password}
+                  value={values.description}
+                  autoComplete="off"
                 />
-                {errors.password && touched.password && errors.password}
-                <button type="submit" disabled={isSubmitting}>
-                  Submit
-                </button>
-              </form>
+                {errors.description &&
+                  touched.description &&
+                  errors.description}
+                <Button type="submit" disabled={isSubmitting}>
+                  Create
+                </Button>
+              </Form>
             )}
           </Formik>
+          {/*
           <Mutation mutation={CREATE_ROOM_MUTATION}>
             {(mutate) => (
               <>
@@ -157,6 +185,7 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
               </>
             )}
           </Mutation>
+                */}
         </FormContainer>
 
         <TitleContainer>
