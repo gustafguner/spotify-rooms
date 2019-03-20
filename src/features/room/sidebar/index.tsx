@@ -96,8 +96,8 @@ const TrackInfo = styled.div`
   display: flex;
   justify-content: center;
   flex-flow: column;
-  margin-left: 12;
-  margin-right: 12;
+  margin-left: 12px;
+  margin-right: 12px;
 `;
 
 const TrackName = styled.div`

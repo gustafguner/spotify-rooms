@@ -79,7 +79,7 @@ const TrackName = styled.a`
 const TrackArtists = styled.div`
   width: 100%;
   font-size: 13px;
-  fontweight: 300;
+  font-weight: 300;
   color: ${colors.GRAY};
   white-space: nowrap;
   overflow: hidden;

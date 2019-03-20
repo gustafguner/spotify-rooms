@@ -81,7 +81,7 @@ const Container = styled.div`
   bottom: 0;
   width: 100%;
   background: colors.PRIMARY_GRAY;
-  height: 90;
+  height: 90px;
   transition: transform 0.15s ease;
   transform: translateY(
     ${({ toggled }: ContainerProps) => (toggled ? 90 : 0)}px

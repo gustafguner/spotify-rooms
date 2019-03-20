@@ -42,7 +42,7 @@ const Spin = keyframes`
 `;
 
 const SpinRule = css`
-  ${Spin} 1.8s linear infinite;
+  ${Spin} 1.8s infinite linear;
 `;
 
 const CoverImageWrapper = styled.div`
@@ -133,11 +133,13 @@ const MetaInfoContainer = styled.div`
     height: 100%;
     width: 15px;
     background: linear-gradient(
-      to left; rgba(0;0;0;0) ; ${colors.PRIMARY_GRAY} 40%
+      to left,
+      rgba(0, 0, 0, 0),
+      ${colors.PRIMARY_GRAY} 40%
     );
-    z-ndex: 1;
+    z-index: 1;
   }
-  &:after {
+  &::after {
     position: absolute;
     content: '';
     right: 0;
@@ -145,9 +147,11 @@ const MetaInfoContainer = styled.div`
     height: 100%;
     width: 15px;
     background: linear-gradient(
-      to right; rgba(0;0;0;0) ; ${colors.PRIMARY_GRAY} 40%
+      to right,
+      rgba(0, 0, 0, 0),
+      ${colors.PRIMARY_GRAY} 40%
     );
-    z-ndex: 1;
+    z-index: 1;
   }
 `;
 
