@@ -1,4 +1,4 @@
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { colors } from 'src/styles/colors';
 import { string } from 'prop-types';
 
@@ -8,10 +8,9 @@ export interface SvgProps {
   height?: number | string;
 }
 
-export const Svg = styled('svg')(
-  ({ fill = colors.WHITE, width = 32, height }: SvgProps) => ({
-    fill,
-    width,
-    height: height !== null ? height : width,
-  }),
-);
+export const Svg = styled.svg`
+  fill: ${({ fill = colors.WHITE }: SvgProps) => fill};
+  width: ${({ width = 32 }: SvgProps) => width};
+  height: ${({ width = 32, height }: SvgProps) =>
+    height !== null ? height : width};
+`;

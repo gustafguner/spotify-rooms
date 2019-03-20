@@ -1,36 +1,36 @@
 import { colors } from 'src/styles';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
-const Title = styled('h1')({
-  fontSize: 52,
-  lineHeight: '56px',
-  color: colors.WHITE,
-});
+const Title = styled.h1`
+  font-size: 52px;
+  line-height: 56px;
+  color: ${colors.WHITE};
+`;
 
-const ModalTitle = styled(Title)({
-  color: colors.BLACK,
-});
+const ModalTitle = styled(Title)`
+  color: ${colors.BLACK};
+`;
 
-const Subtitle = styled('h2')({
-  fontSize: 28,
-  lineHeight: '32px',
-  color: colors.WHITE,
-});
+const Subtitle = styled.h2`
+  font-size: 28px;
+  line-height: 32px;
+  color: ${colors.WHITE};
+`;
 
-const ModalSubtitle = styled(Subtitle)({
-  color: colors.PRIMARY_GRAY,
-  fontWeight: 500,
-});
+const ModalSubtitle = styled(Subtitle)`
+  color: ${colors.PRIMARY_GRAY};
+  font-weight: 500;
+`;
 
-const Paragraph = styled('p')({
-  fontSize: 18,
-  lineHeight: '22px',
-  fontWeight: 400,
-});
+const Paragraph = styled.p`
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+`;
 
-const ModalParagraph = styled(Paragraph)({
-  color: colors.GRAY,
-});
+const ModalParagraph = styled(Paragraph)`
+  color: ${colors.GRAY};
+`;
 
 export {
   Title,

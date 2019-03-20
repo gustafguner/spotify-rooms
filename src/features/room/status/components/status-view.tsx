@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { colors } from 'src/styles';
 import Users from './users';
 
@@ -10,23 +10,22 @@ interface Props {
   userLeftSubscribe: () => void;
 }
 
-const Container = styled('div')({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  background: colors.DARK_GRAY,
-  paddingLeft: 25,
-  paddingRight: 25,
-  justifyContent: 'space-between',
-});
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background: ${colors.DARK_GRAY};
+  padding: 0 25px;
+  justify-content: space-between;
+`;
 
-const Name = styled('div')({
-  color: colors.WHITE,
-  fontSize: 16,
-  fontWeight: 600,
-  letterSpacing: 0.2,
-});
+const Name = styled.div`
+  color: ${colors.WHITE};
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+`;
 
 const StatusView: React.SFC<Props> = ({
   room,

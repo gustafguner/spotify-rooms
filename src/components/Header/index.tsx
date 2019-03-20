@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { colors } from 'src/styles';
 import { Button } from 'src/components/buttons';
 import { getSpotifyAuthorizeUrl } from 'src/utils/spotify';
@@ -12,60 +12,57 @@ import { Root } from 'src/Root';
 import { Room } from 'src/features/room';
 import { PlaybackContainer } from '../Playback';
 
-const HeaderWrapper = styled('header')({
-  width: '100%',
-  height: 70,
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  backgroundColor: colors.PRIMARY_GRAY,
-  display: 'flex',
-  justifyContent: 'space-between',
-  boxShadow: '0 3px 7px rgba(0, 0, 0, 0.08)',
-  paddingLeft: 25,
-  paddingRight: 25,
-  alignItems: 'center',
-  zIndex: 1,
-});
+const HeaderWrapper = styled.header`
+  width: 100%;
+  height: 70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: ${colors.PRIMARY_GRAY};
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.08);
+  padding-left: 25px;
+  padding-right: 25px;
+  align-items: center;
+  z-index: 1;
+`;
 
-const HeaderWrapperPadding = styled('div')({
-  paddingBottom: 70,
-});
+const HeaderWrapperPadding = styled.div`
+  padding-bottom: 70px;
+`;
 
-const LogoContainer = styled('div')({
-  width: 160,
-  display: 'flex',
-});
+const LogoContainer = styled.div`
+  width: 160x;
+  display: flex;
+`;
 
-const Logo = styled('img')({
-  width: '100%',
-});
+const Logo = styled.img`
+  width: 100%;
+`;
 
-const SpotifyLoginButton = styled('button')({
-  backgroundColor: colors.GREEN,
-  color: colors.WHITE,
-  textDecoration: 'none',
-  paddingTop: 10,
-  paddingBottom: 10,
-  paddingLeft: 19,
-  paddingRight: 19,
-  borderRadius: 100,
-  display: 'flex',
-  alignItems: 'center',
-  position: 'relative',
-  fontSize: 16,
-  border: 'none',
-  cursor: 'pointer',
+const SpotifyLoginButton = styled.button`
+  background-color: ${colors.GREEN};
+  color: ${colors.WHITE};
+  text-decoration: none;
+  padding: 10px 19px 10px 10px;
+  border-radius: 100px;
+  display: flex;
+  alignitems: center;
+  position: relative;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
   ':hover': {
-    backgroundColor: colors.GREEN,
-  },
-});
+    background-color: ${colors.GREEN};
+  }
+`;
 
-const SpotifyLogoImage = styled('img')({
-  width: 18,
-  height: 18,
-  marginLeft: 7,
-});
+const SpotifyLogoImage = styled.img`
+  width: 18px;
+  height: 18px;
+  margin-left: 7px;
+`;
 
 const Header: React.SFC = () => {
   const { root, setRoot }: any = React.useContext(Root.Context);

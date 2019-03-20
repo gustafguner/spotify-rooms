@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { Query } from 'react-apollo';
-import styled from 'react-emotion';
-import { colors } from 'src/styles';
 import gql from 'graphql-tag';
 import StatusView from './components/status-view';
-import { previous } from 'src/utils/spotify';
 
 const USERS_IN_ROOM = gql`
   query usersInRoom($roomId: ID!) {

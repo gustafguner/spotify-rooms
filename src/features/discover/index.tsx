@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { colors } from 'src/styles';
 import { Button, LargeButton } from 'src/components/buttons';
 import Room from './components/room';
@@ -46,28 +46,28 @@ const MUTATION = gql`
   }
 `;
 
-const Rooms = styled('div')({
-  width: '100%',
-  paddingLeft: 25,
-  paddingRight: 25,
-  display: 'flex',
-  flexFlow: 'row wrap',
-  marginTop: 25,
-  marginLeft: -15,
-  marginRight: -15,
-});
+const Rooms = styled.div`
+  width: 100%;
+  padding-left: 25px;
+  padding-right: 25px;
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 25px;
+  margin-left: -15px;
+  margin-right: -15px;
+`;
 
-const CreateRoomButton = styled(LargeButton)({
-  background: 'linear-gradient(#009FAE, #1ED760)',
-  position: 'fixed',
-  bottom: 25,
-  left: '50%',
-  transform: 'translateX(-50%) scale(1)',
-  transition: 'transform 0.05s ease-in-out',
-  ':active': {
-    transform: `translateX(-50%) scale(0.95)`,
-  },
-});
+const CreateRoomButton = styled(LargeButton)`
+  background: linear-gradient(#009fae, #1ed760);
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+  transition: transform 0.05s ease-in-out;
+  ':active' {
+    transform: translateX(-50%) scale(0.95);
+  }
+`;
 
 const Discover = () => {
   const { root, setRoot }: any = React.useContext(Root.Context);
@@ -86,9 +86,9 @@ const Discover = () => {
         !loading && !error && data ? (
           <>
             <Rooms>
-              {data.rooms.map((room: any) => (
+              {/*data.rooms.map((room: any) => (
                 <Room key={room.id} room={room} />
-              ))}
+              ))*/}
             </Rooms>
 
             <CreateRoomButton

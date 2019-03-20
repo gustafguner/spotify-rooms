@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Modal from 'react-responsive-modal';
 import { colors } from 'src/styles';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 interface ModalStyles {
   overlay?: object;

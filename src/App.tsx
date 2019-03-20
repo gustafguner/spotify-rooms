@@ -1,7 +1,7 @@
 import * as React from 'react';
 import apolloClient from './graphql/client';
 import { ApolloProvider } from 'react-apollo';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { initializeSpotify } from './utils/spotify';
 import { getToken, getUser } from './utils/auth';
@@ -12,9 +12,9 @@ import { Playback } from 'src/components/Playback';
 
 import { Root } from 'src/Root';
 
-const SiteContainer = styled('div')({
-  width: '100%',
-});
+const SiteContainer = styled.div`
+  width: 100%;
+`;
 
 const App: React.SFC = () => {
   initializeSpotify();

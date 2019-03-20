@@ -1,14 +1,15 @@
 import * as React from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { Formik } from 'formik';
 import CoreModal from 'src/components/CoreModal';
-import { ModalTextInput } from 'src/components/input';
+import { ModalTextInput, Checkbox } from 'src/components/input';
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
 import { ModalParagraph, ModalSubtitle } from 'src/components/text';
 import { colors } from 'src/styles';
 import { Svg } from 'src/components/icons';
+import { Spacing } from 'src/components/core';
 
 const CREATE_ROOM_MUTATION = gql`
   mutation createRoom($input: CreateRoomInput!) {
@@ -16,73 +17,62 @@ const CREATE_ROOM_MUTATION = gql`
   }
 `;
 
-const Modal = styled(CoreModal)({});
+const Modal = styled(CoreModal)``;
 
-const Container = styled('div')({
-  display: 'flex',
-  width: '100%',
-  height: '100%',
-  flexFlow: 'row',
-});
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-flow: row;
+`;
 
-const CurveSvg = styled(Svg)({
-  position: 'absolute',
-  width: 195,
-  top: 0,
-  right: -195,
-  bottom: 0,
-  height: '100%',
-  fill: colors.ALMOST_WHITE,
-});
+const CurveSvg = styled(Svg)`
+  position: absolute;
+  width: 195px;
+  top: 0;
+  right: -195px;
+  bottom: 0;
+  height: 100%;
+  fill: ${colors.ALMOST_WHITE};
+`;
 
-const FormContainer = styled('div')({
-  width: 340,
-  flexShrink: 0,
-  padding: 25,
-  height: '100%',
-  background: colors.ALMOST_WHITE,
-  position: 'relative',
-});
+const FormContainer = styled.div`
+  width: 340px;
+  flex-shrink: 0;
+  padding: 25px;
+  height: 100%;
+  background: ${colors.ALMOST_WHITE};
+  position: relative;
+`;
 
-const Form = styled('form')({
-  width: '100%',
-  ModalTextInput: {
-    marginBottom: 10,
-  },
-});
+const Form = styled.form`
+  width: 100%;
+  ${ModalTextInput} {
+    margin-bottom: 10px;
+  }
+`;
 
-const TitleContainer = styled('div')({
-  width: '100%',
-  height: '100%',
-  marginLeft: 110,
-  paddingLeft: 25,
-  paddingRight: 25,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1,
-});
+const TitleContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  margin-left: 110px;
+  padding-left: 25px;
+  padding-right: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+`;
 
-const Title = styled('h1')({
-  fontSize: 56,
-  lineHeight: '56px',
-  textAlign: 'left',
-});
+const Title = styled.h1`
+  font-size: 56px;
+  line-height: 56px;
+  text-align: left;
+`;
 
-const Headings = styled('div')({
-  marginBottom: 20,
-});
-
-const FormTitle = styled(ModalSubtitle)({
-  marginBottom: 10,
-});
-
-const TextInput = styled(ModalTextInput)({
-  marginBottom: 20,
-  ':last-child': {
-    marginBottom: 0,
-  },
-});
+const SubmitButton = styled(Button)`
+  background: ${colors.GREEN};
+`;
 
 const modalStyles = {
   modal: {
@@ -106,13 +96,17 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
             <path d="M63.5,0H0v768h168.2C216.5,538.1,57,583.4,57,449c0-95,136-143.6,136-288C193,99.1,138.9,45.2,63.5,0z" />
           </CurveSvg>
 
-          <Headings>
-            <FormTitle>Create a room</FormTitle>
-            <ModalParagraph>Customize your room as you wish</ModalParagraph>
-          </Headings>
-
+          <ModalSubtitle>Create a room</ModalSubtitle>
+          <Spacing height={10} />
+          <ModalParagraph>Customize your room as you wish</ModalParagraph>
+          <Spacing height={20} />
           <Formik
-            initialValues={{ name: '', description: '' }}
+            initialValues={{
+              name: '',
+              description: '',
+              genre: '',
+              private: false,
+            }}
             validate={(values) => {
               const errors: any = {};
               if (!values.name) {
@@ -137,7 +131,7 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
               isSubmitting,
             }) => (
               <Form onSubmit={handleSubmit}>
-                <TextInput
+                <ModalTextInput
                   type="text"
                   name="name"
                   placeholder="Name"
@@ -147,7 +141,10 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                   autoComplete="off"
                 />
                 {errors.name && touched.name && errors.name}
-                <TextInput
+
+                <Spacing height={20} />
+
+                <ModalTextInput
                   type="text"
                   name="description"
                   placeholder="Description"
@@ -159,9 +156,33 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                 {errors.description &&
                   touched.description &&
                   errors.description}
-                <Button type="submit" disabled={isSubmitting}>
+
+                <Spacing height={20} />
+
+                <ModalTextInput
+                  type="text"
+                  name="genre"
+                  placeholder="Genre"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.genre}
+                  autoComplete="off"
+                />
+                {errors.genre && touched.genre && errors.genre}
+
+                <Spacing height={20} />
+
+                <Checkbox
+                  checked={values.private}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+
+                <Spacing height={20} />
+
+                <SubmitButton type="submit" disabled={isSubmitting}>
                   Create
-                </Button>
+                </SubmitButton>
               </Form>
             )}
           </Formik>

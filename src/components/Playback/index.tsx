@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { play } from 'src/utils/spotify';
 import { Root } from 'src/Root';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { colors } from 'src/styles';
 import { transform } from 'async';
 
@@ -75,16 +75,18 @@ interface ContainerProps {
   toggled: boolean;
 }
 
-const Container = styled('div')(({ toggled }: ContainerProps) => ({
-  position: 'fixed',
-  left: 0,
-  bottom: 0,
-  width: '100%',
-  background: colors.PRIMARY_GRAY,
-  height: 90,
-  transition: 'transform 0.15s ease',
-  transform: `translateY(${toggled ? 90 : 0}px)`,
-}));
+const Container = styled.div`
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: colors.PRIMARY_GRAY;
+  height: 90;
+  transition: transform 0.15s ease;
+  transform: translateY(
+    ${({ toggled }: ContainerProps) => (toggled ? 90 : 0)}px
+  );
+`;
 
 const Subscription: React.SFC<SubscriptionProps> = ({ subscription }) => {
   const { playback, setPlayback } = React.useContext(PlaybackContainer.Context);

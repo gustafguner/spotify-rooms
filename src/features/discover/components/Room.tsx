@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link as ReactLink } from 'react-router-dom';
-import styled, { keyframes } from 'react-emotion';
+import styled, { keyframes } from 'styled-components';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
 import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
@@ -9,182 +9,191 @@ interface Props {
   room: any;
 }
 
-const Container = styled('div')({
-  width: 260,
-  flexBasis: 260,
-  flexShrink: 0,
-  height: 260,
-  marginLeft: 15,
-  marginRight: 15,
-  position: 'relative',
-  borderRadius: 4,
-  overflow: 'hidden',
-  boxShadow: '0 0 13px rgba(0,0,0,0.2)',
-  transition: 'transform 0.15s ease-in-out',
-  '&:hover': {
-    transform: 'scale(1.022)',
-  },
-});
+const Container = styled.div`
+  width: 260px;
+  flex-basis: 260px;
+  flex-shrink: 0;
+  height: 260px;
+  margin-left: 15px;
+  margin-right: 15px;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 13px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease-in-out;
+  &:hover {
+    transform: scale(1.022);
+  }
+`;
 
-const Link = styled(ReactLink)({
-  textDecoration: 'none',
-  position: 'relative',
-  zIndex: 1,
-});
+const Link = styled(ReactLink)`
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+`;
 
-const Spin = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(360deg)' },
-});
+const Spin = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
 
-const CoverImageWrapper = styled('div')({
-  width: 120,
-  flexBasis: 120,
-  flexShrink: 0,
-  height: 120,
-  boxShadow: '0 0 15px rgba(0, 0, 0, 0.5)',
-  borderRadius: '50%',
-  overflow: 'hidden',
-  animation: `${Spin} 1.8s linear infinite`,
-  position: 'relative',
-  zIndex: 1,
-});
+const CoverImageWrapper = styled.div`
+  width: 120px;
+  flex-basis: 120px;
+  flex-shrink: 0;
+  height: 120px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: ${Spin} 1.8s linear infinite;
+  position: relative;
+  z-index: 1;
+`;
 
-const CoverImage = styled('img')({
-  float: 'left',
-  width: '100%',
-  height: '100%',
-});
+const CoverImage = styled.img`
+  float: left;
+  width: 100%;
+  height: 100%;
+`;
 
-const DefaultCoverImage = styled('div')({
-  width: '100%',
-  height: '100%',
-  backgroundColor: colors.PRIMARY_GRAY,
-});
+const DefaultCoverImage = styled.div`
+  width: 100%;
+  height: 100%;
+  background: ${colors.PRIMARY_GRAY};
+`;
 
-const BackgroundWrapper = styled('div')({
-  width: '100%',
-  height: '100%',
-});
+const BackgroundWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
-const BackgroundBlur = styled(Blur)({
-  width: '100%',
-  height: '100%',
-  position: 'absolute',
-  left: 0,
-  top: 0,
-});
+const BackgroundBlur = styled(Blur)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
 
-const DefaultBackground = styled('div')({
-  width: '100%',
-  height: '100%',
-  position: 'absolute',
-  left: 0,
-  top: 0,
-  background: `linear-gradient(${colors.PRIMARY_GRAY}, rgba(0,0,0,0.8))`,
-});
+const DefaultBackground = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(${colors.PRIMARY_GRAY}, rgba(0, 0, 0, 0.8));
+`;
 
-const DarkFilter = styled('div')({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.36)',
-  backgroundImage:
-    'linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0.10))',
-});
+const DarkFilter = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.36);
+  background-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.1)
+  );
+`;
 
-const CoverContainer = styled('div')({
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  position: 'relative',
-  height: 160,
-});
+const CoverContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 160px;
+`;
 
-const MetaInfoContainer = styled('div')({
-  width: '100%',
-  height: 100,
-  paddingTop: 15,
-  paddingBottom: 15,
-  position: 'relative',
-  display: 'flex',
-  justifyContent: 'center',
-  flexFlow: 'column',
-  backgroundColor: colors.PRIMARY_GRAY,
-  '&:before': {
-    position: 'absolute',
-    content: '""',
-    left: 0,
-    bottom: 0,
-    height: '100%',
-    width: 15,
-    backgroundImage: `linear-gradient(to left, rgba(0,0,0,0), ${
-      colors.PRIMARY_GRAY
-    } 40%)`,
-    zIndex: 1,
-  },
-  '&:after': {
-    position: 'absolute',
-    content: '""',
-    right: 0,
-    bottom: 0,
-    height: '100%',
-    width: 15,
-    backgroundImage: `linear-gradient(to right, rgba(0,0,0,0), ${
-      colors.PRIMARY_GRAY
-    } 40%)`,
-    zIndex: 1,
-  },
-});
+const MetaInfoContainer = styled.div`
+  width: 100%;
+  height: 100px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  background: ${colors.PRIMARY_GRAY};
+  &:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 15px;
+    background: linear-gradient(
+      to left; rgba(0;0;0;0) ; ${colors.PRIMARY_GRAY} 40%
+    );
+    z-ndex: 1;
+  }
+  &:after {
+    position: absolute;
+    content: '';
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 15px;
+    background: linear-gradient(
+      to right; rgba(0;0;0;0) ; ${colors.PRIMARY_GRAY} 40%
+    );
+    z-ndex: 1;
+  }
+`;
 
-const Name = styled('div')({
-  textDecoration: 'none',
-  color: colors.WHITE,
-  textAlign: 'center',
-  fontSize: 18,
-  fontWeight: 600,
-  flexBasis: 26,
-  flexShrink: 0,
-  flexGrow: 0,
-  marginBottom: 5,
-  width: '100%',
-});
+const Name = styled.div`
+  width: 100%;
+  text-decoration: none;
+  color: ${colors.WHITE};
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  flex-basis: 26px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-bottom: 5px;
+`;
 
-const TrackContainer = styled('div')({
-  flexBasis: 28,
-  flexShrink: 0,
-  flexGrow: 0,
-  width: '100%',
-  position: 'relative',
-});
+const TrackContainer = styled.div`
+  width: 100%;
+  position: relative;
+  flex-basis: 28px;
+  flex-shrink: 0;
+  flex-grow: 0;
+`;
 
-const Roll = (parentWidth: number | null) =>
-  keyframes({
-    '0%': { transform: 'translateX(15px)' },
-    '100%': { transform: `translateX(calc(${parentWidth}px - 100% - 15px))` },
-  });
+const Roll = (parentWidth: number | null) => keyframes`
+  0% {
+    transform: translateX(15px);
+  }
+  100% {
+    transform: translateX(calc(${parentWidth}px - 100% - 15px));
+  }
+`;
 
 interface TrackProps {
   parentWidth: number | null;
 }
 
-const Track = styled('div')(({ parentWidth = null }: TrackProps) => ({
-  color: 'rgba(255,255,255,0.5)',
-  whiteSpace: 'nowrap',
-  position: 'absolute',
-  fontSize: 15,
-  lineHeight: '26px',
-  fontWeight: 300,
-  animation: `${Roll(parentWidth)} 5s infinite alternate ease-in-out`,
-}));
+const Track = styled.div`
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  position: absolute;
+  font-size: 15px;
+  line-height: 26px;
+  font-weight: 300;
+  animation: ${({ parentWidth }: TrackProps) => Roll(parentWidth)} 5s infinite
+    alternate ease-in-out;
+`;
 
 const Room: React.SFC<Props> = ({ room }) => {
   const isTrack = room.playback && room.playback.id !== null;
   const trackRef: any = React.useRef(null);
-  console.log(trackRef);
   return (
     <Container>
       <Link to={`/room/${room.id}`}>
@@ -228,7 +237,7 @@ const Room: React.SFC<Props> = ({ room }) => {
         </CoverContainer>
         <MetaInfoContainer>
           <Name>{room.name}</Name>
-          <TrackContainer innerRef={trackRef}>
+          <TrackContainer ref={trackRef}>
             <Track
               parentWidth={
                 trackRef.current !== null ? trackRef.current.offsetWidth : null

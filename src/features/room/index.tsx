@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Query, Mutation } from 'react-apollo';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import gql from 'graphql-tag';
 import Loader from 'src/components/Loader';
 
@@ -78,42 +78,42 @@ const LEAVE_ROOM = gql`
   }
 `;
 
-const Container = styled('div')({
-  display: 'flex',
-});
+const Container = styled.div`
+  display: flex;
+`;
 
-const Content = styled('div')({
-  display: 'flex',
-  width: '100%',
-  flexFlow: 'column',
-});
+const Content = styled.div`
+  display: flex;
+  width: 100%;
+  flex-flow: column;
+`;
 
-const Top = styled('div')({
-  width: '100%',
-  flexBasis: 230,
-  flexShrink: 0,
-  flexGrow: 0,
-  position: 'relative',
-});
+const Top = styled.div`
+  width: 100%;
+  flex-basis: 230px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  position: relative;
+`;
 
-const Bottom = styled('div')({
-  width: '100%',
-  flexBasis: '100%',
-  display: 'flex',
-  flexFlow: 'column',
-});
+const Bottom = styled.div`
+  width: 100%;
+  flex-basis: 100%;
+  display: flex;
+  flex-flow: column;
+`;
 
-const StatusContainer = styled('div')({
-  width: '100%',
-  flexBasis: 66,
-  flexShrink: 0,
-  flexGrow: 0,
-});
+const StatusContainer = styled.div`
+  width: 100%;
+  flex-basis: 66px;
+  flex-shrink: 0;
+  flex-grow: 0;
+`;
 
-const ChatContainer = styled('div')({
-  width: '100%',
-  flexBasis: '100%',
-});
+const ChatContainer = styled.div`
+  width: 100%;
+  flex-basis: 100%;
+`;
 
 interface SetRoomProps {
   room: object;

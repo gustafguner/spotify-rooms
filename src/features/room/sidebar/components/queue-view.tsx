@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -14,124 +14,125 @@ interface Props {
   removeSubscribe: () => void;
 }
 
-const Container = styled('div')({
-  width: '100%',
-  flexBasis: '100%',
-  height: '100%',
-  display: 'flex',
-  flexFlow: 'column',
-  padding: 15,
-  overflowY: 'scroll',
-});
+const Container = styled.div`
+  width: 100%;
+  flex-basis: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  padding: 15px;
+  overflow-y: scroll;
+`;
 
-const Item = styled('div')({
-  width: '100%',
-  flexBasis: 80,
-  flexShrink: 0,
-  padding: 8,
-  backgroundColor: colors.PRIMARY_GRAY,
-  display: 'flex',
-  flexFlow: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginBottom: 15,
-  ':last-child': {
-    marginBottom: 0,
-  },
-});
+const Item = styled.div`
+  width: 100%;
+  flex-basis: 80px;
+  flex-shrink: 0;
+  padding: 8px;
+  background: ${colors.PRIMARY_GRAY};
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
 
-const CoverImageWrapper = styled('div')({
-  width: 65,
-  flexBasis: 65,
-  flexShrink: 0,
-  height: 65,
-});
+const CoverImageWrapper = styled.div`
+  width: 65px;
+  flex-basis: 65px;
+  flex-shrink: 0;
+  height: 65px;
+`;
 
-const CoverImage = styled('img')({
-  width: '100%',
-  height: '100%',
-  float: 'left',
-});
+const CoverImage = styled.img`
+  width: 100%;
+  height: 100%;
+  float: left;
+`;
 
-const TrackInfo = styled('div')({
-  marginLeft: 15,
-  marginRight: 15,
-  width: 'calc(100% - 65px - 40px - 30px)',
-  display: 'flex',
-  flexDirection: 'column',
-  flexFlow: 'row wrap',
-});
+const TrackInfo = styled.div`
+  margin-left: 15px;
+  margin-right: 15px;
+  width: calc(100% - 65px - 40px - 30px);
+  display: flex;
+  flex-direction: column;
+  flex-flow: row wrap;
+`;
 
-const TrackNameContainer = styled('div')({
-  width: '100%',
-  fontSize: 15,
-  fontWeight: 700,
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-});
+const TrackNameContainer = styled.div`
+  width: 100%;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
-const TrackName = styled('a')({
-  color: colors.WHITE,
-  textDecoration: 'none',
-});
+const TrackName = styled.a`
+  color: ${colors.WHITE};
+  text-decoration: none;
+`;
 
-const TrackArtists = styled('div')({
-  width: '100%',
-  fontSize: 13,
-  fontWeight: 300,
-  color: colors.GRAY,
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-});
+const TrackArtists = styled.div`
+  width: 100%;
+  font-size: 13px;
+  fontweight: 300;
+  color: ${colors.GRAY};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
-const TrackVotes = styled('div')({
-  flexBasis: 40,
-  flexShrink: 0,
-  flexGrow: 0,
-  display: 'flex',
-  alignItems: 'center',
-});
+const TrackVotes = styled.div`
+  flex-basis: 40px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+`;
 
-const VoteButton = styled('button')({
-  outline: 'none',
-  border: 'none',
-  background: 'none',
-  fontSize: 20,
-  width: 'auto',
-  cursor: 'pointer',
-  textAlign: 'center',
-  flexBasis: 22,
-  padding: 0,
-});
+const VoteButton = styled.button`
+  outline: none;
+  border: none;
+  background: none;
+  font-size: 20px;
+  width: auto;
+  cursor: pointer;
+  text-align: center;
+  flex-basis: 22px;
+  padding: 0;
+`;
 
 interface VoteCountProps {
   voted?: boolean;
 }
 
-const VoteCount = styled('div')(({ voted = false }: VoteCountProps) => ({
-  textAlign: 'center',
-  color: voted ? colors.WHITE : 'rgba(255,255,255,0.5)',
-  fontSize: 15,
-  marginLeft: 3,
-}));
+const VoteCount = styled.div`
+  text-align: center;
+  color: ${({ voted }: VoteCountProps) =>
+    voted ? colors.WHITE : 'rgba(255,255,255,0.5)'};
+  font-size: 15px;
+  margin-left: 3px;
+`;
 
-const EmptyQueueContainer = styled('div')({
-  width: '100%',
-  height: 'calc(100% - 80px)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  position: 'absolute',
-  top: 0,
-  left: 0,
-});
+const EmptyQueueContainer = styled.div`
+  width: 100%;
+  height: calc(100% - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
 
-const EmptyQueueText = styled('p')({
-  color: colors.GRAY,
-  textAlign: 'center',
-});
+const EmptyQueueText = styled.p`
+  color: ${colors.GRAY};
+  text-align: center;
+`;
 
 const VOTE_FOR_TRACK = gql`
   mutation voteForTrack($input: VoteForTrackInput!) {

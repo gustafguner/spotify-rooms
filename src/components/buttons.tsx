@@ -1,33 +1,30 @@
 import { colors } from 'src/styles';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
-const Button = styled('button')({
-  backgroundColor: colors.GRAY,
-  color: colors.WHITE,
-  textDecoration: 'none',
-  paddingTop: 10,
-  paddingBottom: 10,
-  paddingLeft: 19,
-  paddingRight: 19,
-  display: 'flex',
-  alignItems: 'center',
-  position: 'relative',
-  border: 'none',
-  outline: 'none',
-  fontSize: 16,
-  cursor: 'pointer',
-  borderRadius: 40,
+const Button = styled.button`
+  background-color: colors.GRAY;
+  color: ${colors.WHITE};
+  text-decoration: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 19px;
+  padding-right: 19px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 40px;
   ':focus': {
-    outline: 'none',
-  },
-});
+    outline: none;
+  }
+`;
 
-const LargeButton = styled(Button)({
-  paddingTop: 16,
-  paddingBottom: 16,
-  paddingLeft: 30,
-  paddingRight: 30,
-  fontSize: 18,
-});
+const LargeButton = styled(Button)`
+  padding: 16px 30px 16px 30px;
+  font-size: 18px;
+`;
 
 export { Button, LargeButton };
