@@ -2,7 +2,7 @@ import { colors } from 'src/styles';
 import styled from 'styled-components';
 
 const Button = styled.button`
-  background-color: colors.GRAY;
+  background-color: ${colors.GRAY};
   color: ${colors.WHITE};
   text-decoration: none;
   padding-top: 10px;

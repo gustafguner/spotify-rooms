@@ -33,7 +33,7 @@ const HeaderWrapperPadding = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  width: 160x;
+  width: 160px;
   display: flex;
 `;
 
