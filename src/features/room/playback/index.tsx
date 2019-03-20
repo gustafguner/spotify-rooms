@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
 import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
@@ -136,13 +136,18 @@ interface ProgressBarFillProps {
 }
 
 const ProgressGrow = (width: number) => keyframes`
-  0%: {
+  0% {
     width: ${width}%;
     content: "${uuid()}";
   }
-  100%: { 
+  100% { 
     width: 100%;
   }
+`;
+
+const ProgressBarAnimationRule = (position: number, duration: number) => css`
+  ${ProgressGrow((position / duration) * 100)} ${duration -
+    position}ms linear forwards;
 `;
 
 const ProgressBarFill = styled.div`
@@ -151,8 +156,7 @@ const ProgressBarFill = styled.div`
   height: 100%;
   background: rgba(255, 255, 255, 0.24);
   animation: ${({ position, duration }: ProgressBarFillProps) =>
-    `${ProgressGrow((position / duration) * 100)} ${duration -
-      position}ms linear forwards`};
+    ProgressBarAnimationRule(position, duration)};
 `;
 
 const TrackInfo = styled.div`

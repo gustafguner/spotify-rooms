@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link as ReactLink } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { colors } from 'src/styles';
 import Blur from 'react-blur';
 import * as ReactCSSTransitionReplace from 'react-css-transition-replace';
@@ -41,6 +41,10 @@ const Spin = keyframes`
   }
 `;
 
+const SpinRule = css`
+  ${Spin} 1.8s linear infinite;
+`;
+
 const CoverImageWrapper = styled.div`
   width: 120px;
   flex-basis: 120px;
@@ -48,7 +52,8 @@ const CoverImageWrapper = styled.div`
   height: 120px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  animation: ${Spin} 1.8s linear infinite;
+  border-radius: 50%;
+  animation: ${SpinRule}
   position: relative;
   z-index: 1;
 `;
@@ -176,6 +181,10 @@ const Roll = (parentWidth: number | null) => keyframes`
   }
 `;
 
+const RollAnimationRule = (parentWidth: number | null) => css`
+  ${Roll(parentWidth)} 5s infinite alternate ease-in-out;
+`;
+
 interface TrackProps {
   parentWidth: number | null;
 }
@@ -187,8 +196,7 @@ const Track = styled.div`
   font-size: 15px;
   line-height: 26px;
   font-weight: 300;
-  animation: ${({ parentWidth }: TrackProps) => Roll(parentWidth)} 5s infinite
-    alternate ease-in-out;
+  animation: ${({ parentWidth }: TrackProps) => RollAnimationRule(parentWidth)};
 `;
 
 const Room: React.SFC<Props> = ({ room }) => {

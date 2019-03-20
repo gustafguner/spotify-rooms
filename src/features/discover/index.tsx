@@ -86,9 +86,9 @@ const Discover = () => {
         !loading && !error && data ? (
           <>
             <Rooms>
-              {/*data.rooms.map((room: any) => (
+              {data.rooms.map((room: any) => (
                 <Room key={room.id} room={room} />
-              ))*/}
+              ))}
             </Rooms>
 
             <CreateRoomButton
