@@ -8,4 +8,5 @@ export const colors = {
   DARK_GRAY: '#181818',
   ALMOST_BLACK: '#151515',
   GRAY: '#999999',
+  GRAY_OFF: '#757575',
 };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import CoreModal from 'src/components/CoreModal';
-import { ModalTextInput, Checkbox } from 'src/components/input';
+import { Checkbox, ModalTextInput } from 'src/components/input';
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
@@ -37,6 +37,8 @@ const CurveSvg = styled(Svg)`
 `;
 
 const FormContainer = styled.div`
+  display: flex;
+  flex-flow: column;
   width: 340px;
   flex-shrink: 0;
   padding: 25px;
@@ -46,10 +48,11 @@ const FormContainer = styled.div`
 `;
 
 const Form = styled.form`
+  display: flex;
   width: 100%;
-  ${ModalTextInput} {
-    margin-bottom: 10px;
-  }
+  height: 100%;
+  flex-flow: column;
+  justify-content: space-between;
 `;
 
 const TitleContainer = styled.div`
@@ -68,6 +71,12 @@ const Title = styled.h1`
   font-size: 56px;
   line-height: 56px;
   text-align: left;
+`;
+
+const Fields = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 `;
 
 const SubmitButton = styled(Button)`
@@ -99,7 +108,8 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
           <ModalSubtitle>Create a room</ModalSubtitle>
           <Spacing height={10} />
           <ModalParagraph>Customize your room as you wish</ModalParagraph>
-          <Spacing height={20} />
+          <Spacing height={25} />
+
           <Formik
             initialValues={{
               name: '',
@@ -131,58 +141,62 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
               isSubmitting,
             }) => (
               <Form onSubmit={handleSubmit}>
-                <ModalTextInput
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.name}
-                  autoComplete="off"
-                />
-                {errors.name && touched.name && errors.name}
+                <Fields>
+                  <ModalTextInput
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                    autoComplete="off"
+                  />
+                  {errors.name && touched.name && errors.name}
 
-                <Spacing height={20} />
+                  <Spacing height={18} />
 
-                <ModalTextInput
-                  type="text"
-                  name="description"
-                  placeholder="Description"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.description}
-                  autoComplete="off"
-                />
-                {errors.description &&
-                  touched.description &&
-                  errors.description}
+                  <ModalTextInput
+                    type="text"
+                    name="description"
+                    placeholder="Description"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.description}
+                    autoComplete="off"
+                  />
+                  {errors.description &&
+                    touched.description &&
+                    errors.description}
 
-                <Spacing height={20} />
+                  <Spacing height={18} />
 
-                <ModalTextInput
-                  type="text"
-                  name="genre"
-                  placeholder="Genre"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.genre}
-                  autoComplete="off"
-                />
-                {errors.genre && touched.genre && errors.genre}
+                  <ModalTextInput
+                    type="text"
+                    name="genre"
+                    placeholder="Genre"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.genre}
+                    autoComplete="off"
+                  />
+                  {errors.genre && touched.genre && errors.genre}
 
-                <Spacing height={20} />
+                  <Spacing height={25} />
 
-                <Checkbox
-                  checked={values.private}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
+                  <Checkbox
+                    name="private"
+                    checked={values.private}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    label="Private"
+                  />
+                </Fields>
 
-                <Spacing height={20} />
-
-                <SubmitButton type="submit" disabled={isSubmitting}>
-                  Create
-                </SubmitButton>
+                <div>
+                  <SubmitButton type="submit" disabled={isSubmitting}>
+                    Create
+                  </SubmitButton>
+                </div>
               </Form>
             )}
           </Formik>
