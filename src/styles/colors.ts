@@ -9,4 +9,5 @@ export const colors = {
   ALMOST_BLACK: '#151515',
   GRAY: '#999999',
   GRAY_OFF: '#757575',
+  RED: '#E84118',
 };

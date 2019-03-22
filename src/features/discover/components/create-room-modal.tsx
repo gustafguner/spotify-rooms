@@ -2,7 +2,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import CoreModal from 'src/components/CoreModal';
-import { Checkbox, ModalTextInput } from 'src/components/input';
+import {
+  Checkbox,
+  ModalTextInput,
+  TextInputValidationError,
+  TextInputInformation,
+} from 'src/components/input';
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
@@ -151,7 +156,11 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                     value={values.name}
                     autoComplete="off"
                   />
-                  {errors.name && touched.name && errors.name}
+                  {errors.name && touched.name && (
+                    <TextInputValidationError>
+                      {errors.name}
+                    </TextInputValidationError>
+                  )}
 
                   <Spacing height={18} />
 

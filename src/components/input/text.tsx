@@ -17,4 +17,22 @@ const ModalTextInput = styled(TextInput)`
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
 `;
 
-export { TextInput, ModalTextInput };
+const TextInputValidationError = styled.div`
+  position: relative;
+  padding: 10px 20px 0 20px;
+  color: ${colors.RED};
+  font-size: 14px;
+`;
+
+const TextInputInformation = styled.div`
+  padding: 10px 20px 0 20px;
+  color: ${colors.GRAY};
+  font-size: 14px;
+`;
+
+export {
+  TextInput,
+  ModalTextInput,
+  TextInputValidationError,
+  TextInputInformation,
+};

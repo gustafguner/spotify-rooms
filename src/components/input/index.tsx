@@ -1,4 +1,15 @@
-import { TextInput, ModalTextInput } from './text';
+import {
+  TextInput,
+  ModalTextInput,
+  TextInputValidationError,
+  TextInputInformation,
+} from './text';
 import { Checkbox } from './checkbox';
 
-export { TextInput, ModalTextInput, Checkbox };
+export {
+  TextInput,
+  ModalTextInput,
+  TextInputValidationError,
+  TextInputInformation,
+  Checkbox,
+};
