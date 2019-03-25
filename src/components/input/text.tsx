@@ -25,7 +25,7 @@ const TextInputValidationError = styled.div`
 `;
 
 const TextInputInformation = styled.div`
-  padding: 10px 20px 0 20px;
+  padding: 10px 20px 0 0;
   color: ${colors.GRAY};
   font-size: 14px;
 `;

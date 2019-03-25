@@ -1,12 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import CoreModal from 'src/components/CoreModal';
 import {
   Checkbox,
   ModalTextInput,
   TextInputValidationError,
   TextInputInformation,
+  Slider,
 } from 'src/components/input';
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
@@ -119,7 +120,7 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
             initialValues={{
               name: '',
               description: '',
-              genre: '',
+              mode: 'collaborative',
               private: false,
             }}
             validate={(values) => {
@@ -179,16 +180,16 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
 
                   <Spacing height={18} />
 
-                  <ModalTextInput
-                    type="text"
-                    name="genre"
-                    placeholder="Genre"
+                  <Slider
+                    name="mode"
+                    selected={values.mode}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.genre}
-                    autoComplete="off"
+                    fields={[
+                      { value: 'collaborative', label: 'Collaborative' },
+                      { value: 'dj', label: 'DJ' },
+                    ]}
                   />
-                  {errors.genre && touched.genre && errors.genre}
 
                   <Spacing height={25} />
 
@@ -199,6 +200,10 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                     onBlur={handleBlur}
                     label="Private"
                   />
+
+                  <TextInputInformation>
+                    A private room can only be accessed through a link.
+                  </TextInputInformation>
                 </Fields>
 
                 <div>
