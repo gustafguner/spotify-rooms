@@ -3,6 +3,7 @@ import { colors } from 'src/styles';
 import styled from 'styled-components';
 import { InputProps } from './types';
 import { v4 as uuid } from 'uuid';
+import { Svg } from '../icons';
 
 interface KnobProps {
   left: number;
@@ -46,9 +47,23 @@ const SliderContainer = styled.div`
     position: relative;
     line-height: 40px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ${Svg} {
+      overflow: visible;
+      fill: ${colors.GRAY};
+      stroke-width: 0.5px;
+      stroke: ${colors.GRAY};
+      margin-left: 7px;
+    }
   }
   input:checked + label {
     color: ${colors.PRIMARY_GRAY};
+    ${Svg} {
+      fill: ${colors.GREEN};
+      stroke: ${colors.GREEN};
+    }
   }
 `;
 
@@ -56,6 +71,7 @@ interface SliderField {
   value: string;
   label: string;
   id: string;
+  icon?: any;
 }
 
 interface ToggleProps {
@@ -90,7 +106,10 @@ const Toggle: React.SFC<ToggleProps> = ({
           checked={selected === field.value}
           id={field.id}
         />
-        <label htmlFor={field.id}>{field.label}</label>
+        <label htmlFor={field.id}>
+          <div>{field.label}</div>
+          {field.icon}
+        </label>
       </Field>
     ))}
   </SliderContainer>

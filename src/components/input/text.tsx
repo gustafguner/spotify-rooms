@@ -24,15 +24,4 @@ const TextInputValidationError = styled.div`
   font-size: 14px;
 `;
 
-const TextInputInformation = styled.div`
-  padding: 10px 20px 0 0;
-  color: ${colors.GRAY};
-  font-size: 14px;
-`;
-
-export {
-  TextInput,
-  ModalTextInput,
-  TextInputValidationError,
-  TextInputInformation,
-};
+export { TextInput, ModalTextInput, TextInputValidationError };

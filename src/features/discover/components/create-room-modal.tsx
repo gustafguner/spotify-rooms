@@ -6,7 +6,8 @@ import {
   Checkbox,
   ModalTextInput,
   TextInputValidationError,
-  TextInputInformation,
+  InputInformation,
+  InputTitle,
   Toggle,
 } from 'src/components/input';
 import gql from 'graphql-tag';
@@ -14,7 +15,7 @@ import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
 import { ModalParagraph, ModalSubtitle } from 'src/components/text';
 import { colors } from 'src/styles';
-import { Svg } from 'src/components/icons';
+import { Svg, CoopIcon, DjIcon } from 'src/components/icons';
 import { Spacing } from 'src/components/core';
 
 const CREATE_ROOM_MUTATION = gql`
@@ -120,7 +121,7 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
             initialValues={{
               name: '',
               description: '',
-              mode: 'collaborative',
+              mode: 'co-op',
               private: false,
             }}
             validate={(values) => {
@@ -165,20 +166,7 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
 
                   <Spacing height={25} />
 
-                  <ModalTextInput
-                    type="text"
-                    name="description"
-                    placeholder="Description"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.description}
-                    autoComplete="off"
-                  />
-                  {errors.description &&
-                    touched.description &&
-                    errors.description}
-
-                  <Spacing height={25} />
+                  <InputTitle>Mode</InputTitle>
 
                   <Toggle
                     name="mode"
@@ -187,15 +175,31 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                     onBlur={handleBlur}
                     fields={[
                       {
-                        value: 'collaborative',
-                        label: 'Collaborative',
-                        id: 'collaborative-mode-choice',
+                        value: 'co-op',
+                        label: 'Co-op',
+                        id: 'coop-mode-choice',
+                        icon: <CoopIcon width={28} height={28} />,
                       },
-                      { value: 'dj', label: 'DJ', id: 'dj-mode-choice' },
+                      {
+                        value: 'dj',
+                        label: 'DJ',
+                        id: 'dj-mode-choice',
+                        icon: <DjIcon width={28} height={28} />,
+                      },
                     ]}
                   />
+                  {values.mode === 'co-op' ? (
+                    <InputInformation>
+                      You vote together on which tracks to play.
+                    </InputInformation>
+                  ) : (
+                    <InputInformation>
+                      You can all suggest tracks, but it's up to the DJ to
+                      choose which ones to play.
+                    </InputInformation>
+                  )}
 
-                  <Spacing height={40} />
+                  <Spacing height={25} />
 
                   <Checkbox
                     name="private"
@@ -205,9 +209,9 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                     label="Private"
                   />
 
-                  <TextInputInformation>
+                  <InputInformation>
                     A private room can only be accessed through a link.
-                  </TextInputInformation>
+                  </InputInformation>
                 </Fields>
 
                 <div>
