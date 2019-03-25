@@ -7,7 +7,7 @@ import {
   ModalTextInput,
   TextInputValidationError,
   TextInputInformation,
-  Slider,
+  Toggle,
 } from 'src/components/input';
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
@@ -163,7 +163,7 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                     </TextInputValidationError>
                   )}
 
-                  <Spacing height={18} />
+                  <Spacing height={25} />
 
                   <ModalTextInput
                     type="text"
@@ -178,20 +178,24 @@ const CreateRoomModal: React.SFC<Props> = ({ isOpen, close }) => {
                     touched.description &&
                     errors.description}
 
-                  <Spacing height={18} />
+                  <Spacing height={25} />
 
-                  <Slider
+                  <Toggle
                     name="mode"
                     selected={values.mode}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fields={[
-                      { value: 'collaborative', label: 'Collaborative' },
-                      { value: 'dj', label: 'DJ' },
+                      {
+                        value: 'collaborative',
+                        label: 'Collaborative',
+                        id: 'collaborative-mode-choice',
+                      },
+                      { value: 'dj', label: 'DJ', id: 'dj-mode-choice' },
                     ]}
                   />
 
-                  <Spacing height={25} />
+                  <Spacing height={40} />
 
                   <Checkbox
                     name="private"

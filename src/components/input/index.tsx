@@ -5,7 +5,7 @@ import {
   TextInputInformation,
 } from './text';
 import { Checkbox } from './checkbox';
-import { Slider } from './radio';
+import { Toggle } from './radio';
 
 export {
   TextInput,
@@ -13,5 +13,5 @@ export {
   TextInputValidationError,
   TextInputInformation,
   Checkbox,
-  Slider,
+  Toggle,
 };
