@@ -18,25 +18,27 @@ const FadeOut = styled.div`
   position: absolute;
   left: 0;
   height: 100%;
-  width: 50px;
+  width: 100px;
   background: linear-gradient(
     to right,
-    ${colors.DARK_GRAY} 0% ${colors.TRANSPARENT} 100%
+    ${colors.DARK_GRAY},
+    ${colors.TRANSPARENT}
   );
-  z-index: 1;
+  z-index: 100;
 `;
 
 const Avatar = styled.div`
-  flex-basis: 28px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   flex-grow: 0;
-  height: 28px;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
-  margin-left: 6px;
-  &:last-child {
-    margin-left: 0;
+  margin-right: -6px;
+  box-shadow: 1px 0 6px rgba(0, 0, 0, 0.05);
+  &:first-child {
+    margin-right: 0;
   }
 `;
 

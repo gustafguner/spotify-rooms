@@ -53,8 +53,8 @@ const SliderContainer = styled.div`
     ${Svg} {
       overflow: visible;
       fill: ${colors.GRAY};
-      stroke-width: 0.5px;
       stroke: ${colors.GRAY};
+      stroke-width: 0.2px;
       margin-left: 7px;
     }
   }

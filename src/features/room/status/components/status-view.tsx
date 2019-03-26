@@ -2,7 +2,13 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { colors } from 'src/styles';
 import Users from './users';
-import { CoopIcon, DjIcon } from 'src/components/icons';
+import {
+  CoopIcon,
+  DjIcon,
+  LockIcon,
+  Svg,
+  GlobeIcon,
+} from 'src/components/icons';
 
 interface Props {
   room: any;
@@ -27,6 +33,18 @@ const Meta = styled.div`
   align-items: center;
 `;
 
+const NameContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  ${Svg} {
+    width: 18px;
+    height: 18px;
+    fill: ${colors.GRAY};
+    margin-right: 10px;
+  }
+`;
+
 const Name = styled.div`
   color: ${colors.WHITE};
   font-size: 16px;
@@ -42,10 +60,11 @@ const Mode = styled.div`
   letter-spacing: 0.2px;
   display: flex;
   align-items: center;
-  svg {
+  ${Svg} {
+    width: 28px;
+    height: 28px;
+    fill: ${colors.GRAY};
     margin-right: 10px;
-    stroke: white;
-    stroke-width: 0.3px;
   }
 `;
 
@@ -85,16 +104,20 @@ const StatusView: React.SFC<Props> = ({
   return (
     <Container>
       <Meta>
-        <Name>{room.name}</Name>
+        <NameContainer>
+          {room.private === true ? <LockIcon /> : <GlobeIcon />}
+          <Name>{room.name}</Name>
+        </NameContainer>
+
         <Mode>
           {room.mode === 'co-op' ? (
             <>
-              <CoopIcon width={28} height={28} />
+              <CoopIcon />
               <ModeName>Co-op</ModeName>
             </>
           ) : (
             <>
-              <DjIcon width={28} height={28} />
+              <DjIcon />
               <ModeName>DJ</ModeName>
             </>
           )}
