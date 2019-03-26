@@ -22,6 +22,8 @@ const GET_ROOM_QUERY = gql`
     room(roomId: $roomId) {
       id
       name
+      mode
+      private
       host {
         displayName
       }

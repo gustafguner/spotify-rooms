@@ -98,27 +98,6 @@ const Discover = () => {
             >
               Create room
             </CreateRoomButton>
-            {/*
-            <Mutation mutation={MUTATION}>
-              {(mutate) => (
-                <>
-                  <Button
-                    onClick={() => {
-                      mutate({
-                        variables: {
-                          input: {
-                            name: 'Test',
-                          },
-                        },
-                      });
-                    }}
-                  >
-                    Create room
-                  </Button>
-                </>
-              )}
-            </Mutation>
-                  */}
 
             <CreateRoomModal
               isOpen={createRoomModalIsOpen}
