@@ -8,7 +8,8 @@ interface Props {
 }
 
 const Container = styled.div`
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   position: relative;

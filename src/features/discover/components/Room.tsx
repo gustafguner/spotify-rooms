@@ -53,7 +53,6 @@ const CoverImageWrapper = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   border-radius: 50%;
-  animation: ${SpinRule}
   position: relative;
   z-index: 1;
 `;

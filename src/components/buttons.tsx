@@ -17,6 +17,7 @@ const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   border-radius: 40px;
+  white-space: nowrap;
   ':focus': {
     outline: none;
   }
@@ -27,4 +28,13 @@ const LargeButton = styled(Button)`
   font-size: 18px;
 `;
 
-export { Button, LargeButton };
+const DullButton = styled(Button)`
+  background: ${colors.PRIMARY_GRAY_LIGHTER};
+  padding-top: 9px;
+  padding-bottom: 9px;
+  font-size: 14px;
+  border-radius: 6px;
+  box-shadow: 0 0px 6px rgba(0, 0, 0, 0.09);
+`;
+
+export { Button, LargeButton, DullButton };

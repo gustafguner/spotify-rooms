@@ -5,6 +5,7 @@ export const colors = {
   TRANSPARENT: 'transparent',
   GREEN: '#64D270',
   PRIMARY_GRAY: '#232323',
+  PRIMARY_GRAY_LIGHTER: '#2B2B2B',
   DARK_GRAY: '#181818',
   ALMOST_BLACK: '#151515',
   GRAY: '#999999',

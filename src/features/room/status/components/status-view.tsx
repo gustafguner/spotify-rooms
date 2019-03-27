@@ -9,6 +9,7 @@ import {
   Svg,
   GlobeIcon,
 } from 'src/components/icons';
+import { DullButton } from 'src/components/buttons';
 
 interface Props {
   room: any;
@@ -31,6 +32,12 @@ const Meta = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
+  > * {
+    margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 `;
 
 const NameContainer = styled.div`
@@ -50,7 +57,6 @@ const Name = styled.div`
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.2px;
-  margin-right: 20px;
 `;
 
 const Mode = styled.div`
@@ -122,6 +128,8 @@ const StatusView: React.SFC<Props> = ({
             </>
           )}
         </Mode>
+
+        <DullButton>Invite</DullButton>
       </Meta>
       <Users users={users} />
     </Container>
