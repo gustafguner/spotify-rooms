@@ -1,32 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Formik, Field } from 'formik';
 import CoreModal from 'src/components/CoreModal';
-import {
-  Checkbox,
-  ModalTextInput,
-  TextInputValidationError,
-  InputInformation,
-  InputTitle,
-  Toggle,
-} from 'src/components/input';
-import gql from 'graphql-tag';
+import { ModalTextInput, InputInformation } from 'src/components/input';
 import { Button } from 'src/components/buttons';
-import { Mutation } from 'react-apollo';
 import { ModalParagraph, ModalSubtitle } from 'src/components/text';
 import { colors } from 'src/styles';
-import { Svg, CoopIcon, DjIcon } from 'src/components/icons';
 import { Spacing } from 'src/components/core';
 import { withRouter } from 'react-router';
-
-const CREATE_ROOM_MUTATION = gql`
-  mutation createRoom($input: CreateRoomInput!) {
-    createRoom(input: $input) {
-      id
-      name
-    }
-  }
-`;
+import * as copy from 'copy-to-clipboard';
 
 const Modal = styled(CoreModal)``;
 
@@ -42,13 +23,23 @@ const Title = styled(ModalSubtitle)`
 `;
 
 const Paragraph = styled(ModalParagraph)`
-  margin-bottom: 10px;
+  margin-bottom: 25px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-flow: row;
+`;
+
+const CopyButton = styled(Button)`
+  background: ${colors.GREEN};
 `;
 
 const modalStyles = {
   modal: {
     width: 600,
-    height: 300,
+    height: 'auto',
   },
 };
 
@@ -66,13 +57,28 @@ const ShareRoomModal: React.SFC<Props> = ({ isOpen, close, location }) => {
     <Modal isOpen={isOpen} close={close} styles={modalStyles}>
       <Container>
         <Title>Share with others</Title>
-        <Paragraph>Make the room crowded!</Paragraph>
+        <Paragraph>Make the room crowded! 💃</Paragraph>
 
         <ModalTextInput
           value={`${window.location.origin}${location.pathname}`}
           onChange={() => {}}
           readOnly={true}
         />
+
+        <InputInformation>
+          People can join this room by visiting this URL.
+        </InputInformation>
+
+        <Spacing height={25} />
+        <ButtonContainer>
+          <CopyButton
+            onClick={() => {
+              copy(`${window.location.origin}${location.pathname}`);
+            }}
+          >
+            Copy link
+          </CopyButton>
+        </ButtonContainer>
       </Container>
     </Modal>
   );
