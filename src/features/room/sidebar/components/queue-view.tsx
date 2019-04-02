@@ -5,6 +5,8 @@ import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import FlipMove from 'react-flip-move';
+import { Button } from 'src/components/buttons';
+import * as color from 'color';
 
 interface Props {
   queue: any;
@@ -35,6 +37,8 @@ const Item = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   &:last-child {
     margin-bottom: 0;
   }
@@ -45,21 +49,24 @@ const CoverImageWrapper = styled.div`
   flex-basis: 65px;
   flex-shrink: 0;
   height: 65px;
+  border-radius: 50%;
+  overflow: hidden;
 `;
 
 const CoverImage = styled.img`
   width: 100%;
   height: 100%;
-  float: left;
+  display: block;
 `;
 
 const TrackInfo = styled.div`
   margin-left: 15px;
   margin-right: 15px;
-  width: calc(100% - 65px - 40px - 30px);
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-flow: row wrap;
+  overflow: hidden;
 `;
 
 const TrackNameContainer = styled.div`
@@ -94,16 +101,15 @@ const TrackVotes = styled.div`
   align-items: center;
 `;
 
-const VoteButton = styled.button`
-  outline: none;
-  border: none;
-  background: none;
-  font-size: 20px;
-  width: auto;
-  cursor: pointer;
-  text-align: center;
-  flex-basis: 22px;
-  padding: 0;
+const VoteButton = styled(Button)`
+  background: ${color(colors.PRIMARY_GRAY)
+    .darken(0.15)
+    .string()};
+  &:hover {
+    background: ${color(colors.PRIMARY_GRAY)
+      .darken(0.2)
+      .string()};
+  }
 `;
 
 interface VoteCountProps {
@@ -214,8 +220,8 @@ const QueueView: React.SFC<Props> = ({
                     }}
                   >
                     👍
+                    <VoteCount>{track.voters.length}</VoteCount>
                   </VoteButton>
-                  <VoteCount>{track.voters.length}</VoteCount>
                 </TrackVotes>
               )}
             </Mutation>

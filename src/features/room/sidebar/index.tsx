@@ -22,8 +22,7 @@ interface Props {
 }
 
 const Container = styled.div`
-  width: 350px;
-  flex-basis: 350px;
+  width: 380px;
   flex-shrink: 0;
   height: calc(100vh - 70px);
   background: ${colors.ALMOST_BLACK};
