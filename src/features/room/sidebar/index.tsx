@@ -8,6 +8,7 @@ import gql from 'graphql-tag';
 import Loader from 'src/components/Loader';
 
 import { searchTracks } from 'src/utils/spotify';
+import * as color from 'color';
 
 const MUTATION = gql`
   mutation addTrackToQueue($input: AddTrackToQueueInput!) {
@@ -51,27 +52,60 @@ const TextInput = styled.input`
   flex-basis: 100%;
   height: 100%;
   background: none;
+  outline: none;
   color: ${colors.WHITE};
-  ':focus' {
+  '&:focus' {
     outline: none;
+  }
+  &::placeholder {
+    color: ${colors.GRAY_OFF};
   }
 `;
 
-const Suggestions = styled.div`
+const SuggestionsContainer = styled.div`
   width: 100%;
   position: absolute;
-  background: ${colors.PRIMARY_GRAY};
-  height: 225px;
-  top: -225px;
-  padding: 15px;
+  background: ${colors.DARK_GRAY};
+  top: 0;
+  transform: translateY(-100%);
+  display: flex;
+  flex-flow: column;
+`;
+
+const Suggestions = styled.div`
+  padding: 10px;
+`;
+
+const SuggestionsTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  padding: 10px 10px 0 10px;
+  color: ${colors.GRAY};
+  font-size: 15px;
 `;
 
 const SuggestionTrack = styled.div`
   width: 100%;
   display: flex;
-  margin-bottom: 15px;
+  padding: 15px;
+  background: ${color(colors.PRIMARY_GRAY)
+    .lighten(0.1)
+    .string()};
+  border-radius: 3px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  cursor: pointer;
   &:last-child {
     margin-bottom: 0;
+  }
+
+  &:hover {
+    background: ${color(colors.PRIMARY_GRAY)
+      .lighten(0.05)
+      .string()};
   }
 `;
 
@@ -80,23 +114,24 @@ const CoverImageWrapper = styled.div`
   height: 55px;
   flex-basis: 55px;
   flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
 `;
 
 const CoverImage = styled.img`
-  float: left;
   width: 100%;
   height: 100%;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: block;
 `;
 
 const TrackInfo = styled.div`
-  width: calc(100% - 55px - 30px - 12px - 12px);
+  width: calc(100% - 55px - 30px - 15px - 15px);
   flex-basis: 100%;
   display: flex;
   justify-content: center;
   flex-flow: column;
-  margin-left: 12px;
-  margin-right: 12px;
+  margin-left: 15px;
+  margin-right: 15px;
 `;
 
 const TrackName = styled.div`
@@ -156,6 +191,7 @@ let spotifyTrackSearchQuery: any = null;
 const Sidebar: React.SFC<Props> = ({ roomId }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
+  const [searchFieldFocused, setSearchFieldFocused] = React.useState(false);
 
   const handleTrackSearchInputChange = (e: any) => {
     const query = e.target.value;
@@ -186,34 +222,21 @@ const Sidebar: React.SFC<Props> = ({ roomId }) => {
 
   return (
     <Container>
-      <DarkTint visible={searchQuery !== ''} />
+      <DarkTint visible={searchFieldFocused !== false} />
       <Queue roomId={roomId} />
 
       <AddToQueue>
-        {searchQuery !== '' && (
-          <Suggestions>
-            {searchResults !== null ? (
-              searchResults.length !== 0 ? (
-                searchResults.map((track) => (
-                  <SuggestionTrack key={track.id}>
-                    <CoverImageWrapper>
-                      <CoverImage src={track.album.images[0].url} />
-                    </CoverImageWrapper>
-                    <TrackInfo>
-                      <TrackName>{track.name}</TrackName>
-                      <TrackArtists>
-                        {track.artists !== null
-                          ? track.artists
-                              .map((e: any) => {
-                                return e.name;
-                              })
-                              .join(', ')
-                          : ''}
-                      </TrackArtists>
-                    </TrackInfo>
+        {searchFieldFocused !== false && (
+          <SuggestionsContainer>
+            <SuggestionsTitle>Search results</SuggestionsTitle>
+            <Suggestions>
+              {searchResults !== null ? (
+                searchResults.length !== 0 ? (
+                  searchResults.map((track) => (
                     <Mutation mutation={MUTATION}>
                       {(mutate) => (
-                        <AddToQueueButton
+                        <SuggestionTrack
+                          key={track.id}
                           onClick={() => {
                             mutate({
                               variables: {
@@ -225,30 +248,50 @@ const Sidebar: React.SFC<Props> = ({ roomId }) => {
                             });
                           }}
                         >
-                          +
-                        </AddToQueueButton>
+                          <CoverImageWrapper>
+                            <CoverImage src={track.album.images[0].url} />
+                          </CoverImageWrapper>
+                          <TrackInfo>
+                            <TrackName>{track.name}</TrackName>
+                            <TrackArtists>
+                              {track.artists !== null
+                                ? track.artists
+                                    .map((e: any) => {
+                                      return e.name;
+                                    })
+                                    .join(', ')
+                                : ''}
+                            </TrackArtists>
+                          </TrackInfo>
+                        </SuggestionTrack>
                       )}
                     </Mutation>
-                  </SuggestionTrack>
-                ))
+                  ))
+                ) : (
+                  <SearchStatusContainer>
+                    <div>We couldn't find any tracks 😢</div>
+                  </SearchStatusContainer>
+                )
               ) : (
                 <SearchStatusContainer>
-                  <div>We couldn't find any tracks 😢</div>
+                  <Loader />
                 </SearchStatusContainer>
-              )
-            ) : (
-              <SearchStatusContainer>
-                <Loader />
-              </SearchStatusContainer>
-            )}
-          </Suggestions>
+              )}
+            </Suggestions>
+          </SuggestionsContainer>
         )}
 
         <TextInput
           type="text"
           value={searchQuery}
-          placeholder="Search for a track that you like... 🤘"
+          placeholder="Search for a track that you like..."
           onChange={handleTrackSearchInputChange}
+          onFocus={() => {
+            setSearchFieldFocused(true);
+          }}
+          onBlur={() => {
+            setSearchFieldFocused(false);
+          }}
         />
       </AddToQueue>
     </Container>

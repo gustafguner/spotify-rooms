@@ -76,6 +76,7 @@ const TrackNameContainer = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 2px;
 `;
 
 const TrackName = styled.a`
@@ -102,6 +103,7 @@ const TrackVotes = styled.div`
 `;
 
 const VoteButton = styled(Button)`
+  padding: 9px 15px;
   background: ${color(colors.PRIMARY_GRAY)
     .darken(0.15)
     .string()};
