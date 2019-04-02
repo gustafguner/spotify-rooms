@@ -8,6 +8,7 @@ import {
   LockIcon,
   Svg,
   GlobeIcon,
+  LinkIcon,
 } from 'src/components/icons';
 import { DullButton } from 'src/components/buttons';
 
@@ -81,6 +82,14 @@ const ModeName = styled.div`
   letter-spacing: 0.2px;
 `;
 
+const InviteButton = styled(DullButton)`
+  ${Svg} {
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+  }
+`;
+
 const StatusView: React.SFC<Props> = ({
   room,
   users,
@@ -129,7 +138,14 @@ const StatusView: React.SFC<Props> = ({
           )}
         </Mode>
 
-        <DullButton>Invite</DullButton>
+        <InviteButton
+          onClick={() => {
+            alert();
+          }}
+        >
+          Invite
+          <LinkIcon />
+        </InviteButton>
       </Meta>
       <Users users={users} />
     </Container>
