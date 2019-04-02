@@ -9,6 +9,12 @@ const TextInput = styled.input`
   font-size: 16px;
   line-height: 22px;
   color: ${colors.PRIMARY_GRAY};
+  &::placeholder {
+    color: ${colors.GRAY_OFF};
+  }
+  &:read-only {
+    color: ${colors.GRAY_OFF};
+  }
 `;
 
 const ModalTextInput = styled(TextInput)`

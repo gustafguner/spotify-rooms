@@ -11,6 +11,7 @@ import {
   LinkIcon,
 } from 'src/components/icons';
 import { DullButton } from 'src/components/buttons';
+import ShareRoomModal from './share-room-modal';
 
 interface Props {
   room: any;
@@ -102,6 +103,8 @@ const StatusView: React.SFC<Props> = ({
 
   const [userLeftUnubscribe, setUserLeftUnubscribe]: any = React.useState(null);
 
+  const [shareModalIsOpen, setShareModalIsOpen]: any = React.useState(false);
+
   React.useEffect(() => {
     setUserEnteredUnubscribe(userEnteredSubscribe());
     setUserLeftUnubscribe(userLeftSubscribe());
@@ -140,7 +143,7 @@ const StatusView: React.SFC<Props> = ({
 
         <InviteButton
           onClick={() => {
-            alert();
+            setShareModalIsOpen(true);
           }}
         >
           Invite
@@ -148,6 +151,12 @@ const StatusView: React.SFC<Props> = ({
         </InviteButton>
       </Meta>
       <Users users={users} />
+      <ShareRoomModal
+        isOpen={shareModalIsOpen}
+        close={() => {
+          setShareModalIsOpen(false);
+        }}
+      />
     </Container>
   );
 };

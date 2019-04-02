@@ -20,7 +20,8 @@ const defaultStyles: ModalStyles = {
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
   },
   modal: {
-    background: colors.WHITE,
+    padding: 25,
+    background: colors.ALMOST_WHITE,
     width: 800,
     borderRadius: 2,
     overflow: 'hidden',
@@ -36,27 +37,21 @@ const CoreModal: React.SFC<ModalProps> = ({
   close = () => {},
   styles = {},
   children,
-}) => {
-  console.log({
-    ...defaultStyles,
-    styles,
-  });
-  return (
-    <Modal
-      open={isOpen}
-      onClose={close}
-      onEscKeyDown={close}
-      onOverlayClick={close}
-      center={true}
-      styles={{
-        modal: Object.assign({}, defaultStyles.modal, styles.modal),
-        overlay: Object.assign({}, defaultStyles.overlay, styles.overlay),
-        closeIcon: Object.assign({}, defaultStyles.closeIcon, styles.closeIcon),
-      }}
-    >
-      {children}
-    </Modal>
-  );
-};
+}) => (
+  <Modal
+    open={isOpen}
+    onClose={close}
+    onEscKeyDown={close}
+    onOverlayClick={close}
+    center={true}
+    styles={{
+      modal: Object.assign({}, defaultStyles.modal, styles.modal),
+      overlay: Object.assign({}, defaultStyles.overlay, styles.overlay),
+      closeIcon: Object.assign({}, defaultStyles.closeIcon, styles.closeIcon),
+    }}
+  >
+    {children}
+  </Modal>
+);
 
 export default CoreModal;
