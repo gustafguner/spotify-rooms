@@ -1,3 +1,5 @@
+import ClickOutside from './click-outside';
+
 import styled from 'styled-components';
 
 interface SpacingProps {
@@ -10,4 +12,4 @@ const Spacing = styled.div`
   height: ${({ height }: SpacingProps) => height}px;
 `;
 
-export { Spacing };
+export { ClickOutside, Spacing };

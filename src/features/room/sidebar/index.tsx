@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import Loader from 'src/components/Loader';
 import { searchTracks } from 'src/utils/spotify';
 import * as color from 'color';
+import { ClickOutside } from 'src/components/core';
 
 const MUTATION = gql`
   mutation addTrackToQueue($input: AddTrackToQueueInput!) {
@@ -223,74 +224,77 @@ const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
       <DarkTint visible={suggestionsVisible !== false} />
       <Queue roomId={roomId} />
 
-      <AddToQueue>
-        {suggestionsVisible !== false && (
-          <SuggestionsContainer>
-            <SuggestionsTitle>Search results</SuggestionsTitle>
-            <Suggestions>
-              {searchResults !== null ? (
-                searchResults.length !== 0 ? (
-                  searchResults.map((track) => (
-                    <Mutation mutation={MUTATION} key={track.id}>
-                      {(mutate) => (
-                        <SuggestionTrack
-                          onClick={() => {
-                            mutate({
-                              variables: {
-                                input: {
-                                  roomId,
-                                  trackId: track.id,
+      <ClickOutside
+        on={() => {
+          setSuggestionsVisible(false);
+        }}
+      >
+        <AddToQueue>
+          {suggestionsVisible !== false && (
+            <SuggestionsContainer>
+              <SuggestionsTitle>Search results</SuggestionsTitle>
+              <Suggestions>
+                {searchResults !== null ? (
+                  searchResults.length !== 0 ? (
+                    searchResults.map((track) => (
+                      <Mutation mutation={MUTATION} key={track.id}>
+                        {(mutate) => (
+                          <SuggestionTrack
+                            onClick={() => {
+                              mutate({
+                                variables: {
+                                  input: {
+                                    roomId,
+                                    trackId: track.id,
+                                  },
                                 },
-                              },
-                            });
-                          }}
-                        >
-                          <CoverImageWrapper>
-                            <CoverImage src={track.album.images[0].url} />
-                          </CoverImageWrapper>
-                          <TrackInfo>
-                            <TrackName>{track.name}</TrackName>
-                            <TrackArtists>
-                              {track.artists !== null
-                                ? track.artists
-                                    .map((e: any) => {
-                                      return e.name;
-                                    })
-                                    .join(', ')
-                                : ''}
-                            </TrackArtists>
-                          </TrackInfo>
-                        </SuggestionTrack>
-                      )}
-                    </Mutation>
-                  ))
+                              });
+                            }}
+                          >
+                            <CoverImageWrapper>
+                              <CoverImage src={track.album.images[0].url} />
+                            </CoverImageWrapper>
+                            <TrackInfo>
+                              <TrackName>{track.name}</TrackName>
+                              <TrackArtists>
+                                {track.artists !== null
+                                  ? track.artists
+                                      .map((e: any) => {
+                                        return e.name;
+                                      })
+                                      .join(', ')
+                                  : ''}
+                              </TrackArtists>
+                            </TrackInfo>
+                          </SuggestionTrack>
+                        )}
+                      </Mutation>
+                    ))
+                  ) : (
+                    <SearchStatusContainer>
+                      <div>We couldn't find any tracks 😢</div>
+                    </SearchStatusContainer>
+                  )
                 ) : (
                   <SearchStatusContainer>
-                    <div>We couldn't find any tracks 😢</div>
+                    <Loader />
                   </SearchStatusContainer>
-                )
-              ) : (
-                <SearchStatusContainer>
-                  <Loader />
-                </SearchStatusContainer>
-              )}
-            </Suggestions>
-          </SuggestionsContainer>
-        )}
+                )}
+              </Suggestions>
+            </SuggestionsContainer>
+          )}
 
-        <TextInput
-          type="text"
-          value={searchQuery}
-          placeholder="Search for a track that you like..."
-          onChange={handleTrackSearchInputChange}
-          onFocus={() => {
-            setSuggestionsVisible(true);
-          }}
-          onBlur={() => {
-            // setSearchFieldFocused(false);
-          }}
-        />
-      </AddToQueue>
+          <TextInput
+            type="text"
+            value={searchQuery}
+            placeholder="Search for a track that you like..."
+            onChange={handleTrackSearchInputChange}
+            onFocus={() => {
+              setSuggestionsVisible(true);
+            }}
+          />
+        </AddToQueue>
+      </ClickOutside>
     </Container>
   );
 };
