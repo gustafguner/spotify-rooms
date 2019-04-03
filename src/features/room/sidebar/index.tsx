@@ -1,12 +1,10 @@
 import * as React from 'react';
 import Queue from './components/queue';
-
 import styled from 'styled-components';
 import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Loader from 'src/components/Loader';
-
 import { searchTracks } from 'src/utils/spotify';
 import * as color from 'color';
 
@@ -188,10 +186,10 @@ const SearchStatusContainer = styled.div`
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
-const Sidebar: React.SFC<Props> = ({ roomId }) => {
+const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
-  const [searchFieldFocused, setSearchFieldFocused] = React.useState(false);
+  const [suggestionsVisible, setSuggestionsVisible] = React.useState(false);
 
   const handleTrackSearchInputChange = (e: any) => {
     const query = e.target.value;
@@ -222,21 +220,20 @@ const Sidebar: React.SFC<Props> = ({ roomId }) => {
 
   return (
     <Container>
-      <DarkTint visible={searchFieldFocused !== false} />
+      <DarkTint visible={suggestionsVisible !== false} />
       <Queue roomId={roomId} />
 
       <AddToQueue>
-        {searchFieldFocused !== false && (
+        {suggestionsVisible !== false && (
           <SuggestionsContainer>
             <SuggestionsTitle>Search results</SuggestionsTitle>
             <Suggestions>
               {searchResults !== null ? (
                 searchResults.length !== 0 ? (
                   searchResults.map((track) => (
-                    <Mutation mutation={MUTATION}>
+                    <Mutation mutation={MUTATION} key={track.id}>
                       {(mutate) => (
                         <SuggestionTrack
-                          key={track.id}
                           onClick={() => {
                             mutate({
                               variables: {
@@ -287,10 +284,10 @@ const Sidebar: React.SFC<Props> = ({ roomId }) => {
           placeholder="Search for a track that you like..."
           onChange={handleTrackSearchInputChange}
           onFocus={() => {
-            setSearchFieldFocused(true);
+            setSuggestionsVisible(true);
           }}
           onBlur={() => {
-            setSearchFieldFocused(false);
+            // setSearchFieldFocused(false);
           }}
         />
       </AddToQueue>

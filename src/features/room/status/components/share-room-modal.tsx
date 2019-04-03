@@ -51,7 +51,11 @@ interface Props {
   history: any;
 }
 
-const ShareRoomModal: React.SFC<Props> = ({ isOpen, close, location }) => {
+const ShareRoomModal: React.FunctionComponent<Props> = ({
+  isOpen,
+  close,
+  location,
+}) => {
   console.log(location);
   return (
     <Modal isOpen={isOpen} close={close} styles={modalStyles}>

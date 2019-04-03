@@ -16,7 +16,7 @@ const SiteContainer = styled.div`
   width: 100%;
 `;
 
-const App: React.SFC = () => {
+const App: React.FunctionComponent = () => {
   initializeSpotify();
 
   return (

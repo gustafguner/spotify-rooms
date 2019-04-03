@@ -32,7 +32,7 @@ const defaultStyles: ModalStyles = {
   },
 };
 
-const CoreModal: React.SFC<ModalProps> = ({
+const CoreModal: React.FunctionComponent<ModalProps> = ({
   isOpen,
   close = () => {},
   styles = {},

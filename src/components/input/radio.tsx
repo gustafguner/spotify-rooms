@@ -78,11 +78,11 @@ interface ToggleProps {
   name: string;
   selected: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: ((event: React.FocusEvent<HTMLInputElement>) => void);
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   fields: SliderField[];
 }
 
-const Toggle: React.SFC<ToggleProps> = ({
+const Toggle: React.FunctionComponent<ToggleProps> = ({
   name,
   selected,
   onChange,

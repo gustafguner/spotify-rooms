@@ -176,16 +176,13 @@ const Artists = styled.div`
   color: rgba(255, 255, 255, 0.55);
 `;
 
-const Playback: React.SFC<Props> = ({ track }) => {
+const Playback: React.FunctionComponent<Props> = ({ track }) => {
   const isTrack = track && track.id !== null;
   const [position, setPosition] = React.useState(isTrack ? track.position : 0);
 
-  React.useEffect(
-    () => {
-      setPosition(isTrack ? track.position : 0);
-    },
-    [track],
-  );
+  React.useEffect(() => {
+    setPosition(isTrack ? track.position : 0);
+  }, [track]);
 
   return (
     <>

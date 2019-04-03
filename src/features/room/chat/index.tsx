@@ -13,7 +13,7 @@ const Container = styled.div`
   background: ${colors.ALMOST_BLACK};
 `;
 
-const Chat: React.SFC<Props> = ({ roomId }) => {
+const Chat: React.FunctionComponent<Props> = ({ roomId }) => {
   return (
     <Container>
       <h1>Chat</h1>

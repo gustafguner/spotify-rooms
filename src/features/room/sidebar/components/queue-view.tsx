@@ -109,7 +109,7 @@ const VoteButton = styled(Button)`
     .string()};
   &:hover {
     background: ${color(colors.PRIMARY_GRAY)
-      .darken(0.2)
+      .darken(0.3)
       .string()};
   }
 `;
@@ -148,7 +148,7 @@ const VOTE_FOR_TRACK = gql`
   }
 `;
 
-const QueueView: React.SFC<Props> = ({
+const QueueView: React.FunctionComponent<Props> = ({
   queue,
   roomId,
   addSubscribe,

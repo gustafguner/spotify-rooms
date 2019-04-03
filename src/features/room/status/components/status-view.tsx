@@ -91,7 +91,7 @@ const InviteButton = styled(DullButton)`
   }
 `;
 
-const StatusView: React.SFC<Props> = ({
+const StatusView: React.FunctionComponent<Props> = ({
   room,
   users,
   userEnteredSubscribe,

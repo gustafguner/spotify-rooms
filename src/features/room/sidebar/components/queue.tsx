@@ -115,7 +115,7 @@ const QUEUE_REMOVE_SUBSCRIPTION = gql`
   }
 `;
 
-const Queue: React.SFC<Props> = ({ roomId }) => {
+const Queue: React.FunctionComponent<Props> = ({ roomId }) => {
   return (
     <Query
       query={QUEUE_QUERY}

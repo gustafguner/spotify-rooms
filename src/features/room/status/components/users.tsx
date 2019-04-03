@@ -86,7 +86,7 @@ const Avatars = styled(FlipMove)`
   flex-flow: row-reverse;
 `;
 
-const Users: React.SFC<Props> = ({ users }) => (
+const Users: React.FunctionComponent<Props> = ({ users }) => (
   <Container>
     <FadeOut />
     <Avatars>

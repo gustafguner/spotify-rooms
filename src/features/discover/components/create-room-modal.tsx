@@ -110,7 +110,11 @@ interface Props {
   history: any;
 }
 
-const CreateRoomModal: React.SFC<Props> = ({ isOpen, close, history }) => {
+const CreateRoomModal: React.FunctionComponent<Props> = ({
+  isOpen,
+  close,
+  history,
+}) => {
   return (
     <Modal isOpen={isOpen} close={close} styles={modalStyles}>
       <Container>

@@ -88,7 +88,9 @@ const Container = styled.div`
   );
 `;
 
-const Subscription: React.SFC<SubscriptionProps> = ({ subscription }) => {
+const Subscription: React.FunctionComponent<SubscriptionProps> = ({
+  subscription,
+}) => {
   const { playback, setPlayback } = React.useContext(PlaybackContainer.Context);
   const [unsubscribe, setUnsubscribe]: any = React.useState(null);
 
