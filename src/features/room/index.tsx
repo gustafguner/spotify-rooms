@@ -92,7 +92,7 @@ const Content = styled.div`
 
 const Top = styled.div`
   width: 100%;
-  flex-basis: 230px;
+  height: 230px;
   flex-shrink: 0;
   flex-grow: 0;
   position: relative;

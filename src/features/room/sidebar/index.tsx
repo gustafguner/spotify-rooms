@@ -2,20 +2,13 @@ import * as React from 'react';
 import Queue from './components/queue';
 import styled from 'styled-components';
 import { colors } from 'src/styles';
-import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import Loader from 'src/components/Loader';
-import { searchTracks } from 'src/utils/spotify';
-import * as color from 'color';
+import {
+  getMyRecentlyPlayedTracks,
+  getTopTracks,
+  searchTracks,
+} from 'src/utils/spotify';
 import { ClickOutside } from 'src/components/core';
-
-const MUTATION = gql`
-  mutation addTrackToQueue($input: AddTrackToQueueInput!) {
-    addTrackToQueue(input: $input) {
-      name
-    }
-  }
-`;
+import DiscoverTracks from './components/discover-tracks';
 
 interface Props {
   roomId: string;
@@ -45,6 +38,44 @@ const AddToQueue = styled.div`
   position: relative;
 `;
 
+const DiscoverContainer = styled.div`
+  width: 100%;
+  height: 340px;
+  position: absolute;
+  background: ${colors.DARK_GRAY};
+  top: 0;
+  transform: translateY(-100%);
+  display: flex;
+  flex-flow: column;
+`;
+
+const Discover = styled.div`
+  width: 100%;
+  height: calc(100% - 45px);
+  padding: 10px;
+  overflow-y: scroll;
+  position: relative;
+`;
+
+const DiscoverTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+  color: ${colors.GRAY};
+  font-size: 15px;
+`;
+
+const DiscoverTracksFadeout = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  background: linear-gradient(${colors.TRANSPARENT}, ${colors.DARK_GRAY});
+`;
+
 const TextInput = styled.input`
   font-size: 16px;
   border: none;
@@ -59,107 +90,6 @@ const TextInput = styled.input`
   &::placeholder {
     color: ${colors.GRAY_OFF};
   }
-`;
-
-const SuggestionsContainer = styled.div`
-  width: 100%;
-  position: absolute;
-  background: ${colors.DARK_GRAY};
-  top: 0;
-  transform: translateY(-100%);
-  display: flex;
-  flex-flow: column;
-`;
-
-const Suggestions = styled.div`
-  padding: 10px;
-`;
-
-const SuggestionsTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 44px;
-  padding: 10px 10px 0 10px;
-  color: ${colors.GRAY};
-  font-size: 15px;
-`;
-
-const SuggestionTrack = styled.div`
-  width: 100%;
-  display: flex;
-  padding: 15px;
-  background: ${color(colors.PRIMARY_GRAY)
-    .lighten(0.1)
-    .string()};
-  border-radius: 3px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-  cursor: pointer;
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  &:hover {
-    background: ${color(colors.PRIMARY_GRAY)
-      .lighten(0.05)
-      .string()};
-  }
-`;
-
-const CoverImageWrapper = styled.div`
-  width: 55px;
-  height: 55px;
-  flex-basis: 55px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  overflow: hidden;
-`;
-
-const CoverImage = styled.img`
-  width: 100%;
-  height: 100%;
-  display: block;
-`;
-
-const TrackInfo = styled.div`
-  width: calc(100% - 55px - 30px - 15px - 15px);
-  flex-basis: 100%;
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  margin-left: 15px;
-  margin-right: 15px;
-`;
-
-const TrackName = styled.div`
-  flex-basis: 20px;
-  flex-shrink: 0;
-  font-weight: 700;
-  font-size: 15px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const TrackArtists = styled.div`
-  width: 100%;
-  font-size: 13px;
-  color: ${colors.GRAY};
-  flex-grow: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const AddToQueueButton = styled.button`
-  flex-basis: 30px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  font-size: 20px;
-  padding: 0;
-  color: rgba(255, 255, 255, 0.5);
 `;
 
 interface DarkTintProps {
@@ -177,20 +107,29 @@ const DarkTint = styled.div`
   opacity: ${({ visible }: DarkTintProps) => (visible ? '1' : '0')};
 `;
 
-const SearchStatusContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-`;
-
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
 const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
-  const [suggestionsVisible, setSuggestionsVisible] = React.useState(false);
+  const [recentlyPlayedTracks, setRecentlyPlayedTracks] = React.useState<
+    null | any[]
+  >(null);
+
+  const [discoverVisible, setDiscoverVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    if (recentlyPlayedTracks === null) {
+      getTopTracks()
+        .then(({ tracks }) => {
+          setRecentlyPlayedTracks(tracks.items.map((track) => track.track));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, []);
 
   const handleTrackSearchInputChange = (e: any) => {
     const query = e.target.value;
@@ -206,82 +145,44 @@ const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
         if (spotifyTrackSearch !== null) {
           spotifyTrackSearch.abort();
         }
-        spotifyTrackSearch = searchTracks(query, 3)
+        spotifyTrackSearch = searchTracks(query, 10)
           .then(({ tracks }) => {
             spotifyTrackSearch = null;
-            console.log(tracks.items);
             setSearchResults(tracks.items);
           })
           .catch((error) => {
             console.error(error);
           });
-      }, 1000);
+      }, 700);
     }
   };
 
   return (
     <Container>
-      <DarkTint visible={suggestionsVisible !== false} />
+      <DarkTint visible={discoverVisible !== false} />
       <Queue roomId={roomId} />
 
       <ClickOutside
         on={() => {
-          setSuggestionsVisible(false);
+          setDiscoverVisible(false);
         }}
       >
         <AddToQueue>
-          {suggestionsVisible !== false && (
-            <SuggestionsContainer>
-              <SuggestionsTitle>Search results</SuggestionsTitle>
-              <Suggestions>
-                {searchResults !== null ? (
-                  searchResults.length !== 0 ? (
-                    searchResults.map((track) => (
-                      <Mutation mutation={MUTATION} key={track.id}>
-                        {(mutate) => (
-                          <SuggestionTrack
-                            onClick={() => {
-                              mutate({
-                                variables: {
-                                  input: {
-                                    roomId,
-                                    trackId: track.id,
-                                  },
-                                },
-                              });
-                            }}
-                          >
-                            <CoverImageWrapper>
-                              <CoverImage src={track.album.images[0].url} />
-                            </CoverImageWrapper>
-                            <TrackInfo>
-                              <TrackName>{track.name}</TrackName>
-                              <TrackArtists>
-                                {track.artists !== null
-                                  ? track.artists
-                                      .map((e: any) => {
-                                        return e.name;
-                                      })
-                                      .join(', ')
-                                  : ''}
-                              </TrackArtists>
-                            </TrackInfo>
-                          </SuggestionTrack>
-                        )}
-                      </Mutation>
-                    ))
-                  ) : (
-                    <SearchStatusContainer>
-                      <div>We couldn't find any tracks 😢</div>
-                    </SearchStatusContainer>
-                  )
-                ) : (
-                  <SearchStatusContainer>
-                    <Loader />
-                  </SearchStatusContainer>
-                )}
-              </Suggestions>
-            </SuggestionsContainer>
+          {discoverVisible !== false && (
+            <DiscoverContainer>
+              <DiscoverTitle>
+                {searchQuery !== '' ? 'Search results' : 'Top tracks'}
+              </DiscoverTitle>
+              <Discover>
+                <DiscoverTracks
+                  tracks={
+                    searchQuery !== '' ? searchResults : recentlyPlayedTracks
+                  }
+                  roomId={roomId}
+                />
+                <DiscoverTracksFadeout />
+              </Discover>
+            </DiscoverContainer>
           )}
 
           <TextInput
@@ -290,7 +191,7 @@ const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
             placeholder="Search for a track that you like..."
             onChange={handleTrackSearchInputChange}
             onFocus={() => {
-              setSuggestionsVisible(true);
+              setDiscoverVisible(true);
             }}
           />
         </AddToQueue>

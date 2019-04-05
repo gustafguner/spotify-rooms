@@ -30,7 +30,7 @@ const Item = styled.div`
   width: 100%;
   flex-basis: 80px;
   flex-shrink: 0;
-  padding: 8px;
+  padding: 10px;
   background: ${colors.PRIMARY_GRAY};
   display: flex;
   flex-flow: row;
