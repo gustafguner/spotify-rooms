@@ -38,7 +38,7 @@ interface Props {
   roomId: string;
 }
 
-const Status: React.FunctionComponent<Props> = ({ room, roomId }) => {
+const Status: React.FC<Props> = ({ room, roomId }) => {
   return (
     <Query
       query={USERS_IN_ROOM}

@@ -82,7 +82,7 @@ interface ToggleProps {
   fields: SliderField[];
 }
 
-const Toggle: React.FunctionComponent<ToggleProps> = ({
+const Toggle: React.FC<ToggleProps> = ({
   name,
   selected,
   onChange,

@@ -121,7 +121,7 @@ interface SetRoomProps {
   room: object;
 }
 
-const SetRoom: React.FunctionComponent<SetRoomProps> = ({ room }) => {
+const SetRoom: React.FC<SetRoomProps> = ({ room }) => {
   const { root, setRoot }: any = React.useContext(Root.Context);
   React.useEffect(() => {
     setRoot({ ...root, visitingRoom: room });
@@ -156,7 +156,7 @@ const PLAYBACK_SUBSCRIPTION = gql`
   }
 `;
 
-const Room: React.FunctionComponent<RoomProps> = ({ match }) => {
+const Room: React.FC<RoomProps> = ({ match }) => {
   console.log('<Room> render');
   const [unsubscribeToPlayback, setUnsubscribeToPlayback]: any = React.useState(
     null,

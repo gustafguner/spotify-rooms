@@ -12,6 +12,7 @@ import {
 } from 'src/components/icons';
 import { DullButton } from 'src/components/buttons';
 import ShareRoomModal from './share-room-modal';
+import Tooltip from 'src/components/core/tooltip';
 
 interface Props {
   room: any;
@@ -91,7 +92,7 @@ const InviteButton = styled(DullButton)`
   }
 `;
 
-const StatusView: React.FunctionComponent<Props> = ({
+const StatusView: React.FC<Props> = ({
   room,
   users,
   userEnteredSubscribe,
@@ -123,7 +124,17 @@ const StatusView: React.FunctionComponent<Props> = ({
     <Container>
       <Meta>
         <NameContainer>
-          {room.private === true ? <LockIcon /> : <GlobeIcon />}
+          {room.private === true ? (
+            <>
+              <LockIcon data-tip={true} data-for="private-tooltip" />
+              <Tooltip id="private-tooltip">Private</Tooltip>
+            </>
+          ) : (
+            <>
+              <GlobeIcon data-tip={true} data-for="public-tooltip" />
+              <Tooltip id="public-tooltip">Public</Tooltip>
+            </>
+          )}
           <Name>{room.name}</Name>
         </NameContainer>
 

@@ -168,7 +168,7 @@ const VOTE_FOR_TRACK = gql`
   }
 `;
 
-const QueueView: React.FunctionComponent<Props> = ({
+const QueueView: React.FC<Props> = ({
   queue,
   roomId,
   searchFieldRef,

@@ -176,7 +176,7 @@ const Artists = styled.div`
   color: rgba(255, 255, 255, 0.55);
 `;
 
-const Playback: React.FunctionComponent<Props> = ({ track }) => {
+const Playback: React.FC<Props> = ({ track }) => {
   const isTrack = track && track.id !== null;
   const [position, setPosition] = React.useState(isTrack ? track.position : 0);
 

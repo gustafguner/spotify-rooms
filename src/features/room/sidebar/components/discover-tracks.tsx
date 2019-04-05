@@ -95,7 +95,7 @@ interface Props {
   tracks: any[] | null;
 }
 
-const DiscoverTracks: React.FunctionComponent<Props> = ({ roomId, tracks }) => (
+const DiscoverTracks: React.FC<Props> = ({ roomId, tracks }) => (
   <>
     {tracks !== null ? (
       tracks.length !== 0 ? (

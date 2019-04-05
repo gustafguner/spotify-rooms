@@ -51,11 +51,7 @@ interface Props {
   history: any;
 }
 
-const ShareRoomModal: React.FunctionComponent<Props> = ({
-  isOpen,
-  close,
-  location,
-}) => {
+const ShareRoomModal: React.FC<Props> = ({ isOpen, close, location }) => {
   console.log(location);
   return (
     <Modal isOpen={isOpen} close={close} styles={modalStyles}>
@@ -70,7 +66,7 @@ const ShareRoomModal: React.FunctionComponent<Props> = ({
         />
 
         <InputInformation>
-          People can join this room by visiting this URL.
+          Invite people to the room by giving them this URL
         </InputInformation>
 
         <Spacing height={25} />

@@ -202,7 +202,7 @@ const Track = styled.div`
   animation: ${({ parentWidth }: TrackProps) => RollAnimationRule(parentWidth)};
 `;
 
-const Room: React.FunctionComponent<Props> = ({ room }) => {
+const Room: React.FC<Props> = ({ room }) => {
   const isTrack = room.playback && room.playback.id !== null;
   const trackRef: any = React.useRef(null);
   return (

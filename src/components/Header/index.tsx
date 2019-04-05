@@ -64,7 +64,7 @@ const SpotifyLogoImage = styled.img`
   margin-left: 7px;
 `;
 
-const Header: React.FunctionComponent = () => {
+const Header: React.FC = () => {
   const { root, setRoot }: any = React.useContext(Root.Context);
 
   const logOut = () => {};

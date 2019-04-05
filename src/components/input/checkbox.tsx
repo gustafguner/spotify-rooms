@@ -66,7 +66,7 @@ interface CheckboxProps extends InputProps {
   label?: string;
 }
 
-const Checkbox: React.FunctionComponent<CheckboxProps> = ({
+const Checkbox: React.FC<CheckboxProps> = ({
   name,
   checked,
   onChange,

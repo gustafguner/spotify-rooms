@@ -4,7 +4,7 @@ interface MountProps {
   event: () => void;
 }
 
-const Mount: React.FunctionComponent<MountProps> = ({ event }) => {
+const Mount: React.FC<MountProps> = ({ event }) => {
   React.useEffect(() => {
     event();
   }, []);
@@ -17,7 +17,7 @@ interface UpdateProps {
   watch?: any[];
 }
 
-const Update: React.FunctionComponent<UpdateProps> = ({ event, watch }) => {
+const Update: React.FC<UpdateProps> = ({ event, watch }) => {
   if (watch !== null) {
     React.useEffect(() => {
       event();
@@ -35,7 +35,7 @@ interface UnmountProps {
   event: () => void;
 }
 
-const Unmount: React.FunctionComponent<UnmountProps> = ({ event }) => {
+const Unmount: React.FC<UnmountProps> = ({ event }) => {
   React.useEffect(() => {
     return () => {
       event();

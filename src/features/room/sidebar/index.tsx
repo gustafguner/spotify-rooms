@@ -2,11 +2,7 @@ import * as React from 'react';
 import Queue from './components/queue';
 import styled from 'styled-components';
 import { colors } from 'src/styles';
-import {
-  getMyRecentlyPlayedTracks,
-  getTopTracks,
-  searchTracks,
-} from 'src/utils/spotify';
+import { getTopTracks, searchTracks } from 'src/utils/spotify';
 import { ClickOutside } from 'src/components/core';
 import DiscoverTracks from './components/discover-tracks';
 
@@ -69,10 +65,11 @@ const DiscoverTitle = styled.div`
 `;
 
 const DiscoverTracksFadeout = styled.div`
-  position: fixed;
-  bottom: 0;
   width: 100%;
   height: 30px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
   background: linear-gradient(${colors.TRANSPARENT}, ${colors.DARK_GRAY});
 `;
 
@@ -110,7 +107,7 @@ const DarkTint = styled.div`
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
-const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
+const Sidebar: React.FC<Props> = ({ roomId }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = React.useState<
