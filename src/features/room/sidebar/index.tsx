@@ -116,8 +116,8 @@ const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = React.useState<
     null | any[]
   >(null);
-
   const [discoverVisible, setDiscoverVisible] = React.useState(false);
+  const searchFieldRef: any = React.useRef(null);
 
   React.useEffect(() => {
     if (recentlyPlayedTracks === null) {
@@ -160,7 +160,7 @@ const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
   return (
     <Container>
       <DarkTint visible={discoverVisible !== false} />
-      <Queue roomId={roomId} />
+      <Queue roomId={roomId} searchFieldRef={searchFieldRef} />
 
       <ClickOutside
         on={() => {
@@ -188,11 +188,12 @@ const Sidebar: React.FunctionComponent<Props> = ({ roomId }) => {
           <TextInput
             type="text"
             value={searchQuery}
-            placeholder="Search for a track that you like..."
+            placeholder="Search for a track on Spotify..."
             onChange={handleTrackSearchInputChange}
             onFocus={() => {
               setDiscoverVisible(true);
             }}
+            ref={searchFieldRef}
           />
         </AddToQueue>
       </ClickOutside>

@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 
 interface Props {
   roomId: string;
+  searchFieldRef: any;
 }
 
 const QUEUE_QUERY = gql`
@@ -115,7 +116,7 @@ const QUEUE_REMOVE_SUBSCRIPTION = gql`
   }
 `;
 
-const Queue: React.FunctionComponent<Props> = ({ roomId }) => {
+const Queue: React.FunctionComponent<Props> = ({ roomId, searchFieldRef }) => {
   return (
     <Query
       query={QUEUE_QUERY}
@@ -129,6 +130,7 @@ const Queue: React.FunctionComponent<Props> = ({ roomId }) => {
           <QueueView
             queue={data.queue}
             roomId={roomId}
+            searchFieldRef={searchFieldRef}
             addSubscribe={() => {
               subscribeToMore({
                 document: QUEUE_ADD_SUBSCRIPTION,

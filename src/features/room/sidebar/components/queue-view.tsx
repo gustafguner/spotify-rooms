@@ -5,12 +5,14 @@ import { colors } from 'src/styles';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import FlipMove from 'react-flip-move';
-import { Button } from 'src/components/buttons';
+import { Button, DullButton } from 'src/components/buttons';
 import * as color from 'color';
+import { EmptyIcon, Svg } from 'src/components/icons';
 
 interface Props {
   queue: any;
   roomId: string;
+  searchFieldRef: any;
   addSubscribe: () => void;
   voteSubscribe: () => void;
   removeSubscribe: () => void;
@@ -137,8 +139,26 @@ const EmptyQueueContainer = styled.div`
   left: 0;
 `;
 
+const EmptyQueue = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+  ${Svg} {
+    fill: ${colors.GRAY_OFF};
+    width: 48px;
+    height: 48px;
+  }
+  & > * {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
 const EmptyQueueText = styled.p`
-  color: ${colors.GRAY};
+  color: ${colors.GRAY_OFF};
   text-align: center;
 `;
 
@@ -151,6 +171,7 @@ const VOTE_FOR_TRACK = gql`
 const QueueView: React.FunctionComponent<Props> = ({
   queue,
   roomId,
+  searchFieldRef,
   addSubscribe,
   voteSubscribe,
   removeSubscribe,
@@ -187,7 +208,17 @@ const QueueView: React.FunctionComponent<Props> = ({
     <Container>
       {queue.length === 0 && (
         <EmptyQueueContainer>
-          <EmptyQueueText>The queue is empty</EmptyQueueText>
+          <EmptyQueue>
+            <EmptyIcon />
+            <EmptyQueueText>The queue is empty</EmptyQueueText>
+            <DullButton
+              onClick={() => {
+                console.log(searchFieldRef.current.focus());
+              }}
+            >
+              Add a track
+            </DullButton>
+          </EmptyQueue>
         </EmptyQueueContainer>
       )}
       <FlipMove>
