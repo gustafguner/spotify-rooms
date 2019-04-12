@@ -161,17 +161,23 @@ const ProgressBarFill = styled.div`
 
 const TrackInfo = styled.div`
   position: absolute;
-  width: 100%;
+  width: calc(100% - 40px);
   top: 50%;
   transform: translateY(-50%);
-  margin-left: 40px;
+  left: 40px;
 `;
 
 const TrackName = styled.h1`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 0 0 7px 0;
 `;
 
 const Artists = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 22px;
   color: rgba(255, 255, 255, 0.55);
 `;
@@ -240,6 +246,7 @@ const Playback: React.FC<Props> = ({ track }) => {
           style={{
             width: '100%',
             height: '100%',
+            position: 'relative',
           }}
         >
           {isTrack ? (
