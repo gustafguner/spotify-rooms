@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import CoreModal from 'src/components/CoreModal';
+import { CoreModal } from 'src/components/CoreModal';
 import { ModalTextInput, InputInformation } from 'src/components/input';
 import { Button } from 'src/components/buttons';
 import { ModalParagraph, ModalSubtitle } from 'src/components/text';

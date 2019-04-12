@@ -56,6 +56,8 @@ const SliderContainer = styled.div`
       stroke: ${colors.GRAY};
       stroke-width: 0.2px;
       margin-left: 7px;
+      width: 28px;
+      height: 28px;
     }
   }
   input:checked + label {

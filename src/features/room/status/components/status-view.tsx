@@ -9,10 +9,12 @@ import {
   Svg,
   GlobeIcon,
   LinkIcon,
+  SettingsIcon,
 } from 'src/components/icons';
 import { DullButton } from 'src/components/buttons';
 import ShareRoomModal from './share-room-modal';
 import Tooltip from 'src/components/core/tooltip';
+import SettingsModal from './settings-modal';
 
 interface Props {
   room: any;
@@ -84,7 +86,7 @@ const ModeName = styled.div`
   letter-spacing: 0.2px;
 `;
 
-const InviteButton = styled(DullButton)`
+const StatusButton = styled(DullButton)`
   ${Svg} {
     width: 16px;
     height: 16px;
@@ -101,14 +103,16 @@ const StatusView: React.FC<Props> = ({
   const [userEnteredUnubscribe, setUserEnteredUnubscribe]: any = React.useState(
     null,
   );
-
   const [userLeftUnubscribe, setUserLeftUnubscribe]: any = React.useState(null);
-
   const [shareModalIsOpen, setShareModalIsOpen]: any = React.useState(false);
+  const [settingsModalIsOpen, setSettingsModalIsOpen]: any = React.useState(
+    false,
+  );
 
   React.useEffect(() => {
     setUserEnteredUnubscribe(userEnteredSubscribe());
     setUserLeftUnubscribe(userLeftSubscribe());
+
     return () => {
       if (userEnteredUnubscribe !== null) {
         userEnteredUnubscribe();
@@ -152,21 +156,39 @@ const StatusView: React.FC<Props> = ({
           )}
         </Mode>
 
-        <InviteButton
+        <StatusButton
           onClick={() => {
             setShareModalIsOpen(true);
           }}
         >
-          Invite
+          Share
           <LinkIcon />
-        </InviteButton>
+        </StatusButton>
+
+        <StatusButton
+          onClick={() => {
+            setSettingsModalIsOpen(true);
+          }}
+        >
+          Settings
+          <SettingsIcon />
+        </StatusButton>
       </Meta>
       <Users users={users} />
+
       <ShareRoomModal
         isOpen={shareModalIsOpen}
         close={() => {
           setShareModalIsOpen(false);
         }}
+      />
+
+      <SettingsModal
+        isOpen={settingsModalIsOpen}
+        close={() => {
+          setSettingsModalIsOpen(false);
+        }}
+        room={room}
       />
     </Container>
   );

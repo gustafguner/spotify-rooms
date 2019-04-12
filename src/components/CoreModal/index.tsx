@@ -54,4 +54,4 @@ const CoreModal: React.FC<ModalProps> = ({
   </Modal>
 );
 
-export default CoreModal;
+export { CoreModal };

@@ -24,6 +24,15 @@ const Button = styled.button`
   }
 `;
 
+const GreenButton = styled(Button)`
+  background-color: ${colors.GREEN};
+  &:hover {
+    background-color: ${color(colors.GREEN)
+      .darken(0.1)
+      .string()};
+  }
+`;
+
 const LargeButton = styled(Button)`
   padding: 16px 30px 16px 30px;
   font-size: 18px;
@@ -43,4 +52,4 @@ const DullButton = styled(Button)`
   }
 `;
 
-export { Button, LargeButton, DullButton };
+export { Button, GreenButton, LargeButton, DullButton };

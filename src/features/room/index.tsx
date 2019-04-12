@@ -129,6 +129,16 @@ const SetRoom: React.FC<SetRoomProps> = ({ room }) => {
   return null;
 };
 
+const ROOM_SUBSCRIPTION = gql`
+  subscription($roomId: ID!) {
+    room(roomId: $roomId) {
+      name
+      mode
+      private
+    }
+  }
+`;
+
 const PLAYBACK_SUBSCRIPTION = gql`
   subscription playback($roomId: ID!) {
     playback(roomId: $roomId) {
@@ -157,7 +167,7 @@ const PLAYBACK_SUBSCRIPTION = gql`
 `;
 
 const Room: React.FC<RoomProps> = ({ match }) => {
-  console.log('<Room> render');
+  const [unsubscribeToRoom, setUnsubscribeToRoom]: any = React.useState(null);
   const [unsubscribeToPlayback, setUnsubscribeToPlayback]: any = React.useState(
     null,
   );
@@ -181,6 +191,27 @@ const Room: React.FC<RoomProps> = ({ match }) => {
               {(mutate) => (
                 <Mount
                   event={() => {
+                    setUnsubscribeToRoom(() => {
+                      subscribeToMore({
+                        document: ROOM_SUBSCRIPTION,
+                        variables: { roomId },
+                        updateQuery: (prev, { subscriptionData }) => {
+                          console.log(subscriptionData);
+                          if (!subscriptionData.data) {
+                            return prev;
+                          }
+
+                          return Object.assign({}, prev, {
+                            room: {
+                              ...prev.room,
+                              ...subscriptionData.data.room,
+                            },
+                          });
+                        },
+                        onError: (err) => console.log(err),
+                      });
+                    });
+
                     setUnsubscribeToPlayback(() => {
                       subscribeToMore({
                         document: PLAYBACK_SUBSCRIPTION,
@@ -200,6 +231,7 @@ const Room: React.FC<RoomProps> = ({ match }) => {
                         onError: (err) => console.log(err),
                       });
                     });
+
                     mutate({
                       variables: {
                         roomId: data.room.id,
@@ -214,9 +246,14 @@ const Room: React.FC<RoomProps> = ({ match }) => {
               {(mutate) => (
                 <Unmount
                   event={() => {
+                    if (unsubscribeToRoom !== null) {
+                      unsubscribeToRoom();
+                    }
+
                     if (unsubscribeToPlayback !== null) {
                       unsubscribeToPlayback();
                     }
+
                     mutate({
                       variables: {
                         roomId: data.room.id,

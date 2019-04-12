@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Formik, Field } from 'formik';
-import CoreModal from 'src/components/CoreModal';
+import { CoreModal } from 'src/components/CoreModal';
 import {
   Checkbox,
   ModalTextInput,
@@ -13,10 +13,14 @@ import {
 import gql from 'graphql-tag';
 import { Button } from 'src/components/buttons';
 import { Mutation } from 'react-apollo';
-import { ModalParagraph, ModalSubtitle } from 'src/components/text';
+import {
+  ModalParagraph,
+  ModalSubtitle,
+  ModalHeadline,
+  ModalTitle,
+} from 'src/components/text';
 import { colors } from 'src/styles';
 import { Svg, CoopIcon, DjIcon } from 'src/components/icons';
-import { Spacing } from 'src/components/core';
 import { withRouter } from 'react-router';
 
 const CREATE_ROOM_MUTATION = gql`
@@ -29,6 +33,11 @@ const CREATE_ROOM_MUTATION = gql`
 `;
 
 const Modal = styled(CoreModal)``;
+
+const FormRow = styled.div`
+  margin-bottom: 25px;
+  height: 100%;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -78,12 +87,6 @@ const TitleContainer = styled.div`
   z-index: 1;
 `;
 
-const Title = styled.h1`
-  font-size: 56px;
-  line-height: 56px;
-  text-align: left;
-`;
-
 const Fields = styled.div`
   display: flex;
   flex-flow: column;
@@ -119,10 +122,8 @@ const CreateRoomModal: React.FC<Props> = ({ isOpen, close, history }) => {
             <path d="M63.5,0H0v768h168.2C216.5,538.1,57,583.4,57,449c0-95,136-143.6,136-288C193,99.1,138.9,45.2,63.5,0z" />
           </CurveSvg>
 
-          <ModalSubtitle>Create a room</ModalSubtitle>
-          <Spacing height={10} />
+          <ModalTitle>Create a room</ModalTitle>
           <ModalParagraph>Customize your room as you wish</ModalParagraph>
-          <Spacing height={25} />
 
           <Mutation mutation={CREATE_ROOM_MUTATION}>
             {(mutate) => (
@@ -152,7 +153,6 @@ const CreateRoomModal: React.FC<Props> = ({ isOpen, close, history }) => {
                       },
                     },
                   });
-                  console.log(res);
 
                   if (res.data.createRoom !== null) {
                     history.push(`/room/${res.data.createRoom.id}`);
@@ -170,57 +170,56 @@ const CreateRoomModal: React.FC<Props> = ({ isOpen, close, history }) => {
                 }) => (
                   <Form onSubmit={handleSubmit}>
                     <Fields>
-                      <ModalTextInput
-                        type="text"
-                        name="name"
-                        placeholder="Name"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.name}
-                        autoComplete="off"
-                      />
-                      {errors.name && touched.name && (
-                        <TextInputValidationError>
-                          {errors.name}
-                        </TextInputValidationError>
-                      )}
+                      <FormRow>
+                        <ModalTextInput
+                          type="text"
+                          name="name"
+                          placeholder="Room name"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.name}
+                          autoComplete="off"
+                        />
+                        {errors.name && touched.name && (
+                          <TextInputValidationError>
+                            {errors.name}
+                          </TextInputValidationError>
+                        )}
+                      </FormRow>
 
-                      <Spacing height={25} />
-
-                      <InputTitle>Mode</InputTitle>
-
-                      <Toggle
-                        name="mode"
-                        selected={values.mode}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fields={[
-                          {
-                            value: 'co-op',
-                            label: 'Co-op',
-                            id: 'coop-mode-choice',
-                            icon: <CoopIcon width={28} height={28} />,
-                          },
-                          {
-                            value: 'dj',
-                            label: 'DJ',
-                            id: 'dj-mode-choice',
-                            icon: <DjIcon width={28} height={28} />,
-                          },
-                        ]}
-                      />
-                      {values.mode === 'co-op' ? (
-                        <InputInformation>
-                          You vote together on which tracks to play.
-                        </InputInformation>
-                      ) : (
-                        <InputInformation>
-                          You can all suggest tracks, but it's up to the DJ to
-                          choose which ones to play.
-                        </InputInformation>
-                      )}
-
-                      <Spacing height={35} />
+                      <FormRow>
+                        <InputTitle>Mode</InputTitle>
+                        <Toggle
+                          name="mode"
+                          selected={values.mode}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          fields={[
+                            {
+                              value: 'co-op',
+                              label: 'Co-op',
+                              id: 'coop-mode-choice',
+                              icon: <CoopIcon />,
+                            },
+                            {
+                              value: 'dj',
+                              label: 'DJ',
+                              id: 'dj-mode-choice',
+                              icon: <DjIcon />,
+                            },
+                          ]}
+                        />
+                        {values.mode === 'co-op' ? (
+                          <InputInformation>
+                            You vote together on which tracks to play.
+                          </InputInformation>
+                        ) : (
+                          <InputInformation>
+                            You can all suggest tracks, but it's up to the DJ to
+                            choose which ones to play.
+                          </InputInformation>
+                        )}
+                      </FormRow>
 
                       <Checkbox
                         name="private"
@@ -229,10 +228,11 @@ const CreateRoomModal: React.FC<Props> = ({ isOpen, close, history }) => {
                         onBlur={handleBlur}
                         label="Private"
                       />
-
-                      <InputInformation>
-                        A private room can only be accessed through a link.
-                      </InputInformation>
+                      <FormRow>
+                        <InputInformation>
+                          A private room can only be accessed through a link.
+                        </InputInformation>
+                      </FormRow>
                     </Fields>
 
                     <div>
@@ -248,7 +248,7 @@ const CreateRoomModal: React.FC<Props> = ({ isOpen, close, history }) => {
         </FormContainer>
 
         <TitleContainer>
-          <Title>It’s better together</Title>
+          <ModalHeadline>It’s better together</ModalHeadline>
         </TitleContainer>
       </Container>
     </Modal>

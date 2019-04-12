@@ -40,12 +40,6 @@ const ROOMS_QUERY = gql`
   }
 `;
 
-const MUTATION = gql`
-  mutation createRoom($input: CreateRoomInput!) {
-    createRoom(input: $input)
-  }
-`;
-
 const Rooms = styled.div`
   width: 100%;
   padding-left: 25px;

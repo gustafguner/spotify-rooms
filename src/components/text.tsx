@@ -7,8 +7,12 @@ const Title = styled.h1`
   color: ${colors.WHITE};
 `;
 
-const ModalTitle = styled(Title)`
-  color: ${colors.BLACK};
+const ModalTitle = styled.h1`
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 500;
+  color: ${colors.PRIMARY_GRAY};
+  margin-bottom: 10px;
 `;
 
 const Subtitle = styled.h2`
@@ -28,8 +32,16 @@ const Paragraph = styled.p`
   font-weight: 400;
 `;
 
+const ModalHeadline = styled.span`
+  font-size: 52px;
+  line-height: 56px;
+  color: ${colors.WHITE};
+  font-weight: 600;
+`;
+
 const ModalParagraph = styled(Paragraph)`
   color: ${colors.GRAY};
+  margin-bottom: 25px;
 `;
 
 export {
@@ -39,4 +51,5 @@ export {
   ModalSubtitle,
   Paragraph,
   ModalParagraph,
+  ModalHeadline,
 };
