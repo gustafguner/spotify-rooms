@@ -280,7 +280,7 @@ const Room: React.FC<RoomProps> = ({ match }) => {
               </Bottom>
             </Content>
 
-            <Sidebar roomId={match.params.id} />
+            <Sidebar roomId={match.params.id} roomMode={data.room.mode} />
           </Container>
         ) : (
           <Loader />

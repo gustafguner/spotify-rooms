@@ -7,16 +7,8 @@ import gql from 'graphql-tag';
 import FlipMove from 'react-flip-move';
 import { Button, DullButton } from 'src/components/buttons';
 import * as color from 'color';
-import { EmptyIcon, Svg } from 'src/components/icons';
-
-interface Props {
-  queue: any;
-  roomId: string;
-  searchFieldRef: any;
-  addSubscribe: () => void;
-  voteSubscribe: () => void;
-  removeSubscribe: () => void;
-}
+import { EmptyIcon, Svg, QueueIcon, LightBulbIcon } from 'src/components/icons';
+import { Toggle } from 'src/components/input';
 
 const Container = styled.div`
   width: 100%;
@@ -24,8 +16,32 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-flow: column;
-  padding: 15px;
   overflow-y: scroll;
+`;
+
+const Header = styled.div`
+  width: 100%;
+  height: 70px;
+  padding: 15px 15px 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SidebarType = styled.div`
+  display: flex;
+  align-items: center;
+  ${Svg} {
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+    fill: ${colors.GREEN};
+  }
+`;
+
+const SidebarTypeName = styled.div`
+  font-size: 16px;
+  color: ${colors.ALMOST_WHITE};
 `;
 
 const Item = styled.div`
@@ -134,9 +150,9 @@ const EmptyQueueContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
   top: 0;
   left: 0;
+  padding: 15px;
 `;
 
 const EmptyQueue = styled.div`
@@ -162,15 +178,30 @@ const EmptyQueueText = styled.p`
   text-align: center;
 `;
 
+const QueueContainer = styled(FlipMove)`
+  padding: 15px;
+`;
+
 const VOTE_FOR_TRACK = gql`
   mutation voteForTrack($input: VoteForTrackInput!) {
     voteForTrack(input: $input)
   }
 `;
 
+interface Props {
+  queue: any;
+  roomId: string;
+  roomMode: string;
+  searchFieldRef: any;
+  addSubscribe: () => void;
+  voteSubscribe: () => void;
+  removeSubscribe: () => void;
+}
+
 const QueueView: React.FC<Props> = ({
   queue,
   roomId,
+  roomMode,
   searchFieldRef,
   addSubscribe,
   voteSubscribe,
@@ -179,6 +210,7 @@ const QueueView: React.FC<Props> = ({
   const [addUnsubscribe, setAddUnsubscribe]: any = React.useState(null);
   const [voteUnsubscribe, setVoteUnsubscribe]: any = React.useState(null);
   const [removeUnsubscribe, setRemoveUnsubscribe]: any = React.useState(null);
+  const [sidebarType, setSidebarType]: any = React.useState('queue');
 
   queue.sort((a: any, b: any) => {
     return (
@@ -206,6 +238,39 @@ const QueueView: React.FC<Props> = ({
 
   return (
     <Container>
+      <Header>
+        {roomMode === 'co-op' ? (
+          <SidebarType>
+            <SidebarTypeName>Queue</SidebarTypeName>
+            <QueueIcon />
+          </SidebarType>
+        ) : (
+          <Toggle
+            name="mode"
+            selected={sidebarType}
+            onChange={(event) => {
+              setSidebarType(event.target.value);
+            }}
+            onBlur={() => {}}
+            fields={[
+              {
+                value: 'queue',
+                label: 'Queue',
+                id: 'queue-choice',
+                icon: <QueueIcon />,
+              },
+              {
+                value: 'requests',
+                label: 'Requests',
+                id: 'requests-choice',
+                icon: <LightBulbIcon />,
+              },
+            ]}
+            theme="dark"
+          />
+        )}
+      </Header>
+
       {queue.length === 0 && (
         <EmptyQueueContainer>
           <EmptyQueue>
@@ -213,7 +278,7 @@ const QueueView: React.FC<Props> = ({
             <EmptyQueueText>The queue is empty</EmptyQueueText>
             <DullButton
               onClick={() => {
-                console.log(searchFieldRef.current.focus());
+                searchFieldRef.current.focus();
               }}
             >
               Add a track
@@ -221,46 +286,48 @@ const QueueView: React.FC<Props> = ({
           </EmptyQueue>
         </EmptyQueueContainer>
       )}
-      <FlipMove>
-        {queue.map((track: any) => (
-          <Item key={track.id}>
-            <CoverImageWrapper>
-              <CoverImage src={track.images[0].url} />
-            </CoverImageWrapper>
-            <TrackInfo>
-              <TrackNameContainer>
-                <TrackName href="">{track.name}</TrackName>
-              </TrackNameContainer>
-              <TrackArtists>
-                {track.artists !== null
-                  ? track.artists.map((a: any) => a.name).join(', ')
-                  : ''}
-              </TrackArtists>
-            </TrackInfo>
-            <Mutation mutation={VOTE_FOR_TRACK}>
-              {(mutate) => (
-                <TrackVotes>
-                  <VoteButton
-                    onClick={() => {
-                      mutate({
-                        variables: {
-                          input: {
-                            roomId,
-                            trackId: track.id,
+      <QueueContainer>
+        <FlipMove>
+          {queue.map((track: any) => (
+            <Item key={track.id}>
+              <CoverImageWrapper>
+                <CoverImage src={track.images[0].url} />
+              </CoverImageWrapper>
+              <TrackInfo>
+                <TrackNameContainer>
+                  <TrackName href="">{track.name}</TrackName>
+                </TrackNameContainer>
+                <TrackArtists>
+                  {track.artists !== null
+                    ? track.artists.map((a: any) => a.name).join(', ')
+                    : ''}
+                </TrackArtists>
+              </TrackInfo>
+              <Mutation mutation={VOTE_FOR_TRACK}>
+                {(mutate) => (
+                  <TrackVotes>
+                    <VoteButton
+                      onClick={() => {
+                        mutate({
+                          variables: {
+                            input: {
+                              roomId,
+                              trackId: track.id,
+                            },
                           },
-                        },
-                      });
-                    }}
-                  >
-                    👍
-                    <VoteCount>{track.voters.length}</VoteCount>
-                  </VoteButton>
-                </TrackVotes>
-              )}
-            </Mutation>
-          </Item>
-        ))}
-      </FlipMove>
+                        });
+                      }}
+                    >
+                      👍
+                      <VoteCount>{track.voters.length}</VoteCount>
+                    </VoteButton>
+                  </TrackVotes>
+                )}
+              </Mutation>
+            </Item>
+          ))}
+        </FlipMove>
+      </QueueContainer>
     </Container>
   );
 };

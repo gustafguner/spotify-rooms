@@ -4,9 +4,13 @@ import styled from 'styled-components';
 import { InputProps } from './types';
 import { v4 as uuid } from 'uuid';
 import { Svg } from '../icons';
+import * as color from 'color';
+
+type SliderTheme = 'light' | 'dark';
 
 interface KnobProps {
   left: number;
+  theme: SliderTheme;
 }
 
 const Knob = styled.div`
@@ -15,7 +19,12 @@ const Knob = styled.div`
   width: 50%;
   border-radius: 40px;
   height: calc(100% + 2px);
-  background: ${colors.WHITE}
+  background: ${({ theme }: KnobProps) =>
+    theme === 'light'
+      ? colors.WHITE
+      : color(colors.PRIMARY_GRAY)
+          .lighten(0.2)
+          .string()};
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s;
   transform: ${({ left }: KnobProps) => `translateX(${left}%)`};
@@ -29,6 +38,10 @@ const Field = styled.div`
   align-items: center;
 `;
 
+interface SliderProps {
+  theme: SliderTheme;
+}
+
 const SliderContainer = styled.div`
   width: 100%;
   height: 40px;
@@ -37,6 +50,8 @@ const SliderContainer = styled.div`
   display: flex;
   flex-flow: row;
   background: rgb(240, 240, 240);
+  background: ${({ theme }: SliderProps) =>
+    theme === 'light' ? 'rgb(240, 240, 240)' : colors.PRIMARY_GRAY};
   input {
     display: none;
   }
@@ -61,7 +76,8 @@ const SliderContainer = styled.div`
     }
   }
   input:checked + label {
-    color: ${colors.PRIMARY_GRAY};
+    color: ${({ theme }: SliderProps) =>
+      theme === 'light' ? colors.PRIMARY_GRAY : colors.ALMOST_WHITE};
     ${Svg} {
       fill: ${colors.GREEN};
       stroke: ${colors.GREEN};
@@ -82,6 +98,7 @@ interface ToggleProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   fields: SliderField[];
+  theme?: SliderTheme;
 }
 
 const Toggle: React.FC<ToggleProps> = ({
@@ -90,9 +107,11 @@ const Toggle: React.FC<ToggleProps> = ({
   onChange,
   onBlur,
   fields,
+  theme = 'light',
 }) => (
-  <SliderContainer>
+  <SliderContainer theme={theme}>
     <Knob
+      theme={theme}
       left={
         fields.findIndex((field: SliderField) => selected === field.value) * 100
       }

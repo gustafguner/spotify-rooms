@@ -6,10 +6,6 @@ import { getTopTracks, searchTracks } from 'src/utils/spotify';
 import { ClickOutside } from 'src/components/core';
 import DiscoverTracks from './components/discover-tracks';
 
-interface Props {
-  roomId: string;
-}
-
 const Container = styled.div`
   width: 380px;
   flex-shrink: 0;
@@ -107,7 +103,12 @@ const DarkTint = styled.div`
 let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
-const Sidebar: React.FC<Props> = ({ roomId }) => {
+interface Props {
+  roomId: string;
+  roomMode: string;
+}
+
+const Sidebar: React.FC<Props> = ({ roomId, roomMode }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = React.useState<
@@ -157,7 +158,12 @@ const Sidebar: React.FC<Props> = ({ roomId }) => {
   return (
     <Container>
       <DarkTint visible={discoverVisible !== false} />
-      <Queue roomId={roomId} searchFieldRef={searchFieldRef} />
+
+      <Queue
+        roomId={roomId}
+        roomMode={roomMode}
+        searchFieldRef={searchFieldRef}
+      />
 
       <ClickOutside
         on={() => {

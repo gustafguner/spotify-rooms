@@ -95,6 +95,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ subscription }) => {
   React.useEffect(() => {
     if (playback !== null && playback.id) {
       console.log('Play');
+      console.log(playback);
       play({ uris: [playback.uri], position_ms: playback.position });
     }
     setUnsubscribe(subscription(setPlayback));
