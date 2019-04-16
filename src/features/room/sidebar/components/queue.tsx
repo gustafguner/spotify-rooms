@@ -27,6 +27,28 @@ const QUEUE_QUERY = gql`
       position
       duration
     }
+    requests(roomId: $roomId) {
+      id
+      uri
+      name
+      images {
+        url
+        width
+        height
+      }
+      artists {
+        name
+      }
+      voters {
+        id
+        spotifyId
+        displayName
+      }
+      queueTimestamp
+      playTimestamp
+      position
+      duration
+    }
   }
 `;
 
@@ -136,6 +158,7 @@ const Queue: React.FC<Props> = ({
         !loading && !error && data ? (
           <QueueView
             queue={data.queue}
+            requests={data.requests}
             roomId={roomId}
             roomMode={roomMode}
             roomDj={roomDj}
