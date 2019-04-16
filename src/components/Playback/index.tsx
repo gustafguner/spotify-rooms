@@ -112,14 +112,14 @@ const Subscription: React.FC<SubscriptionProps> = ({ subscription }) => {
 };
 
 const Playback = () => {
-  const { root }: any = React.useContext(Root.Context);
+  const { rootContext }: any = React.useContext(Root.Context);
 
-  return root ? (
-    <Container toggled={root.visitingRoom !== null || true}>
-      {root.visitingRoom !== null ? (
+  return rootContext ? (
+    <Container toggled={rootContext.visitingRoom !== null || true}>
+      {rootContext.visitingRoom !== null ? (
         <Query
           query={PLAYBACK_QUERY}
-          variables={{ roomId: root.visitingRoom.id }}
+          variables={{ roomId: rootContext.visitingRoom.id }}
           fetchPolicy={'network-only'}
         >
           {({ data, loading, error, subscribeToMore }) => {
@@ -129,7 +129,7 @@ const Playback = () => {
                   subscription={(setPlayback: (playback: any) => void) => {
                     subscribeToMore({
                       document: PLAYBACK_SUBSCRIPTION,
-                      variables: { roomId: root.visitingRoom.id },
+                      variables: { roomId: rootContext.visitingRoom.id },
                       updateQuery: (prev, { subscriptionData }) => {
                         if (!subscriptionData.data) {
                           return prev;

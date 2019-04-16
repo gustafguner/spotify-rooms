@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Container = styled.div`
-  max-width: 400px;
+  max-width: 220px;
   width: 100%;
   display: flex;
   justify-content: flex-end;

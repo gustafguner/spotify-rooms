@@ -27,6 +27,10 @@ const GET_ROOM_QUERY = gql`
       host {
         displayName
       }
+      dj {
+        id
+        displayName
+      }
       playback {
         id
         name
@@ -44,6 +48,27 @@ const GET_ROOM_QUERY = gql`
         duration
       }
       queue {
+        id
+        name
+        images {
+          url
+          width
+          height
+        }
+        artists {
+          name
+        }
+        voters {
+          id
+          spotifyId
+          displayName
+        }
+        queueTimestamp
+        playTimestamp
+        position
+        duration
+      }
+      requests {
         id
         name
         images {
@@ -86,7 +111,7 @@ const Container = styled.div`
 
 const Content = styled.div`
   display: flex;
-  width: 100%;
+  width: calc(100% - 380px);
   flex-flow: column;
 `;
 
@@ -122,9 +147,9 @@ interface SetRoomProps {
 }
 
 const SetRoom: React.FC<SetRoomProps> = ({ room }) => {
-  const { root, setRoot }: any = React.useContext(Root.Context);
+  const { rootContext, setRootContext }: any = React.useContext(Root.Context);
   React.useEffect(() => {
-    setRoot({ ...root, visitingRoom: room });
+    setRootContext({ ...rootContext, visitingRoom: room, room });
   }, []);
   return null;
 };
@@ -280,7 +305,7 @@ const Room: React.FC<RoomProps> = ({ match }) => {
               </Bottom>
             </Content>
 
-            <Sidebar roomId={match.params.id} roomMode={data.room.mode} />
+            <Sidebar room={data.room} />
           </Container>
         ) : (
           <Loader />

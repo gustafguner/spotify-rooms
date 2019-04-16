@@ -9,6 +9,7 @@ import { Button, DullButton } from 'src/components/buttons';
 import * as color from 'color';
 import { EmptyIcon, Svg, QueueIcon, LightBulbIcon } from 'src/components/icons';
 import { Toggle } from 'src/components/input';
+import { Root } from 'src/Root';
 
 const Container = styled.div`
   width: 100%;
@@ -146,7 +147,7 @@ const VoteCount = styled.div`
 
 const EmptyQueueContainer = styled.div`
   width: 100%;
-  height: calc(100% - 80px);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -192,6 +193,7 @@ interface Props {
   queue: any;
   roomId: string;
   roomMode: string;
+  roomDj: any;
   searchFieldRef: any;
   addSubscribe: () => void;
   voteSubscribe: () => void;
@@ -202,11 +204,14 @@ const QueueView: React.FC<Props> = ({
   queue,
   roomId,
   roomMode,
+  roomDj,
   searchFieldRef,
   addSubscribe,
   voteSubscribe,
   removeSubscribe,
 }) => {
+  const { rootContext }: any = React.useContext(Root.Context);
+
   const [addUnsubscribe, setAddUnsubscribe]: any = React.useState(null);
   const [voteUnsubscribe, setVoteUnsubscribe]: any = React.useState(null);
   const [removeUnsubscribe, setRemoveUnsubscribe]: any = React.useState(null);
@@ -238,38 +243,59 @@ const QueueView: React.FC<Props> = ({
 
   return (
     <Container>
-      <Header>
-        {roomMode === 'co-op' ? (
-          <SidebarType>
-            <SidebarTypeName>Queue</SidebarTypeName>
-            <QueueIcon />
-          </SidebarType>
-        ) : (
-          <Toggle
-            name="mode"
-            selected={sidebarType}
-            onChange={(event) => {
-              setSidebarType(event.target.value);
-            }}
-            onBlur={() => {}}
-            fields={[
-              {
-                value: 'queue',
-                label: 'Queue',
-                id: 'queue-choice',
-                icon: <QueueIcon />,
-              },
-              {
-                value: 'requests',
-                label: 'Requests',
-                id: 'requests-choice',
-                icon: <LightBulbIcon />,
-              },
-            ]}
-            theme="dark"
-          />
-        )}
-      </Header>
+      {roomMode === 'dj' ? (
+        <>
+          {roomDj !== null && roomDj.id === rootContext.auth.user.id ? (
+            <Header>
+              <Toggle
+                name="mode"
+                selected={sidebarType}
+                onChange={(event) => {
+                  setSidebarType(event.target.value);
+                }}
+                onBlur={() => {}}
+                fields={[
+                  {
+                    value: 'queue',
+                    label: 'Queue',
+                    id: 'queue-choice',
+                    icon: <QueueIcon />,
+                  },
+                  {
+                    value: 'requests',
+                    label: 'Requests',
+                    id: 'requests-choice',
+                    icon: <LightBulbIcon />,
+                  },
+                ]}
+                theme="dark"
+              />
+            </Header>
+          ) : (
+            <>
+              {queue.length !== 0 && (
+                <Header>
+                  <SidebarType>
+                    <SidebarTypeName>Requests</SidebarTypeName>
+                    <LightBulbIcon />
+                  </SidebarType>
+                </Header>
+              )}
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {queue.length !== 0 && (
+            <Header>
+              <SidebarType>
+                <SidebarTypeName>Queue</SidebarTypeName>
+                <QueueIcon />
+              </SidebarType>
+            </Header>
+          )}
+        </>
+      )}
 
       {queue.length === 0 && (
         <EmptyQueueContainer>

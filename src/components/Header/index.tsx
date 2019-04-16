@@ -65,7 +65,7 @@ const SpotifyLogoImage = styled.img`
 `;
 
 const Header: React.FC = () => {
-  const { root, setRoot }: any = React.useContext(Root.Context);
+  const { rootContext, setRootContext }: any = React.useContext(Root.Context);
 
   const logOut = () => {};
   return (
@@ -78,13 +78,13 @@ const Header: React.FC = () => {
           </LogoContainer>
         </Link>
 
-        {root.visitingRoom && root.visitingRoom !== null ? (
-          <h4>{root.visitingRoom.name}</h4>
+        {rootContext.visitingRoom && rootContext.visitingRoom !== null ? (
+          <h4>{rootContext.visitingRoom.name}</h4>
         ) : (
           <h4>Enter a room...</h4>
         )}
 
-        {root.auth && root.auth.loggedIn ? (
+        {rootContext.auth && rootContext.auth.loggedIn ? (
           <Button onClick={logOut}>Log out</Button>
         ) : (
           <SpotifyLoginButton onClick={getSpotifyAuthorizeUrl}>

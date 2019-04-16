@@ -55,7 +55,7 @@ const DiscoverTitle = styled.div`
   justify-content: center;
   width: 100%;
   height: 45px;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   color: ${colors.GRAY};
   font-size: 15px;
 `;
@@ -104,11 +104,10 @@ let spotifyTrackSearch: any = null;
 let spotifyTrackSearchQuery: any = null;
 
 interface Props {
-  roomId: string;
-  roomMode: string;
+  room: any;
 }
 
-const Sidebar: React.FC<Props> = ({ roomId, roomMode }) => {
+const Sidebar: React.FC<Props> = ({ room }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = React.useState<
@@ -160,8 +159,9 @@ const Sidebar: React.FC<Props> = ({ roomId, roomMode }) => {
       <DarkTint visible={discoverVisible !== false} />
 
       <Queue
-        roomId={roomId}
-        roomMode={roomMode}
+        roomId={room.id}
+        roomMode={room.mode}
+        roomDj={room.dj}
         searchFieldRef={searchFieldRef}
       />
 
@@ -181,7 +181,7 @@ const Sidebar: React.FC<Props> = ({ roomId, roomMode }) => {
                   tracks={
                     searchQuery !== '' ? searchResults : recentlyPlayedTracks
                   }
-                  roomId={roomId}
+                  roomId={room.id}
                 />
                 <DiscoverTracksFadeout />
               </Discover>

@@ -2,18 +2,19 @@ import * as React from 'react';
 import createContainer from 'constate';
 import { getToken, getUser } from './utils/auth';
 
-const useRoot = () => {
-  const [root, setRoot] = React.useState({
+const useRootContext = () => {
+  const [rootContext, setRootContext] = React.useState({
     auth: {
       loggedIn: getToken() !== null,
       user: getUser(),
     },
     visitingRoom: null,
     playback: null,
+    room: null,
   });
-  return { root, setRoot };
+  return { rootContext, setRootContext };
 };
 
-const Root = createContainer(useRoot);
+const Root = createContainer(useRootContext);
 
 export { Root };

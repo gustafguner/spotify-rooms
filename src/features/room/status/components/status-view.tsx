@@ -49,11 +49,13 @@ const NameContainer = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
+  max-width: 175px;
   ${Svg} {
     width: 18px;
     height: 18px;
     fill: ${colors.GRAY};
     margin-right: 10px;
+    flex-shrink: 0;
   }
 `;
 
@@ -62,6 +64,10 @@ const Name = styled.div`
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.2px;
+  width: calc(100% - 28px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const Mode = styled.div`
@@ -71,6 +77,7 @@ const Mode = styled.div`
   letter-spacing: 0.2px;
   display: flex;
   align-items: center;
+  max-width: 100px;
   ${Svg} {
     width: 28px;
     height: 28px;
@@ -83,7 +90,11 @@ const ModeName = styled.div`
   color: ${colors.GRAY};
   font-weight: 600;
   font-size: 13px;
+  width: calc(100% - 38px);
   letter-spacing: 0.2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const StatusButton = styled(DullButton)`

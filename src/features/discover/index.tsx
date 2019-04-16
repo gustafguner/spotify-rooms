@@ -64,13 +64,13 @@ const CreateRoomButton = styled(LargeButton)`
 `;
 
 const Discover = () => {
-  const { root, setRoot }: any = React.useContext(Root.Context);
+  const { rootContext, setRootContext }: any = React.useContext(Root.Context);
   const [createRoomModalIsOpen, setCreateRoomModalIsOpen] = React.useState(
     false,
   );
   React.useEffect(() => {
-    setRoot({
-      ...root,
+    setRootContext({
+      ...rootContext,
       visitingRoom: null,
     });
   }, []);

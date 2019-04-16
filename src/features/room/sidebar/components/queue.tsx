@@ -3,12 +3,6 @@ import QueueView from './queue-view';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-interface Props {
-  roomId: string;
-  roomMode: string;
-  searchFieldRef: any;
-}
-
 const QUEUE_QUERY = gql`
   query queue($roomId: ID!) {
     queue(roomId: $roomId) {
@@ -117,7 +111,19 @@ const QUEUE_REMOVE_SUBSCRIPTION = gql`
   }
 `;
 
-const Queue: React.FC<Props> = ({ roomId, roomMode, searchFieldRef }) => {
+interface Props {
+  roomId: string;
+  roomMode: string;
+  roomDj: any;
+  searchFieldRef: any;
+}
+
+const Queue: React.FC<Props> = ({
+  roomId,
+  roomMode,
+  roomDj,
+  searchFieldRef,
+}) => {
   return (
     <Query
       query={QUEUE_QUERY}
@@ -132,6 +138,7 @@ const Queue: React.FC<Props> = ({ roomId, roomMode, searchFieldRef }) => {
             queue={data.queue}
             roomId={roomId}
             roomMode={roomMode}
+            roomDj={roomDj}
             searchFieldRef={searchFieldRef}
             addSubscribe={() => {
               subscribeToMore({
