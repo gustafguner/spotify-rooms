@@ -55,26 +55,29 @@ const QUEUE_QUERY = gql`
 const QUEUE_ADD_SUBSCRIPTION = gql`
   subscription trackAddedToQueue($roomId: ID!) {
     trackAddedToQueue(roomId: $roomId) {
-      id
-      uri
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
+      queueType
+      track {
         id
-        spotifyId
-        displayName
+        uri
+        name
+        images {
+          url
+          width
+          height
+        }
+        artists {
+          name
+        }
+        voters {
+          id
+          spotifyId
+          displayName
+        }
+        queueTimestamp
+        playTimestamp
+        position
+        duration
       }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
     }
   }
 `;
@@ -82,26 +85,29 @@ const QUEUE_ADD_SUBSCRIPTION = gql`
 const QUEUE_VOTE_SUBSCRIPTION = gql`
   subscription trackVotedOnInQueue($roomId: ID!) {
     trackVotedOnInQueue(roomId: $roomId) {
-      id
-      uri
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
+      queueType
+      track {
         id
-        spotifyId
-        displayName
+        uri
+        name
+        images {
+          url
+          width
+          height
+        }
+        artists {
+          name
+        }
+        voters {
+          id
+          spotifyId
+          displayName
+        }
+        queueTimestamp
+        playTimestamp
+        position
+        duration
       }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
     }
   }
 `;
@@ -109,26 +115,29 @@ const QUEUE_VOTE_SUBSCRIPTION = gql`
 const QUEUE_REMOVE_SUBSCRIPTION = gql`
   subscription trackRemovedFromQueue($roomId: ID!) {
     trackRemovedFromQueue(roomId: $roomId) {
-      id
-      uri
-      name
-      images {
-        url
-        width
-        height
-      }
-      artists {
-        name
-      }
-      voters {
+      queueType
+      track {
         id
-        spotifyId
-        displayName
+        uri
+        name
+        images {
+          url
+          width
+          height
+        }
+        artists {
+          name
+        }
+        voters {
+          id
+          spotifyId
+          displayName
+        }
+        queueTimestamp
+        playTimestamp
+        position
+        duration
       }
-      queueTimestamp
-      playTimestamp
-      position
-      duration
     }
   }
 `;
@@ -136,14 +145,18 @@ const QUEUE_REMOVE_SUBSCRIPTION = gql`
 interface Props {
   roomId: string;
   roomMode: string;
-  roomDj: any;
+  userIsDJ: boolean;
+  queueType: 'queue' | 'requests';
+  setQueueType: (type: string) => void;
   searchFieldRef: any;
 }
 
 const Queue: React.FC<Props> = ({
   roomId,
   roomMode,
-  roomDj,
+  userIsDJ,
+  queueType,
+  setQueueType,
   searchFieldRef,
 }) => {
   return (
@@ -161,7 +174,9 @@ const Queue: React.FC<Props> = ({
             requests={data.requests}
             roomId={roomId}
             roomMode={roomMode}
-            roomDj={roomDj}
+            userIsDJ={userIsDJ}
+            queueType={queueType}
+            setQueueType={setQueueType}
             searchFieldRef={searchFieldRef}
             addSubscribe={() => {
               subscribeToMore({
@@ -172,12 +187,24 @@ const Queue: React.FC<Props> = ({
                     return prev;
                   }
 
-                  return Object.assign({}, prev, {
-                    queue: [
-                      ...prev.queue,
-                      subscriptionData.data.trackAddedToQueue,
-                    ],
-                  });
+                  if (
+                    subscriptionData.data.trackAddedToQueue.queueType ===
+                    'queue'
+                  ) {
+                    return Object.assign({}, prev, {
+                      queue: [
+                        ...prev.queue,
+                        subscriptionData.data.trackAddedToQueue.track,
+                      ],
+                    });
+                  } else {
+                    return Object.assign({}, prev, {
+                      requests: [
+                        ...prev.requests,
+                        subscriptionData.data.trackAddedToQueue.track,
+                      ],
+                    });
+                  }
                 },
                 onError: (err) => console.log(err),
               });
@@ -191,15 +218,29 @@ const Queue: React.FC<Props> = ({
                     return prev;
                   }
 
-                  const newTrack = subscriptionData.data.trackVotedOnInQueue;
+                  const newTrack =
+                    subscriptionData.data.trackVotedOnInQueue.track;
 
-                  const newQueue = prev.queue.map((track: any) => {
-                    return track.id === newTrack.id ? newTrack : track;
-                  });
+                  if (
+                    subscriptionData.data.trackVotedOnInQueue.queueType ===
+                    'queue'
+                  ) {
+                    const newQueue = prev.queue.map((track: any) => {
+                      return track.id === newTrack.id ? newTrack : track;
+                    });
 
-                  return Object.assign({}, prev, {
-                    queue: newQueue,
-                  });
+                    return Object.assign({}, prev, {
+                      queue: newQueue,
+                    });
+                  } else {
+                    const newQueue = prev.requests.map((track: any) => {
+                      return track.id === newTrack.id ? newTrack : track;
+                    });
+
+                    return Object.assign({}, prev, {
+                      requests: newQueue,
+                    });
+                  }
                 },
                 onError: (err) => console.log(err),
               });
@@ -214,15 +255,28 @@ const Queue: React.FC<Props> = ({
                   }
 
                   const removedTrack =
-                    subscriptionData.data.trackRemovedFromQueue;
+                    subscriptionData.data.trackRemovedFromQueue.track;
 
-                  const newQueue = prev.queue.filter((track: any) => {
-                    return track.id !== removedTrack.id;
-                  });
+                  if (
+                    subscriptionData.data.trackRemovedFromQueue.queueType ===
+                    'queue'
+                  ) {
+                    const newQueue = prev.queue.filter((track: any) => {
+                      return track.id !== removedTrack.id;
+                    });
 
-                  return Object.assign({}, prev, {
-                    queue: newQueue,
-                  });
+                    return Object.assign({}, prev, {
+                      queue: newQueue,
+                    });
+                  } else {
+                    const newQueue = prev.requests.filter((track: any) => {
+                      return track.id !== removedTrack.id;
+                    });
+
+                    return Object.assign({}, prev, {
+                      requests: newQueue,
+                    });
+                  }
                 },
                 onError: (err) => console.log(err),
               });

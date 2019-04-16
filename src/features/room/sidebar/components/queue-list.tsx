@@ -5,6 +5,13 @@ import styled from 'styled-components';
 import { colors } from 'src/styles';
 import { Button } from 'src/components/buttons';
 import * as color from 'color';
+import gql from 'graphql-tag';
+
+const VOTE_FOR_TRACK_IN_QUEUE = gql`
+  mutation voteForTrackInQueue($input: VoteForTrackInQueueInput!) {
+    voteForTrackInQueue(input: $input)
+  }
+`;
 
 const Item = styled.div`
   width: 100%;
@@ -108,11 +115,11 @@ const VoteCount = styled.div`
 
 interface Props {
   list: any;
-  mutation: any;
   roomId: string;
+  queueType: 'queue' | 'requests';
 }
 
-const QueueList: React.FC<Props> = ({ list, mutation, roomId }) => (
+const QueueList: React.FC<Props> = ({ list, roomId, queueType }) => (
   <FlipMove>
     {list.map((track: any) => (
       <Item key={track.id}>
@@ -129,7 +136,7 @@ const QueueList: React.FC<Props> = ({ list, mutation, roomId }) => (
               : ''}
           </TrackArtists>
         </TrackInfo>
-        <Mutation mutation={mutation}>
+        <Mutation mutation={VOTE_FOR_TRACK_IN_QUEUE}>
           {(mutate) => (
             <TrackVotes>
               <VoteButton
@@ -139,6 +146,7 @@ const QueueList: React.FC<Props> = ({ list, mutation, roomId }) => (
                       input: {
                         roomId,
                         trackId: track.id,
+                        queueType,
                       },
                     },
                   });

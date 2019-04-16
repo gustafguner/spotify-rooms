@@ -4,7 +4,7 @@ import { colors } from 'src/styles';
 import { Svg, EmptyIcon } from 'src/components/icons';
 import { DullButton } from 'src/components/buttons';
 
-const EmptyQueueContainer = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   height: calc(100% - 80px);
   display: flex;
@@ -16,7 +16,7 @@ const EmptyQueueContainer = styled.div`
   position: absolute;
 `;
 
-const EmptyQueue = styled.div`
+const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,31 +34,39 @@ const EmptyQueue = styled.div`
   }
 `;
 
-const EmptyQueueText = styled.p`
+const Title = styled.p`
   color: ${colors.GRAY_OFF};
   text-align: center;
 `;
 
 interface Props {
-  title: string;
-  buttonTitle: string;
+  title?: string;
+  hideButton?: boolean;
+  buttonTitle?: string;
   onButtonClick: () => void;
 }
 
-const Empty: React.FC<Props> = ({ title, buttonTitle, onButtonClick }) => (
-  <EmptyQueueContainer>
-    <EmptyQueue>
+const Empty: React.FC<Props> = ({
+  title = '',
+  hideButton = false,
+  buttonTitle = '',
+  onButtonClick = () => {},
+}) => (
+  <Wrapper>
+    <Container>
       <EmptyIcon />
-      <EmptyQueueText>{title} </EmptyQueueText>
-      <DullButton
-        onClick={() => {
-          onButtonClick();
-        }}
-      >
-        {buttonTitle}
-      </DullButton>
-    </EmptyQueue>
-  </EmptyQueueContainer>
+      <Title>{title}</Title>
+      {hideButton === false && (
+        <DullButton
+          onClick={() => {
+            onButtonClick();
+          }}
+        >
+          {buttonTitle}
+        </DullButton>
+      )}
+    </Container>
+  </Wrapper>
 );
 
 export default Empty;

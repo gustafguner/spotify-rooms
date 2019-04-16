@@ -2,9 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from 'src/styles';
-import gql from 'graphql-tag';
-import { DullButton } from 'src/components/buttons';
-import { EmptyIcon, Svg, QueueIcon, LightBulbIcon } from 'src/components/icons';
+import { Svg, QueueIcon, LightBulbIcon } from 'src/components/icons';
 import { Toggle } from 'src/components/input';
 import { Root } from 'src/Root';
 import QueueList from './queue-list';
@@ -51,18 +49,14 @@ const QueueContainer = styled.div`
   padding: 15px;
 `;
 
-const VOTE_FOR_TRACK = gql`
-  mutation voteForTrack($input: VoteForTrackInput!) {
-    voteForTrack(input: $input)
-  }
-`;
-
 interface Props {
   queue: any;
   requests: any;
   roomId: string;
   roomMode: string;
-  roomDj: any;
+  userIsDJ: boolean;
+  queueType: 'queue' | 'requests';
+  setQueueType: (type: string) => void;
   searchFieldRef: any;
   addSubscribe: () => void;
   voteSubscribe: () => void;
@@ -74,20 +68,25 @@ const QueueView: React.FC<Props> = ({
   requests,
   roomId,
   roomMode,
-  roomDj,
+  userIsDJ,
+  queueType,
+  setQueueType,
   searchFieldRef,
   addSubscribe,
   voteSubscribe,
   removeSubscribe,
 }) => {
-  const { rootContext }: any = React.useContext(Root.Context);
-
   const [addUnsubscribe, setAddUnsubscribe]: any = React.useState(null);
   const [voteUnsubscribe, setVoteUnsubscribe]: any = React.useState(null);
   const [removeUnsubscribe, setRemoveUnsubscribe]: any = React.useState(null);
-  const [sidebarType, setSidebarType]: any = React.useState('queue');
 
   queue.sort((a: any, b: any) => {
+    return (
+      b.voters.length - a.voters.length || a.queueTimestamp - b.queueTimestamp
+    );
+  });
+
+  requests.sort((a: any, b: any) => {
     return (
       b.voters.length - a.voters.length || a.queueTimestamp - b.queueTimestamp
     );
@@ -115,12 +114,12 @@ const QueueView: React.FC<Props> = ({
     <Container>
       {roomMode === 'dj' ? (
         <Header>
-          {roomDj !== null && roomDj.id === rootContext.auth.user.id ? (
+          {userIsDJ ? (
             <Toggle
               name="mode"
-              selected={sidebarType}
+              selected={queueType}
               onChange={(event) => {
-                setSidebarType(event.target.value);
+                setQueueType(event.target.value);
               }}
               onBlur={() => {}}
               fields={[
@@ -155,35 +154,20 @@ const QueueView: React.FC<Props> = ({
         </Header>
       )}
 
-      {/*queue.length === 0 && (
-        <Empty
-          title="The queue is empty"
-          buttonTitle="Add track"
-          onButtonClick={() => {
-            searchFieldRef.current.focus();
-          }}
-        />
-        )*/}
-
       <QueueContainer>
-        {sidebarType === 'requests' ||
-        (roomMode === 'dj' &&
-          (roomDj === null || roomDj.id !== rootContext.auth.user.id)) ? (
+        {queueType === 'requests' || (roomMode === 'dj' && !userIsDJ) ? (
           <>
             {requests.length === 0 && (
               <Empty
                 title="There are no requests"
-                buttonTitle="Request a track"
+                buttonTitle="Request track"
+                hideButton={roomMode === 'dj' && userIsDJ}
                 onButtonClick={() => {
                   searchFieldRef.current.focus();
                 }}
               />
             )}
-            <QueueList
-              list={requests}
-              mutation={VOTE_FOR_TRACK}
-              roomId={roomId}
-            />
+            <QueueList list={requests} roomId={roomId} queueType="requests" />
           </>
         ) : (
           <>
@@ -196,7 +180,7 @@ const QueueView: React.FC<Props> = ({
                 }}
               />
             )}
-            <QueueList list={queue} mutation={VOTE_FOR_TRACK} roomId={roomId} />
+            <QueueList list={queue} roomId={roomId} queueType="queue" />
           </>
         )}
       </QueueContainer>

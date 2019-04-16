@@ -52,7 +52,6 @@ interface Props {
 }
 
 const ShareRoomModal: React.FC<Props> = ({ isOpen, close, location }) => {
-  console.log(location);
   return (
     <Modal isOpen={isOpen} close={close} styles={modalStyles}>
       <Container>

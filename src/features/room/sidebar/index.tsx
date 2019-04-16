@@ -5,6 +5,7 @@ import { colors } from 'src/styles';
 import { getTopTracks, searchTracks } from 'src/utils/spotify';
 import { ClickOutside } from 'src/components/core';
 import DiscoverTracks from './components/discover-tracks';
+import { Root } from 'src/Root';
 
 const Container = styled.div`
   width: 380px;
@@ -108,6 +109,8 @@ interface Props {
 }
 
 const Sidebar: React.FC<Props> = ({ room }) => {
+  const { rootContext }: any = React.useContext(Root.Context);
+
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<null | any[]>(null);
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = React.useState<
@@ -115,6 +118,13 @@ const Sidebar: React.FC<Props> = ({ room }) => {
   >(null);
   const [discoverVisible, setDiscoverVisible] = React.useState(false);
   const searchFieldRef: any = React.useRef(null);
+
+  const [queueType, setQueueType]: any = React.useState('queue');
+  const userIsDJ: boolean =
+    room.mode === 'dj' && room.dj && room.dj.id === rootContext.auth.user.id;
+  const canAddTrackToQueue: boolean =
+    room.mode === 'co-op' ||
+    (room.mode === 'dj' && (userIsDJ === false || queueType === 'queue'));
 
   React.useEffect(() => {
     if (recentlyPlayedTracks === null) {
@@ -161,45 +171,53 @@ const Sidebar: React.FC<Props> = ({ room }) => {
       <Queue
         roomId={room.id}
         roomMode={room.mode}
-        roomDj={room.dj}
+        userIsDJ={userIsDJ}
+        queueType={queueType}
+        setQueueType={setQueueType}
         searchFieldRef={searchFieldRef}
       />
+      {canAddTrackToQueue && (
+        <ClickOutside
+          on={() => {
+            setDiscoverVisible(false);
+          }}
+        >
+          <AddToQueue>
+            {discoverVisible !== false && (
+              <DiscoverContainer>
+                <DiscoverTitle>
+                  {searchQuery !== '' ? 'Search results' : 'Top tracks'}
+                </DiscoverTitle>
+                <Discover>
+                  <DiscoverTracks
+                    tracks={
+                      searchQuery !== '' ? searchResults : recentlyPlayedTracks
+                    }
+                    roomId={room.id}
+                    queueType={
+                      userIsDJ === true || room.mode === 'co-op'
+                        ? 'queue'
+                        : 'requests'
+                    }
+                  />
+                  <DiscoverTracksFadeout />
+                </Discover>
+              </DiscoverContainer>
+            )}
 
-      <ClickOutside
-        on={() => {
-          setDiscoverVisible(false);
-        }}
-      >
-        <AddToQueue>
-          {discoverVisible !== false && (
-            <DiscoverContainer>
-              <DiscoverTitle>
-                {searchQuery !== '' ? 'Search results' : 'Top tracks'}
-              </DiscoverTitle>
-              <Discover>
-                <DiscoverTracks
-                  tracks={
-                    searchQuery !== '' ? searchResults : recentlyPlayedTracks
-                  }
-                  roomId={room.id}
-                />
-                <DiscoverTracksFadeout />
-              </Discover>
-            </DiscoverContainer>
-          )}
-
-          <TextInput
-            type="text"
-            value={searchQuery}
-            placeholder="Search for a track on Spotify..."
-            onChange={handleTrackSearchInputChange}
-            onFocus={() => {
-              setDiscoverVisible(true);
-            }}
-            ref={searchFieldRef}
-          />
-        </AddToQueue>
-      </ClickOutside>
+            <TextInput
+              type="text"
+              value={searchQuery}
+              placeholder="Search for a track on Spotify..."
+              onChange={handleTrackSearchInputChange}
+              onFocus={() => {
+                setDiscoverVisible(true);
+              }}
+              ref={searchFieldRef}
+            />
+          </AddToQueue>
+        </ClickOutside>
+      )}
     </Container>
   );
 };

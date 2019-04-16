@@ -6,7 +6,7 @@ import { colors } from 'src/styles';
 import * as color from 'color';
 import Loader from 'src/components/Loader';
 
-const MUTATION = gql`
+const ADD_TRACK_TO_QUEUE = gql`
   mutation addTrackToQueue($input: AddTrackToQueueInput!) {
     addTrackToQueue(input: $input) {
       name
@@ -93,14 +93,15 @@ const SearchStatusContainer = styled.div`
 interface Props {
   roomId: string;
   tracks: any[] | null;
+  queueType: 'queue' | 'requests';
 }
 
-const DiscoverTracks: React.FC<Props> = ({ roomId, tracks }) => (
+const DiscoverTracks: React.FC<Props> = ({ roomId, tracks, queueType }) => (
   <>
     {tracks !== null ? (
       tracks.length !== 0 ? (
         tracks.map((track) => (
-          <Mutation mutation={MUTATION} key={track.id}>
+          <Mutation mutation={ADD_TRACK_TO_QUEUE} key={track.id}>
             {(mutate) => (
               <Track
                 onClick={() => {
@@ -109,6 +110,7 @@ const DiscoverTracks: React.FC<Props> = ({ roomId, tracks }) => (
                       input: {
                         roomId,
                         trackId: track.id,
+                        queueType,
                       },
                     },
                   });
