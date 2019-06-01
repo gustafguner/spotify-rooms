@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { colors } from 'src/styles';
 import { Svg, QueueIcon, LightBulbIcon } from 'src/components/icons';
 import { Toggle } from 'src/components/input';
-import { Root } from 'src/Root';
 import QueueList from './queue-list';
 import Empty from './empty';
 
@@ -26,6 +25,10 @@ const Header = styled.div`
   align-items: center;
   position: relative;
   z-index: 1;
+  ${Svg} {
+    width: 22px;
+    height: 22px;
+  }
 `;
 
 const SidebarType = styled.div`
@@ -167,7 +170,12 @@ const QueueView: React.FC<Props> = ({
                 }}
               />
             )}
-            <QueueList list={requests} roomId={roomId} queueType="requests" />
+            <QueueList
+              list={requests}
+              roomId={roomId}
+              queueType="requests"
+              userIsDJ={userIsDJ}
+            />
           </>
         ) : (
           <>

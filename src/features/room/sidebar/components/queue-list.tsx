@@ -89,16 +89,26 @@ const TrackVotes = styled.div`
   align-items: center;
 `;
 
+interface VoteButtonProps {
+  disabled?: boolean;
+}
+
 const VoteButton = styled(Button)`
   padding: 9px 15px;
   background: ${color(colors.PRIMARY_GRAY)
     .darken(0.15)
     .string()};
+  cursor: ${({ disabled }: VoteButtonProps) =>
+    disabled ? 'default' : 'pointer'};
   &:hover {
-    background: ${color(colors.PRIMARY_GRAY)
-      .darken(0.3)
-      .string()};
-  }
+    background: ${({ disabled }: VoteButtonProps) =>
+      disabled
+        ? color(colors.PRIMARY_GRAY)
+            .darken(0.15)
+            .string()
+        : color(colors.PRIMARY_GRAY)
+            .darken(0.3)
+            .string()};
 `;
 
 interface VoteCountProps {
@@ -117,9 +127,15 @@ interface Props {
   list: any;
   roomId: string;
   queueType: 'queue' | 'requests';
+  userIsDJ?: boolean;
 }
 
-const QueueList: React.FC<Props> = ({ list, roomId, queueType }) => (
+const QueueList: React.FC<Props> = ({
+  list,
+  roomId,
+  queueType,
+  userIsDJ = false,
+}) => (
   <FlipMove>
     {list.map((track: any) => (
       <Item key={track.id}>
@@ -136,28 +152,36 @@ const QueueList: React.FC<Props> = ({ list, roomId, queueType }) => (
               : ''}
           </TrackArtists>
         </TrackInfo>
-        <Mutation mutation={VOTE_FOR_TRACK_IN_QUEUE}>
-          {(mutate) => (
-            <TrackVotes>
-              <VoteButton
-                onClick={() => {
-                  mutate({
-                    variables: {
-                      input: {
-                        roomId,
-                        trackId: track.id,
-                        queueType,
+        {userIsDJ === true ? (
+          <TrackVotes>
+            <VoteButton disabled={true} onClick={() => {}}>
+              🤚<VoteCount>{track.voters.length}</VoteCount>
+            </VoteButton>
+          </TrackVotes>
+        ) : (
+          <Mutation mutation={VOTE_FOR_TRACK_IN_QUEUE}>
+            {(mutate) => (
+              <TrackVotes>
+                <VoteButton
+                  onClick={() => {
+                    mutate({
+                      variables: {
+                        input: {
+                          roomId,
+                          trackId: track.id,
+                          queueType,
+                        },
                       },
-                    },
-                  });
-                }}
-              >
-                👍
-                <VoteCount>{track.voters.length}</VoteCount>
-              </VoteButton>
-            </TrackVotes>
-          )}
-        </Mutation>
+                    });
+                  }}
+                >
+                  👍
+                  <VoteCount>{track.voters.length}</VoteCount>
+                </VoteButton>
+              </TrackVotes>
+            )}
+          </Mutation>
+        )}
       </Item>
     ))}
   </FlipMove>
