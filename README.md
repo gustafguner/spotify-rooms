@@ -1,7 +1,6 @@
-<div style="width: 100%;">
-<img src="https://i.imgur.com/PrdC2LC.png" style="width: 330px;
-margin: 0 auto;">
-</div>
+<p align="center">
+<img src="https://i.imgur.com/IQoFJTf.png" width="350">
+</p>
 
 A collaborative way of listening to Spotify together. Create a room and invite your friends to it. Vote on tracks to bump their queue positions. The more votes, the sooner you will hear it!
 
